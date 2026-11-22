@@ -1,0 +1,536 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nightbar · A black menu bar for your Mac</title>
+  <meta name="description" content="Nightbar is a tiny macOS menu bar app that makes the menu bar black with white icons, whatever wallpaper you use, including live wallpapers.">
+  <meta name="theme-color" content="#07070b">
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" href="/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/icon.svg">
+  <meta property="og:title" content="Nightbar">
+  <meta property="og:description" content="A black menu bar with white icons, whatever your wallpaper.">
+  <meta property="og:url" content="https://nightbar.app">
+  <meta property="og:type" content="website">
+  <style>
+    :root {
+      --bg: #07070b;
+      --bg-raised: #101018;
+      --line: rgba(255, 255, 255, 0.08);
+      --text: #f3eef0;
+      --muted: #a39aa3;
+      --dim: #6f6770;
+      --plum: #5e2d4f;
+      --rose: #b5637a;
+      --peach: #f0ae86;
+      --radius: 18px;
+      --gutter: 24px;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", Roboto, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; overflow-x: clip; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: clip;
+    }
+    a { color: inherit; }
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 0 var(--gutter); }
+
+    /* Top bar: the site itself wears a black menu bar */
+    .topbar {
+      position: sticky; top: 0; z-index: 10;
+      background: #000;
+      border-bottom: 1px solid var(--line);
+    }
+    .topbar .wrap {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 44px; font-size: 14px;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; text-decoration: none; }
+    .brand img { width: 22px; height: 22px; }
+    .topbar nav { display: flex; gap: 22px; }
+    .topbar nav a { text-decoration: none; color: var(--muted); }
+    .topbar nav a:hover { color: var(--text); }
+
+    /* Hero */
+    .hero { position: relative; padding: 88px 0 40px; text-align: center; }
+    .hero::before {
+      content: ""; position: absolute; inset: -20% -10% auto; height: 640px; z-index: -1;
+      background:
+        radial-gradient(60% 55% at 50% 8%, rgba(181, 99, 122, 0.28), transparent 70%),
+        radial-gradient(40% 40% at 78% 30%, rgba(240, 174, 134, 0.12), transparent 70%),
+        radial-gradient(40% 40% at 20% 35%, rgba(94, 45, 79, 0.35), transparent 70%);
+    }
+    .app-icon { width: 104px; height: 104px; filter: drop-shadow(0 18px 40px rgba(181, 99, 122, 0.35)); }
+    h1 {
+      font-size: clamp(40px, 7vw, 72px); line-height: 1.04; letter-spacing: -0.035em;
+      margin: 28px 0 18px; font-weight: 700;
+    }
+    h1 .glow {
+      background: linear-gradient(180deg, #fff 30%, var(--peach) 140%);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .lede { font-size: clamp(17px, 2.2vw, 20px); color: var(--muted); max-width: 600px; margin: 0 auto; }
+
+    .cta { margin-top: 36px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 15px 26px; border-radius: 999px;
+      font-size: 16px; font-weight: 600; text-decoration: none;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    }
+    .btn-primary {
+      background: linear-gradient(180deg, #fbe3d3, var(--peach));
+      color: #2a1220;
+      box-shadow: 0 10px 30px rgba(240, 174, 134, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 14px 36px rgba(240, 174, 134, 0.35), inset 0 1px 0 rgba(255,255,255,.6); }
+    .btn-primary svg { width: 18px; height: 18px; }
+    .btn-ghost { color: var(--muted); border: 1px solid var(--line); }
+    .btn-ghost:hover { color: var(--text); background: rgba(255,255,255,.04); }
+    .meta { font-size: 13px; color: var(--dim); }
+    .meta a { color: var(--muted); }
+
+    /* Demo screen */
+    .demo { margin: 64px auto 0; max-width: 920px; }
+    .screen {
+      position: relative; aspect-ratio: 16 / 10; border-radius: 14px; overflow: hidden;
+      border: 1px solid rgba(255,255,255,.12);
+      box-shadow: 0 40px 120px rgba(0,0,0,.7), 0 0 0 10px #15131a, 0 0 0 11px rgba(255,255,255,.06);
+      background: var(--wall);
+      transition: background 0.6s ease;
+    }
+    .screen[data-wall="glacier"] {
+      --wall:
+        radial-gradient(30% 22% at 72% 30%, rgba(255,255,255,.95), transparent 70%),
+        linear-gradient(180deg, #eaf4fb 0%, #cfe6f4 45%, #9ec7df 46%, #f4f9fc 62%, #d7e8f2 100%);
+    }
+    .screen[data-wall="dune"] {
+      --wall:
+        radial-gradient(14% 22% at 30% 34%, #fff6df, rgba(255,246,223,0) 70%),
+        radial-gradient(120% 40% at 70% 100%, #d99a5b 30%, transparent 31%),
+        radial-gradient(120% 45% at 20% 105%, #e9b778 35%, transparent 36%),
+        linear-gradient(180deg, #fdf0dc 0%, #f8dcb3 60%, #f1c48c 100%);
+    }
+    .screen[data-wall="dusk"] {
+      --wall:
+        radial-gradient(120% 30% at 30% 100%, #1b1216 40%, transparent 41%),
+        linear-gradient(180deg, #5e2d4f 0%, #b5637a 55%, #f0ae86 100%);
+    }
+
+    .menubar {
+      position: absolute; inset: 0 0 auto; height: 7%;
+      min-height: 22px; max-height: 32px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 14px; font-size: clamp(9px, 1.35vw, 13px);
+      background: rgba(255,255,255,.38);
+      -webkit-backdrop-filter: blur(20px) saturate(1.4); backdrop-filter: blur(20px) saturate(1.4);
+      color: #141414;
+      transition: background 0.5s ease, color 0.5s ease;
+    }
+    .screen.on .menubar { background: #000; color: #fff; }
+    .menubar .left, .menubar .right { display: flex; align-items: center; gap: clamp(8px, 1.8vw, 18px); white-space: nowrap; }
+    .menubar .app { font-weight: 700; }
+    .menubar svg { height: 1.25em; width: auto; display: block; }
+    .menubar .extra { display: contents; }
+
+    .window {
+      position: absolute; left: 12%; top: 22%; width: 46%; height: 52%;
+      border-radius: 10px; background: rgba(28, 26, 32, .82);
+      border: 1px solid rgba(255,255,255,.1);
+      box-shadow: 0 20px 60px rgba(0,0,0,.35);
+      -webkit-backdrop-filter: blur(30px); backdrop-filter: blur(30px);
+      overflow: hidden;
+    }
+    .window::before {
+      content: ""; position: absolute; top: 12px; left: 14px; width: 9px; height: 9px; border-radius: 50%;
+      background: #ff5f57; box-shadow: 15px 0 #febc2e, 30px 0 #28c840;
+    }
+    .window .lines { position: absolute; inset: 40px 18px 18px; display: grid; gap: 10px; align-content: start; }
+    .window .lines span { height: 8px; border-radius: 4px; background: rgba(255,255,255,.08); }
+    .window .lines span:nth-child(2) { width: 80%; }
+    .window .lines span:nth-child(3) { width: 60%; }
+    .window .lines span:nth-child(5) { width: 70%; }
+
+    .controls {
+      margin-top: 28px; display: flex; flex-wrap: wrap; gap: 16px;
+      align-items: center; justify-content: center;
+    }
+    .switch {
+      display: inline-flex; align-items: center; gap: 12px; cursor: pointer;
+      background: var(--bg-raised); border: 1px solid var(--line);
+      padding: 8px 16px 8px 8px; border-radius: 999px; color: var(--text); font: inherit; font-size: 14px;
+    }
+    .switch .track {
+      width: 42px; height: 24px; border-radius: 999px; background: #3a3540; position: relative;
+      transition: background .25s ease;
+    }
+    .switch .track::after {
+      content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%;
+      background: #fff; transition: transform .25s ease;
+    }
+    .switch[aria-checked="true"] .track { background: var(--rose); }
+    .switch[aria-checked="true"] .track::after { transform: translateX(18px); }
+    .walls { display: flex; gap: 8px; align-items: center; font-size: 13px; color: var(--dim); }
+    .walls button {
+      width: 30px; height: 30px; border-radius: 50%; cursor: pointer;
+      border: 2px solid transparent; outline-offset: 2px;
+      box-shadow: 0 0 0 1px rgba(255,255,255,.15);
+    }
+    .walls button[aria-pressed="true"] { border-color: #fff; }
+    .walls [data-wall="glacier"] { background: linear-gradient(180deg, #eaf4fb, #9ec7df); }
+    .walls [data-wall="dune"] { background: linear-gradient(180deg, #fdf0dc, #d99a5b); }
+    .walls [data-wall="dusk"] { background: linear-gradient(180deg, #5e2d4f, #f0ae86); }
+
+    /* Sections */
+    section { padding: 96px 0 0; }
+    .eyebrow { text-transform: uppercase; letter-spacing: .14em; font-size: 12px; color: var(--rose); font-weight: 600; }
+    h2 { font-size: clamp(28px, 4vw, 40px); letter-spacing: -0.02em; line-height: 1.15; margin: 10px 0 16px; }
+    .section-lede { color: var(--muted); max-width: 640px; font-size: 17px; margin: 0; }
+
+    .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 40px; }
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.01));
+      border: 1px solid var(--line); border-radius: var(--radius); padding: 24px;
+    }
+    .card h3 { font-size: 17px; margin: 14px 0 6px; }
+    .card p { margin: 0; color: var(--muted); font-size: 15px; }
+    .card .ico {
+      width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center;
+      background: rgba(181, 99, 122, .14); color: var(--peach);
+    }
+    .card .ico svg { width: 20px; height: 20px; }
+
+    .how { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; margin-top: 8px; }
+    .layers { position: relative; height: 380px; perspective: 1000px; }
+    .layer {
+      position: absolute; left: 12%; right: 12%; height: 150px; border-radius: 12px;
+      transform: rotateX(58deg) rotateZ(-30deg);
+      border: 1px solid rgba(255,255,255,.18);
+    }
+    .layer span {
+      position: absolute; right: 14px; bottom: 10px;
+      font-size: 13px; font-weight: 600; white-space: nowrap;
+    }
+    .layer.l-wall { top: 220px; background: linear-gradient(135deg, #cfe6f4, #f8dcb3); color: #2a2a2a; }
+    .layer.l-strip { top: 120px; border-style: dashed; background: linear-gradient(180deg, #000 0 26%, rgba(255,255,255,.02) 26%); color: var(--peach); }
+    .layer.l-win { top: 20px; border-style: dashed; background: rgba(255,255,255,.02); color: var(--text); }
+    .layer.l-win::before {
+      content: ""; position: absolute; left: 14%; top: 34%; width: 44%; height: 46%;
+      border-radius: 6px; background: rgba(40,36,46,.9); border: 1px solid rgba(255,255,255,.2);
+    }
+    .steps-list { list-style: none; padding: 0; margin: 24px 0 0; display: grid; gap: 14px; }
+    .steps-list li { display: grid; grid-template-columns: 28px 1fr; gap: 12px; color: var(--muted); }
+    .steps-list b { color: var(--text); font-weight: 600; }
+    .dot { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 13px; font-weight: 700; background: var(--bg-raised); border: 1px solid var(--line); color: var(--peach); }
+
+    .install { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 40px; counter-reset: step; }
+    .install .card::before {
+      counter-increment: step; content: counter(step);
+      display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%;
+      background: var(--rose); color: #fff; font-weight: 700; font-size: 14px;
+    }
+    code {
+      font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: .86em;
+      background: rgba(255,255,255,.06); border: 1px solid var(--line);
+      padding: 2px 6px; border-radius: 6px; word-break: break-all;
+    }
+    .note { margin-top: 20px; font-size: 14px; color: var(--dim); max-width: 760px; }
+
+    .faq { margin-top: 32px; border-top: 1px solid var(--line); }
+    details { border-bottom: 1px solid var(--line); padding: 18px 0; }
+    summary { cursor: pointer; font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+    summary::-webkit-details-marker { display: none; }
+    summary::after { content: "+"; color: var(--dim); font-weight: 400; font-size: 20px; line-height: 1; }
+    details[open] summary::after { content: "–"; }
+    details p { color: var(--muted); margin: 10px 0 0; max-width: 720px; }
+
+    .final {
+      margin: 96px 0 0; padding: 56px 24px; text-align: center; border-radius: 24px;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(180deg, #000 0 44px, transparent 44px),
+        radial-gradient(80% 120% at 50% 120%, rgba(240,174,134,.25), transparent 60%),
+        linear-gradient(180deg, #120d14, #1d1119);
+      position: relative; overflow: hidden;
+    }
+    .final h2 { margin-top: 32px; }
+    .final p { color: var(--muted); margin: 0 0 28px; }
+
+    footer { padding: 48px 0 56px; color: var(--dim); font-size: 14px; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+    footer nav { display: flex; gap: 20px; }
+    footer a { text-decoration: none; color: var(--muted); }
+    footer a:hover { color: var(--text); }
+
+    :focus-visible { outline: 2px solid var(--peach); outline-offset: 3px; border-radius: 6px; }
+
+    @media (max-width: 860px) {
+      .features { grid-template-columns: 1fr 1fr; }
+      .install { grid-template-columns: 1fr 1fr; }
+      .how { grid-template-columns: 1fr; gap: 16px; }
+      .layers { height: 360px; max-width: 440px; width: 100%; margin: 0 auto; }
+    }
+    @media (max-width: 560px) {
+      :root { --gutter: 16px; }
+      .topbar nav a:not(.gh) { display: none; }
+      .hero { padding-top: 56px; }
+      .features, .install { grid-template-columns: 1fr; }
+      .menubar .extra { display: none; }
+      .screen { box-shadow: 0 24px 60px rgba(0,0,0,.7), 0 0 0 6px #15131a; }
+      section { padding-top: 72px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; scroll-behavior: auto !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <a class="brand" href="/"><img src="/icon.svg" alt="">Nightbar</a>
+      <nav>
+        <a href="#how">How it works</a>
+        <a href="#install">Install</a>
+        <a href="#faq">FAQ</a>
+        <a class="gh" href="https://github.com/philfreshman/nightbar">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="hero">
+      <div class="wrap">
+        <img class="app-icon" src="/icon.svg" alt="Nightbar app icon">
+        <h1><span class="glow">A black menu bar.</span><br>Whatever your wallpaper.</h1>
+        <p class="lede">Nightbar is a tiny macOS menu bar app that keeps your menu bar black with crisp white icons, on bright wallpapers, live wallpapers and every display.</p>
+
+        <div class="cta">
+          <a class="btn btn-primary js-download" href="https://github.com/philfreshman/nightbar/releases/latest/download/Nightbar.zip">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10M5.5 8.5 10 13l4.5-4.5M4 17h12"/></svg>
+            <span class="js-download-label">Download for Mac</span>
+          </a>
+          <div class="meta"><span class="js-version">Free and open source</span> · macOS 14 or later · <a href="https://github.com/philfreshman/nightbar">Source on GitHub</a></div>
+        </div>
+
+        <div class="demo">
+          <div class="screen" id="screen" data-wall="glacier" role="img" aria-label="A Mac desktop with a bright wallpaper. With Nightbar on, the menu bar is black with white text.">
+            <div class="menubar">
+              <div class="left">
+                <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5.5" fill="currentColor"/></svg>
+                <span class="app">Finder</span><span>File</span><span>Edit</span><span>View</span>
+                <span class="extra"><span>Go</span><span>Window</span><span>Help</span></span>
+              </div>
+              <div class="right">
+                <svg viewBox="0 0 22 16" aria-hidden="true"><rect x="1" y="4" width="20" height="9" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.2" transform="translate(-1 0)"/><rect x="2" y="6" width="12" height="5" rx="1" fill="currentColor"/><rect x="20" y="7" width="1.5" height="3" rx=".7" fill="currentColor"/></svg>
+                <svg viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 6.2a8.5 8.5 0 0 1 12 0M4.3 8.6a5.2 5.2 0 0 1 7.4 0M6.6 11a2 2 0 0 1 2.8 0"/></svg>
+                <svg viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y="3" width="13" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.3"/><rect x="1.5" y="3" width="13" height="3" rx="1.2" fill="currentColor"/></svg>
+                <span class="extra"><span>Sun 22 Nov</span></span><span>9:41</span>
+              </div>
+            </div>
+            <div class="window"><div class="lines"><span></span><span></span><span></span><span></span><span></span></div></div>
+          </div>
+
+          <div class="controls">
+            <button class="switch" id="toggle" role="switch" aria-checked="false"><span class="track"></span><span>Nightbar</span></button>
+            <div class="walls" role="group" aria-label="Try a wallpaper">
+              <span>Wallpaper</span>
+              <button data-wall="glacier" aria-pressed="true" aria-label="Glacier, bright"></button>
+              <button data-wall="dune" aria-pressed="false" aria-label="Dune, bright"></button>
+              <button data-wall="dusk" aria-pressed="false" aria-label="Dusk, dark"></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section>
+      <div class="wrap">
+        <div class="eyebrow">Why Nightbar</div>
+        <h2>The menu bar you want, without giving up your wallpaper.</h2>
+        <p class="section-lede">On a bright wallpaper macOS turns the menu bar light and the icons dark. Nightbar keeps it black, so the notch blends in and your icons stay white.</p>
+        <div class="features">
+          <div class="card">
+            <div class="ico"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4" width="15" height="12" rx="2"/><path d="M2.5 7.5h15"/></svg></div>
+            <h3>Any wallpaper</h3>
+            <p>Bright photos, rotating folders and live wallpapers all get the same black bar.</p>
+          </div>
+          <div class="card">
+            <div class="ico"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="1.5" y="5" width="10" height="8" rx="1.5"/><rect x="13.5" y="7" width="5" height="7" rx="1.2"/><path d="M5 16h3"/></svg></div>
+            <h3>Every display</h3>
+            <p>Each connected screen gets its own black strip, and it follows when you plug displays in or out.</p>
+          </div>
+          <div class="card">
+            <div class="ico"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2.5 3.5 5v5c0 3.6 2.8 6.4 6.5 7.5 3.7-1.1 6.5-3.9 6.5-7.5V5z"/><path d="m7.2 10 2 2 3.6-3.8"/></svg></div>
+            <h3>Hands off your wallpaper</h3>
+            <p>Your wallpaper files are never edited. Turn Nightbar off and everything is exactly as before.</p>
+          </div>
+          <div class="card">
+            <div class="ico"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7"/><path d="M10 6v4l2.5 2"/></svg></div>
+            <h3>Launch at login</h3>
+            <p>Switch it on once from the Nightbar menu and forget about it.</p>
+          </div>
+          <div class="card">
+            <div class="ico"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3v14M3 10h14"/></svg></div>
+            <h3>One switch</h3>
+            <p>A single menu with an on and off toggle. No settings window, no accounts, no tracking.</p>
+          </div>
+          <div class="card">
+            <div class="ico"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m7 6-4 4 4 4M13 6l4 4-4 4"/></svg></div>
+            <h3>Open source</h3>
+            <p>A few hundred lines of Swift and AppKit with no dependencies. Read it, build it, improve it.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="how">
+      <div class="wrap how">
+        <div>
+          <div class="eyebrow">How it works</div>
+          <h2>A black strip, just above your wallpaper.</h2>
+          <p class="section-lede">macOS does not let apps paint the menu bar. It picks the bar's look and the icon colour from whatever sits behind it. So Nightbar puts black there.</p>
+          <ul class="steps-list">
+            <li><span class="dot">1</span><span><b>Your wallpaper</b> stays where it is, untouched.</span></li>
+            <li><span class="dot">2</span><span><b>Nightbar's strip</b> sits right above it, behind the menu bar of every screen.</span></li>
+            <li><span class="dot">3</span><span><b>Desktop icons and windows</b> stay on top, so nothing else changes.</span></li>
+          </ul>
+        </div>
+        <div class="layers" aria-hidden="true">
+          <div class="layer l-wall"><span>Wallpaper</span></div>
+          <div class="layer l-strip"><span>Nightbar strip</span></div>
+          <div class="layer l-win"><span>Icons and windows</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="install">
+      <div class="wrap">
+        <div class="eyebrow">Install</div>
+        <h2>Up and running in a minute.</h2>
+        <div class="install">
+          <div class="card"><h3>Download</h3><p>Get <code>Nightbar.zip</code> from the <a class="js-download" href="https://github.com/philfreshman/nightbar/releases/latest/download/Nightbar.zip">latest release</a> and unzip it.</p></div>
+          <div class="card"><h3>Move it</h3><p>Drag <code>Nightbar.app</code> into your Applications folder.</p></div>
+          <div class="card"><h3>Open it</h3><p>The first time, macOS asks you to confirm. Open System Settings, then Privacy &amp; Security, and click Open Anyway.</p></div>
+          <div class="card"><h3>Keep it</h3><p>Click the Nightbar icon in the menu bar and turn on Launch at Login.</p></div>
+        </div>
+        <p class="note">Nightbar is not notarized by Apple yet, which is why macOS asks before the first launch. If you prefer the terminal, run <code>xattr -dr com.apple.quarantine /Applications/Nightbar.app</code> once. Or build it yourself from source with <code>./scripts/build-app.sh</code>.</p>
+      </div>
+    </section>
+
+    <section id="faq">
+      <div class="wrap">
+        <div class="eyebrow">FAQ</div>
+        <h2>Questions</h2>
+        <div class="faq">
+          <details>
+            <summary>Does Nightbar change my wallpaper?</summary>
+            <p>No. It never touches your wallpaper files or settings. It only draws a black strip behind the menu bar, which disappears when you turn Nightbar off or quit it.</p>
+          </details>
+          <details>
+            <summary>Does it work with live and dynamic wallpapers?</summary>
+            <p>Yes. Because the strip sits on top of the wallpaper, it does not matter what the wallpaper is doing underneath.</p>
+          </details>
+          <details>
+            <summary>Which macOS versions are supported?</summary>
+            <p>macOS 14 Sonoma or later.</p>
+          </details>
+          <details>
+            <summary>Why does macOS warn me when I open it?</summary>
+            <p>Releases are signed ad hoc rather than with an Apple Developer ID, so Gatekeeper asks you to confirm once. The full source is on GitHub if you want to check it or build it yourself.</p>
+          </details>
+          <details>
+            <summary>How do I turn it off or remove it?</summary>
+            <p>Click the Nightbar icon in the menu bar and toggle Nightbar off, or choose Quit. To uninstall, turn off Launch at Login, quit, and move the app to the Bin.</p>
+          </details>
+          <details>
+            <summary>Can I contribute?</summary>
+            <p>Yes, please. Read the <a href="https://github.com/philfreshman/nightbar/blob/main/CONTRIBUTING.md">contributing guide</a>, then open an issue or a pull request.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <div class="wrap">
+      <div class="final">
+        <h2>Make it night up there.</h2>
+        <p>Free, open source, and smaller than this web page.</p>
+        <a class="btn btn-primary js-download" href="https://github.com/philfreshman/nightbar/releases/latest/download/Nightbar.zip">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v10M5.5 8.5 10 13l4.5-4.5M4 17h12"/></svg>
+          <span class="js-download-label">Download for Mac</span>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>Nightbar</span>
+      <nav>
+        <a href="https://github.com/philfreshman/nightbar">GitHub</a>
+        <a href="https://github.com/philfreshman/nightbar/releases">Releases</a>
+        <a href="https://github.com/philfreshman/nightbar/blob/main/CONTRIBUTING.md">Contributing</a>
+        <a href="https://github.com/philfreshman/nightbar/issues">Report an issue</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var repo = "philfreshman/nightbar";
+
+      // Demo: toggle and wallpaper picker.
+      var screen = document.getElementById("screen");
+      var toggle = document.getElementById("toggle");
+      var touched = false;
+      function setOn(on) {
+        screen.classList.toggle("on", on);
+        toggle.setAttribute("aria-checked", String(on));
+      }
+      toggle.addEventListener("click", function () {
+        touched = true;
+        setOn(toggle.getAttribute("aria-checked") !== "true");
+      });
+      document.querySelectorAll(".walls button").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          touched = true;
+          screen.dataset.wall = btn.dataset.wall;
+          document.querySelectorAll(".walls button").forEach(function (b) {
+            b.setAttribute("aria-pressed", String(b === btn));
+          });
+        });
+      });
+      // Show the effect once on load, unless the visitor already interacted.
+      setTimeout(function () { if (!touched) setOn(true); }, 1400);
+
+      // Download: point at the real asset of the latest release, or at the
+      // releases page while there is no release yet.
+      fetch("https://api.github.com/repos/" + repo + "/releases/latest", { headers: { Accept: "application/vnd.github+json" } })
+        .then(function (res) {
+          if (res.status === 404) return null;
+          if (!res.ok) throw new Error("GitHub API " + res.status);
+          return res.json();
+        })
+        .then(function (release) {
+          var links = document.querySelectorAll(".js-download");
+          if (!release) {
+            links.forEach(function (a) { a.href = "https://github.com/" + repo + "/releases"; });
+            document.querySelectorAll(".js-download-label").forEach(function (s) { s.textContent = "See releases on GitHub"; });
+            document.querySelector(".js-version").textContent = "First release coming soon";
+            return;
+          }
+          var asset = (release.assets || []).find(function (a) { return /\.zip$/i.test(a.name); });
+          if (asset) links.forEach(function (a) { a.href = asset.browser_download_url; });
+          var size = asset ? " · " + (asset.size / 1048576).toFixed(1) + " MB" : "";
+          document.querySelector(".js-version").textContent = "Version " + release.tag_name.replace(/^v/, "") + size;
+        })
+        .catch(function () { /* Keep the default latest-release link. */ });
+    })();
+  </script>
+</body>
+</html>
