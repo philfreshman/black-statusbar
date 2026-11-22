@@ -40,14 +40,6 @@ struct FolderRotationTests {
         #expect(rotation.currentImage(in: folder, excluding: [], now: later)?.lastPathComponent == "b.png")
     }
 
-    @Test func skipToNextMovesImmediately() {
-        _ = rotation.currentImage(in: folder, excluding: [], now: start)
-
-        rotation.skipToNext()
-
-        #expect(rotation.currentImage(in: folder, excluding: [], now: start)?.lastPathComponent == "b.png")
-    }
-
     @Test func wrapsAroundAndIgnoresNonImages() {
         _ = rotation.currentImage(in: folder, excluding: [], now: start)
         let names = (1...3).map { step in

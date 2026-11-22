@@ -25,8 +25,6 @@ final class WallpaperCoordinator: NSObject {
     /// Wallpapers that failed to load, so they are not retried every few seconds.
     private var unreadableWallpapers: Set<String> = []
 
-    private(set) var lastError: String?
-
     var isEnabled: Bool {
         get { defaults.object(forKey: Self.enabledKey) as? Bool ?? true }
         set {
@@ -64,25 +62,9 @@ final class WallpaperCoordinator: NSObject {
         }
     }
 
-    var rotationInterval: RotationInterval {
-        get { rotation.interval }
-        set { rotation.interval = newValue }
-    }
-
-    func retryUnreadableWallpapers() {
-        unreadableWallpapers.removeAll()
-        refresh()
-    }
-
-    func showNextPicture() {
-        rotation.skipToNext()
-        refresh()
-    }
-
     // MARK: - Updating screens
 
     private func updateAllScreens() async {
-        var errors: [String] = []
         for screen in NSScreen.screens {
             do {
                 if isEnabled {
@@ -92,10 +74,8 @@ final class WallpaperCoordinator: NSObject {
                 }
             } catch {
                 log.error("Updating \(screen.localizedName, privacy: .public) failed: \(error.localizedDescription, privacy: .public)")
-                errors.append(error.localizedDescription)
             }
         }
-        lastError = errors.first
     }
 
     private func applyBlackBar(to screen: NSScreen) async throws {

@@ -7,16 +7,6 @@ enum RotationInterval: Int, CaseIterable {
     case hour = 3600
     case day = 86400
     case never = 0
-
-    var title: String {
-        switch self {
-        case .fiveMinutes: "Every 5 Minutes"
-        case .fifteenMinutes: "Every 15 Minutes"
-        case .hour: "Every Hour"
-        case .day: "Every Day"
-        case .never: "Never"
-        }
-    }
 }
 
 /// Rotates through the pictures of a wallpaper folder.
@@ -32,7 +22,6 @@ final class FolderRotation {
 
     private let defaults: UserDefaults
     private let fileManager: FileManager
-    private var skipRequested = false
 
     init(defaults: UserDefaults = .standard, fileManager: FileManager = .default) {
         self.defaults = defaults
@@ -42,11 +31,6 @@ final class FolderRotation {
     var interval: RotationInterval {
         get { RotationInterval(rawValue: defaults.integer(forKey: Key.interval)) ?? .hour }
         set { defaults.set(newValue.rawValue, forKey: Key.interval) }
-    }
-
-    /// Makes the next call to `currentImage(in:)` move on to the next picture.
-    func skipToNext() {
-        skipRequested = true
     }
 
     /// The picture to show now. Moves to the next picture once the interval has passed.
@@ -62,7 +46,6 @@ final class FolderRotation {
     }
 
     private func shouldAdvance(now: Date) -> Bool {
-        if skipRequested { return true }
         guard interval != .never, let lastChange else { return false }
         return now.timeIntervalSince(lastChange) >= TimeInterval(interval.rawValue)
     }
@@ -73,7 +56,6 @@ final class FolderRotation {
     }
 
     private func select(_ image: URL, now: Date) -> URL {
-        skipRequested = false
         defaults.set(image.path, forKey: Key.currentImage)
         defaults.set(now, forKey: Key.lastChange)
         return image

@@ -9,7 +9,7 @@ macOS does not let apps paint the menu bar itself. Instead, it picks the menu ba
 So the app makes a copy of your wallpaper with a solid black band where the menu bar sits, and sets that copy as the wallpaper. The menu bar then looks black and macOS switches the icons to white.
 
 - It watches for wallpaper, Space and display changes, and updates the copy.
-- If your wallpaper is a **folder** of pictures, the app takes over the rotation (macOS can only rotate the folder itself, not our copies). Pick the interval under **Change Folder Picture**, or use **Next Picture**.
+- If your wallpaper is a **folder** of pictures, the app takes over the rotation (macOS can only rotate the folder itself, not our copies) and shows the next picture every hour.
 - Turning **Black Menu Bar** off puts your original wallpaper (or folder) back.
 
 Copies are stored in `~/Library/Application Support/BlackMenuBar/Wallpapers`.
