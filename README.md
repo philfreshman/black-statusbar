@@ -2,6 +2,8 @@
 
 A small macOS menu bar app that makes the menu bar black with white icons, whatever wallpaper you use, including live wallpapers.
 
+**[Download Nightbar](https://github.com/philfreshman/nightbar/releases/latest/download/Nightbar.zip)** · [nightbar.app](https://nightbar.app)
+
 ## How it works
 
 macOS does not let apps paint the menu bar itself. Instead, it picks the menu bar look and the icon colour (dark or white) from what is behind the menu bar.
@@ -30,4 +32,26 @@ The icon source is `Resources/AppIcon.icon`, an Icon Composer document. Open it 
 
 ```bash
 swift test
+```
+
+## Releases
+
+Releases are built by GitHub Actions (`.github/workflows/release.yml`). After `development` has been merged into `main`, tag the merge commit on `main` and push the tag:
+
+```bash
+git checkout main && git pull
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+The workflow tests and builds the app on macOS, sets the version from the tag, and publishes `Nightbar.zip` on a GitHub release. The website's download button always serves the latest release's `Nightbar.zip`, and `https://nightbar.app/download` redirects to it.
+
+The app is signed ad hoc, not notarized, so macOS asks for confirmation the first time it is opened.
+
+## Website
+
+The landing page at [nightbar.app](https://nightbar.app) lives in `site/`. It is plain HTML and CSS with no build step, deployed by Vercel with `site` as the project's root directory. To preview it locally:
+
+```bash
+python3 -m http.server --directory site 8000
 ```

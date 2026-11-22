@@ -1,0 +1,44 @@
+name: Release
+
+# Push a version tag on main (for example v1.0.0) to build Nightbar.app and
+# publish it as Nightbar.zip on a GitHub release. The website's download button
+# always points at the latest release's Nightbar.zip.
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build and publish
+    # Xcode 26 is needed to compile the Icon Composer app icon.
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set the app version from the tag
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $version" Resources/Info.plist
+          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $GITHUB_RUN_NUMBER" Resources/Info.plist
+
+      - name: Test
+        run: swift test
+
+      - name: Build Nightbar.app
+        run: ./scripts/build-app.sh
+
+      - name: Zip the app
+        run: ditto -c -k --sequesterRsrc --keepParent build/Nightbar.app Nightbar.zip
+
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" Nightbar.zip \
+            --title "Nightbar ${GITHUB_REF_NAME#v}" \
+            --generate-notes \
+            --verify-tag
