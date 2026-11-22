@@ -10,7 +10,7 @@ So the app puts a black strip behind the menu bar of every screen. The strip sit
 
 ## Build and run
 
-Needs macOS 14 or later and Xcode (or the Swift toolchain).
+Needs macOS 14 or later and Xcode 26 or later. The build script uses Xcode's `actool` to compile the app icon.
 
 ```bash
 ./scripts/build-app.sh
@@ -21,6 +21,10 @@ open "build/Nightbar.app"
 ```
 
 To keep it, copy `build/Nightbar.app` to `/Applications` and turn on **Launch at Login** in its menu.
+
+## App icon
+
+The icon source is `Resources/AppIcon.icon`, an Icon Composer document. Open it in Icon Composer (it ships with Xcode) to edit it. The build script compiles it, so there are no generated icon files in the repo.
 
 ## Tests
 
