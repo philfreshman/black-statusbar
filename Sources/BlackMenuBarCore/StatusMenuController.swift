@@ -3,14 +3,14 @@ import AppKit
 /// The app's own icon in the menu bar, with its menu.
 @MainActor
 final class StatusMenuController: NSObject, NSMenuDelegate {
-    private let coordinator: WallpaperCoordinator
+    private let overlay: MenuBarOverlay
     private let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
 
     private lazy var toggleItem = makeItem("Black Menu Bar", action: #selector(toggleBlackBar))
     private lazy var launchAtLoginItem = makeItem("Launch at Login", action: #selector(toggleLaunchAtLogin))
 
-    init(coordinator: WallpaperCoordinator) {
-        self.coordinator = coordinator
+    init(overlay: MenuBarOverlay) {
+        self.overlay = overlay
         super.init()
         statusItem.button?.image = NSImage(
             systemSymbolName: "menubar.rectangle", accessibilityDescription: "Black Menu Bar"
@@ -19,7 +19,7 @@ final class StatusMenuController: NSObject, NSMenuDelegate {
     }
 
     func menuWillOpen(_ menu: NSMenu) {
-        toggleItem.state = coordinator.isEnabled ? .on : .off
+        toggleItem.state = overlay.isEnabled ? .on : .off
         launchAtLoginItem.state = LaunchAtLogin.isEnabled ? .on : .off
     }
 
@@ -41,7 +41,7 @@ final class StatusMenuController: NSObject, NSMenuDelegate {
     }
 
     @objc private func toggleBlackBar() {
-        coordinator.isEnabled.toggle()
+        overlay.isEnabled.toggle()
     }
 
     @objc private func toggleLaunchAtLogin() {
