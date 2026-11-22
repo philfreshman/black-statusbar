@@ -91,6 +91,12 @@ build: compile the app icon into the bundle
 refactor: rename source folders to Nightbar
 ```
 
+## Commit authorship
+
+Commits must be tied to the human contributor who owns the change, never to an AI agent or tool. When an agent writes the commit, it uses the contributor's own git identity.
+
+Do not add agent attribution to commits or pull requests: no `Co-Authored-By` trailers for an agent, no session links, and no "Generated with ..." footers.
+
 ## Pull requests
 
 - Keep each pull request to one change.

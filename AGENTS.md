@@ -1,31 +1,25 @@
 # AGENTS.md
 
-Guidance for AI coding agents working in this repository. Read [CONTRIBUTING.md](CONTRIBUTING.md) for the full workflow; the rules below are the ones agents most often get wrong.
+Nightbar is a small macOS 14+ menu bar app that makes the menu bar black with white icons. It puts a black borderless strip behind each screen's menu bar, just above the wallpaper, so macOS draws a dark menu bar with white icons.
 
-## Project
+Swift Package (tools 6.0, Swift 5 language mode), AppKit, no dependencies. It builds and tests only on macOS with Xcode 26 or later.
 
-Nightbar is a small macOS 14+ menu bar app written in Swift (Swift Package, AppKit, no dependencies). It builds and tests only on a Mac.
+## Layout
+
+- `Sources/Nightbar/` — executable entry point (`main.swift`).
+- `Sources/NightbarCore/` — app logic: overlay window, status menu, screen geometry, launch at login.
+- `Tests/NightbarCoreTests/` — tests (swift-testing).
+- `Resources/` — `Info.plist` and the `AppIcon.icon` Icon Composer source.
+- `scripts/build-app.sh` — builds `build/Nightbar.app` and compiles the icon.
+- `site/` — the nightbar.app landing page.
+- `.github/workflows/` — release and branch-name checks.
+
+## Build and test
 
 ```bash
-swift build               # build
-swift test                # run tests
-./scripts/build-app.sh    # build build/Nightbar.app with its icon
+swift build
+swift test
+./scripts/build-app.sh   # full app bundle at build/Nightbar.app
 ```
 
-## Commits
-
-- Commit as the user, never as the agent. Set author and committer to:
-
-  ```bash
-  git config user.name  "philfreshman"
-  git config user.email "61979403+philfreshman@users.noreply.github.com"
-  ```
-
-- Do not add agent attribution anywhere: no `Co-Authored-By` trailers, no session links, no "Generated with ..." footers, in commit messages or pull request descriptions.
-- Use the commit message prefixes from CONTRIBUTING.md (`feat:`, `fix:`, `docs:`, `build:`, ...).
-
-## Branches and pull requests
-
-- Name branches `<type>/<short-description>`, for example `feat/…`, `fix/…`, `chore/…`, `update/…`. Never use `claude/…` or other tool-generated names.
-- Branch from `development` and open pull requests into `development`.
-- Never push to `main`. It changes only by merging a pull request from `development`.
+Branching, commit and pull request rules are in [CONTRIBUTING.md](CONTRIBUTING.md).
