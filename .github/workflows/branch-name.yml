@@ -33,3 +33,18 @@ jobs:
             exit 1
           fi
           echo "Branch name is fine."
+
+  # Required by the ruleset on main: pull requests into main must come from development.
+  source-branch:
+    if: github.base_ref == 'main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check source branch
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          if [ "$HEAD_REF" != "development" ]; then
+            echo "::error::Pull requests into main must come from development, not '$HEAD_REF'."
+            exit 1
+          fi
+          echo "development -> main: ok"
