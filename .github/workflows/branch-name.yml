@@ -1,0 +1,50 @@
+name: Branch name
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, edited]
+
+permissions: {}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check branch name
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          echo "Pull request: $HEAD_REF -> $BASE_REF"
+
+          if [ "$BASE_REF" = "main" ]; then
+            if [ "$HEAD_REF" != "development" ]; then
+              echo "::error::Pull requests into main must come from development, not '$HEAD_REF'."
+              exit 1
+            fi
+            exit 0
+          fi
+
+          pattern='^(feat|fix|chore|update|docs|refactor|build|test)/[a-z0-9]+(-[a-z0-9]+)*$'
+          if ! printf '%s' "$HEAD_REF" | grep -Eq "$pattern"; then
+            echo "::error::Branch '$HEAD_REF' does not follow the naming rules."
+            echo "Use <type>/<short-description>, for example feat/launch-at-login."
+            echo "Allowed types: feat, fix, chore, update, docs, refactor, build, test. See CONTRIBUTING.md."
+            exit 1
+          fi
+          echo "Branch name is fine."
+
+  # Required by the ruleset on main: pull requests into main must come from development.
+  source-branch:
+    if: github.base_ref == 'main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check source branch
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          if [ "$HEAD_REF" != "development" ]; then
+            echo "::error::Pull requests into main must come from development, not '$HEAD_REF'."
+            exit 1
+          fi
+          echo "development -> main: ok"
