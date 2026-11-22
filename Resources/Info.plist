@@ -3,13 +3,13 @@
 <plist version="1.0">
 <dict>
     <key>CFBundleName</key>
-    <string>Black Menu Bar</string>
+    <string>Nightbar</string>
     <key>CFBundleDisplayName</key>
-    <string>Black Menu Bar</string>
+    <string>Nightbar</string>
     <key>CFBundleIdentifier</key>
-    <string>local.blackmenubar.BlackMenuBar</string>
+    <string>local.nightbar.Nightbar</string>
     <key>CFBundleExecutable</key>
-    <string>BlackMenuBar</string>
+    <string>Nightbar</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>

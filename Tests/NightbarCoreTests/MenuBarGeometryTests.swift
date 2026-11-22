@@ -1,6 +1,6 @@
 import CoreGraphics
 import Testing
-@testable import BlackMenuBarCore
+@testable import NightbarCore
 
 struct MenuBarGeometryTests {
     private let screen = CGRect(x: 0, y: 0, width: 1728, height: 1117)

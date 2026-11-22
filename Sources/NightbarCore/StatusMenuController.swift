@@ -6,14 +6,14 @@ final class StatusMenuController: NSObject, NSMenuDelegate {
     private let overlay: MenuBarOverlay
     private let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
 
-    private lazy var toggleItem = makeItem("Black Menu Bar", action: #selector(toggleBlackBar))
+    private lazy var toggleItem = makeItem("Nightbar", action: #selector(toggleBlackBar))
     private lazy var launchAtLoginItem = makeItem("Launch at Login", action: #selector(toggleLaunchAtLogin))
 
     init(overlay: MenuBarOverlay) {
         self.overlay = overlay
         super.init()
         statusItem.button?.image = NSImage(
-            systemSymbolName: "menubar.rectangle", accessibilityDescription: "Black Menu Bar"
+            systemSymbolName: "menubar.rectangle", accessibilityDescription: "Nightbar"
         )
         statusItem.menu = makeMenu()
     }

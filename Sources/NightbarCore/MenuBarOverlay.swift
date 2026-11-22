@@ -8,7 +8,7 @@ import AppKit
 /// live ones, and leaves the wallpaper itself untouched.
 @MainActor
 final class MenuBarOverlay: NSObject {
-    private static let enabledKey = "blackMenuBarEnabled"
+    private static let enabledKey = "nightbarEnabled"
     private static let stripLevel = NSWindow.Level(Int(CGWindowLevelForKey(.desktopWindow)) + 1)
 
     private let defaults: UserDefaults

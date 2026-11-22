@@ -2,12 +2,12 @@
 import PackageDescription
 
 let package = Package(
-    name: "BlackMenuBar",
+    name: "Nightbar",
     platforms: [.macOS(.v14)],
     targets: [
-        .target(name: "BlackMenuBarCore"),
-        .executableTarget(name: "BlackMenuBar", dependencies: ["BlackMenuBarCore"]),
-        .testTarget(name: "BlackMenuBarCoreTests", dependencies: ["BlackMenuBarCore"]),
+        .target(name: "NightbarCore"),
+        .executableTarget(name: "Nightbar", dependencies: ["NightbarCore"]),
+        .testTarget(name: "NightbarCoreTests", dependencies: ["NightbarCore"]),
     ],
     swiftLanguageModes: [.v5]
 )

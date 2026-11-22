@@ -1,4 +1,4 @@
-# Black Menu Bar
+# Nightbar
 
 A small macOS menu bar app that makes the menu bar black with white icons, whatever wallpaper you use, including live wallpapers.
 
@@ -17,10 +17,10 @@ Needs macOS 14 or later and Xcode (or the Swift toolchain).
 ```
 
 ```bash
-open "build/Black Menu Bar.app"
+open "build/Nightbar.app"
 ```
 
-To keep it, copy `build/Black Menu Bar.app` to `/Applications` and turn on **Launch at Login** in its menu.
+To keep it, copy `build/Nightbar.app` to `/Applications` and turn on **Launch at Login** in its menu.
 
 ## Tests
 
