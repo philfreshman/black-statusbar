@@ -12,6 +12,7 @@ Swift Package (tools 6.0, Swift 5 language mode), AppKit, no dependencies. It bu
 - `Resources/` — `Info.plist` and the `AppIcon.icon` Icon Composer source.
 - `scripts/build-app.sh` — builds `build/Nightbar.app` and compiles the icon.
 - `site/` — the nightbar.app landing page.
+- `website/` — the redesigned landing page, a static Astro site (`npm run build` writes `website/dist/`).
 - `.github/workflows/` — release and branch-name checks.
 
 ## Build and test
