@@ -1,0 +1,31 @@
+import AppKit
+
+enum MenuBarGeometry {
+    /// Used when the menu bar is set to hide automatically and takes no space on screen.
+    static let standardHeight: CGFloat = 24
+
+    /// Height of the menu bar in points. Includes the notch area on MacBooks.
+    static func height(screenFrame: CGRect, visibleFrame: CGRect, safeAreaTop: CGFloat) -> CGFloat {
+        let heightReservedByMenuBar = screenFrame.maxY - visibleFrame.maxY
+        return max(heightReservedByMenuBar, safeAreaTop, standardHeight)
+    }
+
+    /// The band along the top edge of the screen where the menu bar sits.
+    static func frame(screenFrame: CGRect, menuBarHeight: CGFloat) -> CGRect {
+        CGRect(
+            x: screenFrame.minX,
+            y: screenFrame.maxY - menuBarHeight,
+            width: screenFrame.width,
+            height: menuBarHeight
+        )
+    }
+}
+
+extension NSScreen {
+    var menuBarFrame: CGRect {
+        let height = MenuBarGeometry.height(
+            screenFrame: frame, visibleFrame: visibleFrame, safeAreaTop: safeAreaInsets.top
+        )
+        return MenuBarGeometry.frame(screenFrame: frame, menuBarHeight: height)
+    }
+}

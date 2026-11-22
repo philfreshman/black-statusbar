@@ -1,5 +1,5 @@
 import AppKit
-import BlackMenuBarCore
+import NightbarCore
 
 MainActor.assumeIsolated {
     let application = NSApplication.shared
