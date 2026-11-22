@@ -8,7 +8,31 @@ Thanks for helping out. This guide covers how branches work, how to build and te
 | --- | --- |
 | `main` | Released code only. Nobody pushes to it directly. It changes only by merging a pull request from `development`. |
 | `development` | Day-to-day integration. All finished work lands here first. |
-| `feat/…`, `fix/…`, `docs/…` | Short-lived branches for one change each, cut from `development`. |
+| `feat/…`, `fix/…`, `chore/…`, … | Short-lived branches for one change each, cut from `development`. |
+
+### Branch names
+
+Every working branch has a type prefix and a short, meaningful name in lowercase kebab-case:
+
+```
+<type>/<short-description>
+```
+
+| Prefix | Use it for |
+| --- | --- |
+| `feat/` | A new feature |
+| `fix/` | A bug fix |
+| `chore/` | Maintenance, tooling, repo housekeeping |
+| `update/` | Updating something that exists, such as dependencies or assets |
+| `docs/` | Documentation only |
+| `refactor/` | Restructuring code without changing behaviour |
+| `build/` | Build scripts and packaging |
+| `test/` | Adding or fixing tests |
+
+Good: `feat/launch-at-login`, `fix/strip-on-new-screen`, `chore/contributing-guide`.
+Not allowed: names without a prefix (`my-branch`), tool-generated names (`claude/…`, `copilot/…`), or vague names (`fix/stuff`, `feat/wip`).
+
+A check on every pull request enforces this. Pull requests into `main` must come from `development`.
 
 ## Workflow
 
@@ -17,7 +41,7 @@ Thanks for helping out. This guide covers how branches work, how to build and te
    ```bash
    git checkout development
    git pull
-   git checkout -b feat/short-description
+   git checkout -b feat/short-description   # see Branch names
    ```
 
 2. Make your change in small, focused commits.
