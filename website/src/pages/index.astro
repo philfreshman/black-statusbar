@@ -34,15 +34,17 @@ const description = "A small macOS app that keeps the menu bar black with white 
           wallpaper.
         </p>
 
+        <label class="row glass">
+          <span>Black menu bar</span>
+          <input id="nightbar" type="checkbox" switch role="switch" />
+        </label>
+
         <div class="actions">
-          <a class="download" id="download" href={downloadUrl}>Download</a>
-          <label class="toggle glass">
-            <input id="nightbar" type="checkbox" switch role="switch" />
-            <span>Nightbar</span>
-          </label>
+          <a class="button prominent" id="download" href={downloadUrl}>Download</a>
+          <a class="button glass" href={`https://github.com/${repo}`}>GitHub</a>
         </div>
 
-        <p class="meta glass"><span id="meta">macOS 14 or later</span> · <a href={`https://github.com/${repo}`}>GitHub</a></p>
+        <p class="meta" id="meta">macOS 14 or later</p>
       </section>
 
       <section class="visual glass">
@@ -188,127 +190,144 @@ const description = "A small macOS app that keeps the menu bar black with white 
         text-wrap: pretty;
       }
 
-      .actions {
-        margin-top: 2.25rem;
+      /* A settings row with a trailing switch, the way Apple places switches in a list. */
+      .row {
         display: flex;
         align-items: center;
-        gap: 1.5rem;
-        flex-wrap: wrap;
-      }
-
-      .download {
-        display: inline-flex;
-        align-items: center;
-        height: 3.25rem;
-        padding-inline: 1.75rem;
-        border-radius: 999px;
-        /* Tinted glass: the colour sits on a near-solid layer so the label stays readable. */
-        background: linear-gradient(180deg, rgb(248 196 166 / 0.96), rgb(232 158 120 / 0.92));
-        -webkit-backdrop-filter: blur(20px) saturate(1.6);
-        backdrop-filter: blur(20px) saturate(1.6);
-        color: #1d0f14;
-        text-decoration: none;
-        font-size: 1.1rem;
-        font-weight: 700;
-        box-shadow:
-          inset 0 1px 0 rgb(255 255 255 / 0.6),
-          inset 0 -1px 0 rgb(120 50 40 / 0.25),
-          0 12px 30px -8px rgb(238 170 134 / 0.45);
-        transition:
-          scale 0.1s ease-out,
-          filter 0.15s ease;
-
-        &:hover {
-          filter: brightness(1.06);
-        }
-
-        &:active {
-          scale: 0.97;
-        }
-      }
-
-      .toggle {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.65rem;
-        height: 3.25rem;
-        padding: 0 1.1rem 0 0.6rem;
-        border-radius: 999px;
-        font-weight: 600;
+        justify-content: space-between;
+        gap: 1rem;
+        max-width: 22rem;
+        margin-top: 2rem;
+        padding: 0.7rem 0.7rem 0.7rem 1.1rem;
+        border-radius: 1.6rem;
+        font-size: 1.0625rem;
         cursor: pointer;
         user-select: none;
       }
 
-      /* One look in every browser: the native switch only exists in Safari. */
+      /* The iOS 26 switch: a 63 x 28 pt track with a capsule thumb that swells into a lens while pressed. */
       input[type="checkbox"][switch] {
+        --thumb-w: 2.3125rem;
+        --inset: 0.125rem;
+
         appearance: none;
         position: relative;
         flex: none;
-        width: 3.5rem;
-        height: 2rem;
+        width: 3.9375rem;
+        height: 1.75rem;
         margin: 0;
         border-radius: 999px;
-        background: rgb(0 0 0 / 0.28);
-        box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.14), inset 0 1px 2px rgb(0 0 0 / 0.3);
+        background: rgb(120 120 128 / 0.36);
         cursor: pointer;
-        transition: background-color 0.3s ease;
+        transition: background-color 0.25s ease;
 
         &::before {
           content: "";
           position: absolute;
-          top: 0.1875rem;
-          left: 0.1875rem;
-          width: 1.625rem;
-          height: 1.625rem;
-          border-radius: 50%;
+          top: var(--inset);
+          left: var(--inset);
+          width: var(--thumb-w);
+          height: calc(100% - 2 * var(--inset));
+          border-radius: 999px;
           background: #fff;
-          box-shadow: 0 2px 6px rgb(0 0 0 / 0.35);
-          transition: translate 0.35s ease-out;
-          transition-timing-function: linear(0, 0.33 10%, 0.72 24%, 0.94 40%, 1.01 56%, 1);
+          box-shadow:
+            0 3px 8px rgb(0 0 0 / 0.15),
+            0 3px 1px rgb(0 0 0 / 0.06);
+          transition:
+            translate 0.3s ease-out,
+            scale 0.2s ease-out,
+            background-color 0.2s ease;
+          transition-timing-function: linear(0, 0.33 10%, 0.72 24%, 0.94 40%, 1.01 56%, 1), ease-out, ease;
         }
 
         &:checked {
-          background: #000;
-          box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.22);
+          background: #30d158;
         }
 
         &:checked::before {
-          translate: 1.5rem 0;
+          translate: calc(3.9375rem - var(--thumb-w) - 2 * var(--inset)) 0;
         }
 
         &:active::before {
-          scale: 1.06 0.94;
+          scale: 1.3 1.45;
+          background: rgb(255 255 255 / 0.55);
+          box-shadow:
+            inset 0 1px 1px rgb(255 255 255 / 0.9),
+            inset 0 -1px 2px rgb(0 0 0 / 0.12),
+            0 4px 12px rgb(0 0 0 / 0.2);
         }
 
         &:focus-visible {
           outline: 2px solid var(--text);
-          outline-offset: 4px;
+          outline-offset: 3px;
         }
 
         @media (prefers-reduced-motion: reduce) {
           &::before {
-            transition: none;
+            transition: background-color 0.2s ease;
           }
         }
       }
 
-      .meta {
-        display: inline-block;
-        margin: 2.25rem 0 0;
-        padding: 0.4rem 0.9rem;
+      .actions {
+        margin-top: 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+      }
+
+      /* Capsule buttons, large size: 17 pt semibold labels. */
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 3.125rem;
+        min-width: 7.5rem;
+        padding-inline: 1.5rem;
         border-radius: 999px;
-        box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.2);
+        color: var(--text);
+        text-decoration: none;
+        font-size: 1.0625rem;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+        transition:
+          scale 0.2s ease-out,
+          filter 0.15s ease;
+
+        &:hover {
+          filter: brightness(1.08);
+        }
+
+        &:active {
+          scale: 0.96;
+        }
+      }
+
+      /* Glass prominent: the accent colour on a glass capsule with a lit top edge. */
+      .button.prominent {
+        background: linear-gradient(180deg, rgb(10 132 255 / 0.92), rgb(0 110 230 / 0.92));
+        -webkit-backdrop-filter: blur(20px) saturate(1.8);
+        backdrop-filter: blur(20px) saturate(1.8);
+        color: #fff;
+        box-shadow:
+          inset 0 1px 0.5px rgb(255 255 255 / 0.55),
+          inset 0 -1px 1px rgb(0 0 0 / 0.15),
+          0 8px 24px -8px rgb(10 132 255 / 0.6);
+      }
+
+      /* Regular glass: no tint, so the label takes the text colour. */
+      .button.glass {
+        box-shadow:
+          inset 0 1px 0.5px rgb(255 255 255 / 0.35),
+          inset 0 -1px 1px rgb(255 255 255 / 0.06),
+          0 8px 24px -10px rgb(0 0 0 / 0.5);
+      }
+
+      .meta {
+        margin: 1.5rem 0 0 0.25rem;
         font-size: 0.875rem;
         color: var(--muted);
-
-        a {
-          color: inherit;
-          text-underline-offset: 3px;
-
-          &:hover {
-            color: var(--text);
-          }
-        }
       }
 
       .visual {
