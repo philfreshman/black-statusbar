@@ -1,0 +1,10 @@
+/* One file per page section. Vite bundles the imports into one stylesheet. */
+@import './base.css';
+@import './topbar.css';
+@import './hero.css';
+@import './desktop.css';
+@import './points.css';
+@import './how-it-works.css';
+@import './menu.css';
+@import './install.css';
+@import './footer.css';

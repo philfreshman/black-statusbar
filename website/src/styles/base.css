@@ -1,0 +1,128 @@
+:root {
+    --night: #08080d;
+    --night-2: #101019;
+    --line: rgb(255 255 255 / 0.09);
+    --text: #f3f1f6;
+    --muted: #a19fae;
+    --dusk-1: #6b3a6b;
+    --dusk-2: #c2577a;
+    --dusk-3: #f2a272;
+    --dusk: linear-gradient(100deg, #b98fd8 0%, #e58aa4 45%, #f7b98a 100%);
+    --radius: 22px;
+    --max: 1120px;
+    font-family:
+        -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter', 'Segoe UI', system-ui, sans-serif;
+    color: var(--text);
+    background: var(--night);
+    -webkit-font-smoothing: antialiased;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+        radial-gradient(1200px 600px at 50% -10%, rgb(194 87 122 / 0.22), transparent 70%),
+        radial-gradient(900px 500px at 85% 30%, rgb(107 58 107 / 0.25), transparent 70%),
+        var(--night);
+    background-repeat: no-repeat;
+}
+
+a {
+    color: inherit;
+}
+
+h1,
+h2,
+h3 {
+    margin: 0;
+    letter-spacing: -0.025em;
+    font-weight: 650;
+}
+p {
+    line-height: 1.6;
+}
+
+.eyebrow {
+    margin: 0 0 14px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #e6a0b0;
+}
+
+.dusk {
+    background: var(--dusk);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+main > section {
+    width: min(var(--max), calc(100% - 40px));
+    margin: 0 auto;
+}
+
+.button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 22px;
+    border-radius: 999px;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    transition:
+        transform 0.2s,
+        background 0.2s,
+        box-shadow 0.2s;
+}
+
+.button:active {
+    transform: scale(0.97);
+}
+
+.button.primary {
+    color: #160b12;
+    background: var(--dusk);
+    box-shadow: 0 10px 40px -10px rgb(229 138 164 / 0.7);
+}
+
+.button.primary:hover {
+    box-shadow: 0 14px 50px -10px rgb(229 138 164 / 0.9);
+}
+
+/* Two-column sections: How it works and the menu. */
+.how,
+.menu-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 64px;
+    padding: 100px 0;
+}
+
+.how h2,
+.menu-section h2,
+.install h2 {
+    font-size: clamp(30px, 3.6vw, 44px);
+    line-height: 1.1;
+}
+.how-copy p:not(.eyebrow),
+.menu-copy p:not(.eyebrow) {
+    color: var(--muted);
+    font-size: 17px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        transition-duration: 0.01ms !important;
+        animation: none !important;
+    }
+}
