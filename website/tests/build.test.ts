@@ -2,6 +2,7 @@ import { Window } from 'happy-dom'
 import { fileURLToPath } from 'node:url'
 import { build } from 'vite-plus'
 import { beforeAll, describe, expect, it } from 'vite-plus/test'
+import { loadingClass } from '../src/site.ts'
 
 const projectRoot = fileURLToPath(new URL('..', import.meta.url))
 
@@ -90,6 +91,30 @@ describe('production build', () => {
 
         expect(script).toMatch(/^\/assets\/index-[\w-]+\.js$/)
         expect(output.fileNames).toContain(script?.slice(1))
+    })
+
+    it('preloads the Latin font files the stylesheet uses', () => {
+        const preloads = [...document.querySelectorAll('link[rel="preload"][as="font"]')]
+        const stylesheet = document.querySelector('link[rel="stylesheet"]')?.getAttribute('href')
+        const css = output.sources.get(stylesheet?.slice(1) ?? '') ?? ''
+
+        expect(preloads).toHaveLength(3)
+        for (const preload of preloads) {
+            const href = preload.getAttribute('href') ?? ''
+            expect(href).toMatch(/^\/assets\/[\w-]+-latin-wght-normal-[\w-]+\.woff2$/)
+            expect(preload.hasAttribute('crossorigin')).toBe(true)
+            expect(css).toContain(`url(${href})`)
+        }
+    })
+
+    it('hides the page until the fonts are ready, with a timeout as a safety net', () => {
+        const inlineScript = [...document.querySelectorAll('head script:not([src])')]
+            .map((script) => script.textContent)
+            .join('')
+
+        expect(inlineScript).toContain(`classList.add('${loadingClass}')`)
+        expect(inlineScript).toContain(`classList.remove('${loadingClass}')`)
+        expect(inlineScript).toContain('setTimeout')
     })
 
     it('ships install.sh next to the page', () => {
