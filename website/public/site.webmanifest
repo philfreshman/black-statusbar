@@ -1,0 +1,14 @@
+{
+    "name": "Nightbar",
+    "short_name": "Nightbar",
+    "description": "A black menu bar for macOS, with white icons on any wallpaper and every screen.",
+    "start_url": "/",
+    "display": "browser",
+    "background_color": "#050506",
+    "theme_color": "#050506",
+    "icons": [
+        { "src": "/icon.svg", "type": "image/svg+xml", "sizes": "any" },
+        { "src": "/icon-192.png", "type": "image/png", "sizes": "192x192" },
+        { "src": "/icon-512.png", "type": "image/png", "sizes": "512x512" }
+    ]
+}
