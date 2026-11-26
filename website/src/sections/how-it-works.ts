@@ -64,7 +64,9 @@ function renderStage(): string {
             </div>
             <div class="camera">
                 <div class="layer layer-wallpaper">
-                    <div class="plane"><div class="mini-cloud"></div></div>
+                    <div class="plane">
+                        <div class="mini-wallpaper"><div class="mini-cloud"></div></div>
+                    </div>
                     <i class="post"></i><i class="post"></i><i class="post"></i><i class="post"></i>
                     <span class="tag label">L1 · Wallpaper</span>
                 </div>

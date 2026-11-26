@@ -145,6 +145,16 @@
 
 /* L1: the wallpaper, a small copy of the storm scene in the hero. */
 .layer-wallpaper .plane {
+    box-shadow:
+        0 0 0 1px rgb(255 255 255 / 0.18),
+        0 0 60px -10px rgb(124 92 255 / 0.5);
+}
+
+/* The picture sits in its own box, so the blur softens it without fuzzing the plane's edges. */
+.mini-wallpaper {
+    position: absolute;
+    inset: -8%;
+    filter: blur(calc(var(--plane-w) * 0.014));
     background:
         radial-gradient(45% 22% at 36% 68%, rgb(255 242 196 / 0.9), transparent 70%),
         linear-gradient(
@@ -157,9 +167,6 @@
             #3a2354 70.4%,
             #0c0814 100%
         );
-    box-shadow:
-        0 0 0 1px rgb(255 255 255 / 0.18),
-        0 0 60px -10px rgb(124 92 255 / 0.5);
 }
 
 .mini-cloud {
