@@ -4,6 +4,16 @@ A small macOS menu bar app that makes the menu bar black with white icons, whate
 
 **[Download Nightbar](https://github.com/philfreshman/nightbar/releases/latest/download/Nightbar.zip)** · [nightbar.app](https://nightbar.app)
 
+## Install
+
+Paste this into Terminal. It downloads the latest release, puts Nightbar in `/Applications` and opens it:
+
+```bash
+curl -fsSL https://nightbar.app/install.sh | bash
+```
+
+Run it again to update. The script is [`website/public/install.sh`](website/public/install.sh). Or download `Nightbar.zip` above and move Nightbar into Applications yourself; macOS then asks for confirmation the first time you open it.
+
 ## How it works
 
 macOS does not let apps paint the menu bar itself. Instead, it picks the menu bar look and the icon colour (dark or white) from what is behind the menu bar.

@@ -85,3 +85,25 @@ if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
 } else {
     void playLoop();
 }
+
+// Copy buttons: data-copy names the element whose text is copied.
+for (const button of document.querySelectorAll("[data-copy]")) {
+    const label = button.querySelector(".copy-label");
+    let resetTimer;
+    button.addEventListener("click", async () => {
+        const text = document.getElementById(button.dataset.copy).textContent.trim();
+        try {
+            await navigator.clipboard.writeText(text);
+            label.textContent = "Copied";
+        } catch {
+            label.textContent = "Press ⌘C";
+            getSelection().selectAllChildren(document.getElementById(button.dataset.copy));
+        }
+        button.classList.add("is-copied");
+        clearTimeout(resetTimer);
+        resetTimer = setTimeout(() => {
+            label.textContent = "Copy";
+            button.classList.remove("is-copied");
+        }, 1800);
+    });
+}
