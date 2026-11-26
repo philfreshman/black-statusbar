@@ -76,7 +76,7 @@ describe('production build', () => {
         for (const selector of [
             '.topbar',
             '.screen',
-            '.stack',
+            '.camera',
             '.menu-mock',
             '.steps',
             '.footer',
