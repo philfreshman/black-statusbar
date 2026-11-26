@@ -1,13 +1,20 @@
 {
-  "name": "nightbar-landing",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
-  },
-  "devDependencies": {
-    "vite": "^8.3.8"
-  }
+    "name": "nightbar-landing",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "vp dev",
+        "build": "vp build",
+        "preview": "vp preview",
+        "check": "vp check",
+        "fmt": "vp fmt",
+        "lint": "vp lint"
+    },
+    "devDependencies": {
+        "vite": "npm:@voidzero-dev/vite-plus-core@8.3.8000",
+        "vite-plus": "1.7.0"
+    },
+    "overrides": {
+        "vite": "npm:@voidzero-dev/vite-plus-core@8.3.8000"
+    }
 }
