@@ -338,6 +338,40 @@
             <section class="install" id="install" aria-labelledby="install-title">
                 <p class="eyebrow">Install</p>
                 <h2 id="install-title">Running in under a minute.</h2>
+                <p class="install-lede">
+                    Paste this into Terminal. It puts Nightbar in your Applications folder and opens
+                    it, with no security prompt.
+                </p>
+                <div class="command">
+                    <code id="install-command"
+                        >curl -fsSL https://nightbar.app/install.sh | bash</code
+                    >
+                    <button class="copy" type="button" data-copy="install-command">
+                        <svg aria-hidden="true" viewBox="0 0 20 20" width="16" height="16">
+                            <rect
+                                x="6.5"
+                                y="6.5"
+                                width="10"
+                                height="10"
+                                rx="2.2"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.6"
+                            />
+                            <path
+                                d="M13.5 4.2A1.8 1.8 0 0 0 11.8 3H5a2 2 0 0 0-2 2v6.8a1.8 1.8 0 0 0 1.2 1.7"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.6"
+                                stroke-linecap="round"
+                            />
+                        </svg>
+                        <span class="copy-label">Copy</span>
+                    </button>
+                </div>
+                <p class="install-alt">
+                    <a href="/install.sh">Read the script</a> · or install it by hand:
+                </p>
                 <ol class="steps">
                     <li>
                         <h3>Download</h3>
