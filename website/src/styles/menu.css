@@ -11,7 +11,7 @@
 .menu-copy > p:not(.eyebrow) {
     margin: 18px 0 0;
     color: var(--fog);
-    font-size: 17px;
+    font-size: 1.0625rem;
 }
 
 .menu-stage {
@@ -63,7 +63,7 @@
     backdrop-filter: blur(20px);
     border: 1px solid rgb(255 255 255 / 0.12);
     box-shadow: 0 24px 60px -10px rgb(0 0 0 / 0.85);
-    font-size: 14px;
+    font-size: 0.875rem;
 }
 
 .menu-mock-list li {
@@ -78,7 +78,7 @@
 }
 .menu-mock-list .check {
     width: 20px;
-    font-size: 12px;
+    font-size: 0.75rem;
 }
 .menu-mock-list li:not(:has(.check)):not(.sep) {
     padding-left: 30px;
@@ -109,7 +109,7 @@
     gap: 14px;
     padding: 14px 0;
     border-bottom: 1px solid var(--rail);
-    font-size: 15px;
+    font-size: 0.9375rem;
 }
 
 .fact-icon {

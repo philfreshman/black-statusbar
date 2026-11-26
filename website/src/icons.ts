@@ -203,6 +203,18 @@ interface IconOptions {
     size?: number
 }
 
+/** The blue-to-violet accent blend as an SVG paint, so the thunder N can use it as its fill. */
+export function renderIconDefs(): string {
+    return /* HTML */ `
+        <svg class="icon-defs" width="0" height="0" aria-hidden="true">
+            <linearGradient id="accent-blend" x1="0" y1="0" x2="1" y2=".2">
+                <stop offset="0" style="stop-color: var(--accent)" />
+                <stop offset="1" style="stop-color: var(--violet)" />
+            </linearGradient>
+        </svg>
+    `
+}
+
 /** A decorative inline SVG icon, hidden from screen readers. */
 export function icon(name: IconName, { className, id, size }: IconOptions = {}): string {
     const { viewBox, content } = shapes[name]

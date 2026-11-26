@@ -1,4 +1,5 @@
 import { icon } from '../icons.ts'
+import { renderWallpaperScene } from './wallpaper.ts'
 
 interface Step {
     tag: string
@@ -58,14 +59,10 @@ function renderMiniMenubar(): string {
 function renderStage(): string {
     return /* HTML */ `
         <div class="stage" aria-hidden="true">
-            <div class="stage-hud">
-                <span class="label">Orthographic camera</span>
-                <span class="label">No perspective · 3 layers</span>
-            </div>
             <div class="camera">
                 <div class="layer layer-wallpaper">
                     <div class="plane">
-                        <div class="mini-wallpaper"><div class="mini-cloud"></div></div>
+                        <div class="mini-wallpaper">${renderWallpaperScene('mini-scene')}</div>
                     </div>
                     <i class="post"></i><i class="post"></i><i class="post"></i><i class="post"></i>
                     <span class="tag label">L1 · Wallpaper</span>

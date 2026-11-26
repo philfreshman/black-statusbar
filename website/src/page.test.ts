@@ -59,6 +59,15 @@ describe('renderPage', () => {
         }
     })
 
+    it('gives every copy button a status region that screen readers announce', () => {
+        for (const button of page.querySelectorAll('button[data-copy]')) {
+            expect(button.textContent?.replace(/\s+/g, ' ').trim()).toBe('Copy install command')
+            expect(button.parentElement?.querySelector('.copy-status')?.getAttribute('role')).toBe(
+                'status',
+            )
+        }
+    })
+
     it('installs through the command, not a direct download', () => {
         expect(page.querySelector('a[href$="Nightbar.zip"]')).toBeNull()
     })

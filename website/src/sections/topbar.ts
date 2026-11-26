@@ -1,5 +1,5 @@
 import { icon } from '../icons.ts'
-import { ids, links } from '../site.ts'
+import { links } from '../site.ts'
 
 export function renderTopbar(): string {
     return /* HTML */ `
@@ -12,9 +12,6 @@ export function renderTopbar(): string {
                 <a class="section-link" href="#how">How it works</a>
                 <a class="section-link" href="#install">Install</a>
                 <a href="${links.repository}">GitHub</a>
-                <a class="stars" id="${ids.stars}" href="${links.stargazers}" hidden>
-                    Stars: <span class="star-count" id="${ids.starCount}"></span>
-                </a>
             </nav>
         </header>
     `

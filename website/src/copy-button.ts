@@ -9,31 +9,47 @@ const labels = {
     failed: 'Press ⌘C',
 } as const
 
+/** What screen readers hear, through the status region next to the button. */
+const announcements = {
+    copied: 'Install command copied',
+    failed: 'Copy failed. The command is selected: press Command C to copy it.',
+} as const
+
 function setUpCopyButton(button: HTMLButtonElement): void {
     const targetId = button.dataset.copy
     const label = button.querySelector('.copy-label')
-    if (!targetId || !label) {
+    const status = button.parentElement?.querySelector('.copy-status')
+    if (!targetId || !label || !status) {
         return
     }
 
     const target = requireElement(targetId)
     let resetTimer: ReturnType<typeof setTimeout> | undefined
 
+    const show = (outcome: 'copied' | 'failed'): void => {
+        label.textContent = labels[outcome]
+        status.textContent = announcements[outcome]
+        button.classList.add('is-copied')
+    }
+
+    /** Clears the status too, so screen reader browse mode finds no stale message. */
+    const reset = (): void => {
+        label.textContent = labels.idle
+        status.textContent = ''
+        button.classList.remove('is-copied')
+    }
+
     button.addEventListener('click', async () => {
         try {
             await navigator.clipboard.writeText(target.textContent?.trim() ?? '')
-            label.textContent = labels.copied
+            show('copied')
         } catch {
-            label.textContent = labels.failed
             getSelection()?.selectAllChildren(target)
+            show('failed')
         }
 
-        button.classList.add('is-copied')
         clearTimeout(resetTimer)
-        resetTimer = setTimeout(() => {
-            label.textContent = labels.idle
-            button.classList.remove('is-copied')
-        }, RESET_AFTER_MS)
+        resetTimer = setTimeout(reset, RESET_AFTER_MS)
     })
 }
 
