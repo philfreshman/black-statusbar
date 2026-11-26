@@ -45,27 +45,9 @@
     color: var(--chalk);
 }
 
-/* The name, huge, cut off by the bottom hairline. */
-.footer-word {
-    margin: 0;
-    border-top: 1px solid var(--rail);
-    font-family: var(--font-display);
-    font-size: clamp(96px, 27vw, 360px);
-    font-weight: 700;
-    font-stretch: 75%;
-    line-height: 0.74;
-    letter-spacing: -0.06em;
-    text-align: center;
-    color: transparent;
-    -webkit-text-stroke: 1px var(--rail-strong);
-    translate: 0 0.12em;
-}
-
 .footer-base {
-    position: relative;
     padding: 16px var(--pad);
     border-top: 1px solid var(--rail);
-    background: var(--ink);
     font-size: 10.5px;
 }
 
