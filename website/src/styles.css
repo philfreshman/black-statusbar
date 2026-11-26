@@ -55,6 +55,13 @@ p {
     color: #e6a0b0;
 }
 
+.dusk {
+    background: var(--dusk);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
 /* Top bar: a black strip of its own, like the product. */
 .topbar {
     position: sticky;
