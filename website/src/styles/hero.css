@@ -51,7 +51,8 @@
 }
 
 .hero h1 {
-    font-size: clamp(3rem, 8.4vw, 6.75rem);
+    /* Part rem, part vw, so the text still grows when the visitor zooms in. */
+    font-size: clamp(3rem, 1.3rem + 6.8vw, 6.75rem);
     font-weight: 600;
     line-height: 0.92;
     letter-spacing: -0.038em;
@@ -60,7 +61,7 @@
 .lede {
     max-width: 34em;
     margin: 26px 0 0;
-    font-size: clamp(1rem, 1.5vw, 1.1875rem);
+    font-size: clamp(1rem, 0.75rem + 0.6vw, 1.1875rem);
     color: var(--fog);
 }
 
@@ -92,6 +93,29 @@
 .hero .storm {
     border-top: 1px solid var(--rail);
     padding: clamp(28px, 6vw, 80px) clamp(12px, 6vw, 88px);
+}
+
+/* Lines the pause button up with the desktop's right edge. */
+.demo-controls {
+    display: flex;
+    justify-content: flex-end;
+    max-width: 1040px;
+    margin: 16px auto 0;
+}
+
+/* Over the storm glow, so it gets a dark backing to stay readable. */
+.demo-toggle {
+    background: rgb(5 5 6 / 0.6);
+}
+
+.demo-toggle[hidden] {
+    display: none;
+}
+
+/* Shows what the button does next: pause while playing, play while paused. */
+.demo-toggle[data-paused='true'] .icon-pause,
+.demo-toggle:not([data-paused='true']) .icon-play {
+    display: none;
 }
 
 .screen-slot {
@@ -134,33 +158,6 @@
 .command code::before {
     content: '$ ';
     color: var(--accent);
-}
-
-.copy {
-    display: inline-flex;
-    flex: none;
-    align-items: center;
-    gap: 6px;
-    min-block-size: 32px;
-    padding: 0 12px;
-    border: 1px solid var(--rail-strong);
-    border-radius: 5px;
-    background: transparent;
-    color: var(--fog);
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition:
-        color 0.2s,
-        border-color 0.2s,
-        background 0.2s;
-}
-
-.copy:hover {
-    color: var(--chalk);
-    border-color: var(--fog);
 }
 
 .copy.is-copied {

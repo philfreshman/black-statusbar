@@ -28,6 +28,8 @@
     --pad: clamp(20px, 4vw, 48px);
     --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
 
+    /* In-page links land below the sticky top bar instead of under it. */
+    scroll-padding-top: var(--topbar-h);
     color-scheme: dark;
     font-family: var(--font-body);
     font-size-adjust: from-font;
@@ -42,7 +44,7 @@
 
 body {
     margin: 0;
-    min-height: 100vh;
+    min-height: 100dvh;
     background: var(--ink);
     transition: opacity 0.3s var(--ease-out);
 }
@@ -77,7 +79,8 @@ h3 {
 }
 
 h2 {
-    font-size: clamp(2rem, 4.2vw, 3.5rem);
+    /* Part rem, part vw, so the text still grows when the visitor zooms in. */
+    font-size: clamp(2rem, 0.7rem + 3.5vw, 3.5rem);
     line-height: 1;
 }
 
@@ -181,6 +184,34 @@ p {
 
 .button svg {
     flex: none;
+}
+
+/* Small mono buttons that sit beside content, like Copy and Pause demo. */
+.chip {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    gap: 6px;
+    min-block-size: 32px;
+    padding: 0 12px;
+    border: 1px solid var(--rail-strong);
+    border-radius: 5px;
+    background: transparent;
+    color: var(--fog);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition:
+        color 0.2s,
+        border-color 0.2s,
+        background 0.2s;
+}
+
+.chip:hover {
+    color: var(--chalk);
+    border-color: var(--fog);
 }
 
 /* Read by screen readers, not shown on screen. */

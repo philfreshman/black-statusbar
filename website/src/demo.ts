@@ -1,4 +1,5 @@
-import { requireElement, wait } from './dom.ts'
+import { requireElement } from './dom.ts'
+import { PausableClock } from './pausable-clock.ts'
 import { ids } from './site.ts'
 
 interface Position {
@@ -13,9 +14,58 @@ const CURSOR_MOVE_MS = 900
 const CLICK_MS = 120
 const REST_POSITION: Position = { x: 62, y: 58 }
 
+/** Why the demo is paused. It plays only while none of these apply. */
+const pauseReasons = {
+    visitor: 'visitor',
+    offscreen: 'offscreen',
+    hiddenTab: 'hidden-tab',
+} as const
+
+const toggleLabels = { pause: 'Pause demo', play: 'Play demo' } as const
+
+/**
+ * Lets the visitor pause the demo, and pauses it on their behalf while nobody can see it:
+ * scrolled out of view or in a background tab, where it would only use battery.
+ */
+function controlPlayback(clock: PausableClock, desktop: HTMLElement): void {
+    const toggle = requireElement<HTMLButtonElement>(ids.demoToggle)
+    const label = toggle.querySelector('.demo-toggle-label')
+
+    toggle.hidden = false
+    toggle.addEventListener('click', () => {
+        const isPausing = toggle.dataset.paused !== 'true'
+        if (isPausing) {
+            clock.pause(pauseReasons.visitor)
+        } else {
+            clock.resume(pauseReasons.visitor)
+        }
+        // The label says what the button does next, so it needs no aria-pressed.
+        toggle.dataset.paused = String(isPausing)
+        if (label) {
+            label.textContent = isPausing ? toggleLabels.play : toggleLabels.pause
+        }
+    })
+
+    new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) {
+            clock.resume(pauseReasons.offscreen)
+        } else {
+            clock.pause(pauseReasons.offscreen)
+        }
+    }).observe(desktop)
+
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            clock.pause(pauseReasons.hiddenTab)
+        } else {
+            clock.resume(pauseReasons.hiddenTab)
+        }
+    })
+}
+
 /**
  * Plays the hero animation: the cursor opens the Nightbar menu and switches Nightbar on,
- * waits, then switches it off again, forever. With reduced motion it just shows Nightbar on.
+ * waits, then switches it off again, until paused. With reduced motion it just shows Nightbar on.
  */
 export function startDemo(): void {
     const desktop = requireElement(ids.desktop)
@@ -23,6 +73,7 @@ export function startDemo(): void {
     const statusItem = requireElement(ids.statusItem)
     const statusMenu = requireElement(ids.statusMenu)
     const nightbarItem = requireElement(ids.nightbarMenuItem)
+    const clock = new PausableClock()
 
     function centreOf(element: Element): Position {
         const desktopBox = desktop.getBoundingClientRect()
@@ -40,12 +91,12 @@ export function startDemo(): void {
 
     async function moveCursorTo(position: Position): Promise<void> {
         placeCursor(position)
-        await wait(CURSOR_MOVE_MS)
+        await clock.wait(CURSOR_MOVE_MS)
     }
 
     async function click(): Promise<void> {
         cursor.classList.add('is-pressed')
-        await wait(CLICK_MS)
+        await clock.wait(CLICK_MS)
         cursor.classList.remove('is-pressed')
     }
 
@@ -71,10 +122,10 @@ export function startDemo(): void {
         await moveCursorTo(centreOf(statusItem))
         await click()
         setMenuOpen(true)
-        await wait(500)
+        await clock.wait(500)
         await moveCursorTo(centreOf(nightbarItem))
         nightbarItem.classList.add('is-hover')
-        await wait(350)
+        await clock.wait(350)
         await click()
         setMenuOpen(false)
         setNightbar(!isNightbarOn())
@@ -83,10 +134,10 @@ export function startDemo(): void {
     async function playLoop(): Promise<never> {
         placeCursor(REST_POSITION)
         for (;;) {
-            await wait(1400)
+            await clock.wait(1400)
             await toggleNightbarFromMenu()
             await moveCursorTo(REST_POSITION)
-            await wait(2600)
+            await clock.wait(2600)
             await toggleNightbarFromMenu()
             await moveCursorTo(REST_POSITION)
         }
@@ -99,5 +150,6 @@ export function startDemo(): void {
         return
     }
 
+    controlPlayback(clock, desktop)
     void playLoop()
 }

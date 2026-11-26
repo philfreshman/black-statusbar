@@ -46,7 +46,7 @@ export function renderMenuSection(): string {
                 <p class="eyebrow"><span>03</span> Settings</p>
                 <h2 id="menu-title">That is the whole menu.</h2>
                 <p>On or off, launch at login, quit. Nothing to tune.</p>
-                <ul class="facts">
+                <ul class="facts" role="list">
                     ${facts.map(renderFact).join('')}
                 </ul>
             </div>
