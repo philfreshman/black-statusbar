@@ -1,5 +1,5 @@
 import { icon } from '../icons.ts'
-import { installCommand } from '../site.ts'
+import { copyCommand, installCommand } from '../site.ts'
 
 /** The install command in a terminal card, with a button that copies it. */
 export function renderInstallCommand(id: string): string {
@@ -8,7 +8,7 @@ export function renderInstallCommand(id: string): string {
             <p class="label">Terminal · macOS 14 or later</p>
             <div class="command-line">
                 <code id="${id}">${installCommand}</code>
-                <button class="chip copy" type="button" data-copy="${id}">
+                <button class="chip copy" type="button" command="${copyCommand}" commandfor="${id}">
                     ${icon('copy', { size: 16 })}
                     <span class="copy-label">Copy</span
                     ><span class="visually-hidden"> install command</span>

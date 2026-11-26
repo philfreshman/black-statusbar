@@ -1,7 +1,7 @@
 // @vitest-environment happy-dom
 import { beforeAll, describe, expect, it } from 'vite-plus/test'
 import { renderPage } from './page.ts'
-import { ids, installCommand } from './site.ts'
+import { copyCommand, ids, installCommand } from './site.ts'
 
 function parsePage(): Document {
     return new DOMParser().parseFromString(renderPage(), 'text/html')
@@ -50,17 +50,17 @@ describe('renderPage', () => {
     })
 
     it('shows the install command next to every copy button', () => {
-        const buttons = [...page.querySelectorAll<HTMLButtonElement>('button[data-copy]')]
+        const buttons = [...page.querySelectorAll(`button[command="${copyCommand}"]`)]
 
         expect(buttons.length).toBeGreaterThan(0)
         for (const button of buttons) {
-            const target = page.getElementById(button.dataset.copy ?? '')
+            const target = page.getElementById(button.getAttribute('commandfor') ?? '')
             expect(target?.textContent).toBe(installCommand)
         }
     })
 
     it('gives every copy button a status region that screen readers announce', () => {
-        for (const button of page.querySelectorAll('button[data-copy]')) {
+        for (const button of page.querySelectorAll(`button[command="${copyCommand}"]`)) {
             expect(button.textContent?.replace(/\s+/g, ' ').trim()).toBe('Copy install command')
             expect(button.parentElement?.querySelector('.copy-status')?.getAttribute('role')).toBe(
                 'status',

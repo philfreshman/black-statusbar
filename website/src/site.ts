@@ -10,6 +10,12 @@ export const links = {
 export const installCommand = 'curl -fsSL https://nightbar.app/install.sh | bash'
 
 /**
+ * The custom Invoker Command a copy button sends: `command="--copy"` together with
+ * `commandfor`, the id of the element whose text it copies. copy-button.ts handles it.
+ */
+export const copyCommand = '--copy'
+
+/**
  * The class on <html> that keeps the page hidden while its fonts load.
  * The inline script in index.html adds it; fonts.ts removes it.
  */
