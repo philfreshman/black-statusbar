@@ -1,0 +1,42 @@
+/* Top bar: a black strip of its own, like the product. */
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 52px;
+    padding: 0 max(20px, calc((100vw - var(--max)) / 2));
+    background: rgb(0 0 0 / 0.86);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 650;
+    text-decoration: none;
+}
+
+.topbar-links {
+    display: flex;
+    gap: 24px;
+    font-size: 14px;
+}
+.topbar-links a {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+.topbar-links a:hover {
+    color: var(--text);
+}
+
+@media (max-width: 860px) {
+    .topbar-links a:not(:last-child) {
+        display: none;
+    }
+}

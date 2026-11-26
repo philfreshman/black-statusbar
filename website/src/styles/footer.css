@@ -1,0 +1,22 @@
+/* Footer: black, like everything up top. */
+.footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 22px;
+    padding: 28px max(20px, calc((100vw - var(--max)) / 2));
+    border-top: 1px solid var(--line);
+    background: #000;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.footer span {
+    margin-right: auto;
+}
+.footer a {
+    text-decoration: none;
+}
+.footer a:hover {
+    color: var(--text);
+}

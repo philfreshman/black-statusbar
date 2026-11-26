@@ -1,0 +1,104 @@
+/* How it works: the stack of layers. */
+.stack {
+    position: relative;
+    height: 380px;
+    perspective: 1200px;
+}
+
+.layer {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 200px;
+    transition: translate 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.plane {
+    position: absolute;
+    inset: 0 34% 0 0;
+    border-radius: 16px;
+    transform: rotateX(58deg) rotateZ(-32deg);
+    box-shadow: 0 30px 60px -20px rgb(0 0 0 / 0.8);
+}
+
+.layer span {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    translate: 0 -50%;
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    color: var(--muted);
+    background: rgb(0 0 0 / 0.6);
+    border: 1px solid var(--line);
+}
+
+.layer-wallpaper {
+    top: 170px;
+    z-index: 1;
+}
+.layer-strip {
+    top: 95px;
+    z-index: 2;
+}
+.layer-windows {
+    top: 20px;
+    z-index: 3;
+}
+
+.layer-wallpaper .plane {
+    background: linear-gradient(
+        180deg,
+        #d77ab0 0%,
+        #b85a86 40%,
+        #f2b37a 62%,
+        #1d0f16 63%,
+        #120910 100%
+    );
+}
+
+.layer-strip .plane {
+    background: linear-gradient(180deg, #000 0 16%, transparent 16%);
+    outline: 1px dashed rgb(255 255 255 / 0.22);
+    outline-offset: -1px;
+    box-shadow: none;
+}
+
+.layer-strip span {
+    color: #f7b98a;
+    border-color: rgb(247 185 138 / 0.4);
+}
+
+.layer-windows .plane {
+    background:
+        linear-gradient(#fafafc, #fafafc) 22% 45% / 40% 42% no-repeat,
+        linear-gradient(#e8e8ee, #e8e8ee) 70% 70% / 30% 34% no-repeat;
+    outline: 1px dashed rgb(255 255 255 / 0.22);
+    outline-offset: -1px;
+    box-shadow: none;
+}
+
+.stack:hover .layer-windows {
+    translate: 0 -24px;
+}
+.stack:hover .layer-wallpaper {
+    translate: 0 24px;
+}
+
+@media (max-width: 860px) {
+    .how {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        padding: 70px 0;
+    }
+    .stack {
+        height: 320px;
+        max-width: 420px;
+    }
+    .layer span {
+        font-size: 12px;
+    }
+}
