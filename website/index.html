@@ -30,9 +30,7 @@
 
         <main id="top">
             <section class="hero" aria-labelledby="hero-title">
-                <h1 id="hero-title">
-                    Any wallpaper.<br /><span class="dusk">One calm, black menu bar.</span>
-                </h1>
+                <h1 id="hero-title">A black menu bar<br />for <span class="dusk">macOS</span></h1>
 
                 <div class="screen-slot">
                     <div
@@ -199,56 +197,57 @@
                     </div>
                 </div>
 
-                <p class="lede">
-                    Nightbar gives your Mac a solid black menu bar with crisp white icons. It stays
-                    that way on bright photos, busy art and live wallpapers, on every screen you
-                    plug in.
-                </p>
-                <div class="cta">
-                    <a
-                        class="button primary"
-                        href="https://github.com/philfreshman/nightbar/releases/latest/download/Nightbar.zip"
+                <p class="works-with">Works with regular and live wallpapers.</p>
+                <div class="command">
+                    <code id="install-command"
+                        >curl -fsSL https://nightbar.app/install.sh | bash</code
                     >
-                        <svg aria-hidden="true" viewBox="0 0 20 20" width="18" height="18">
-                            <path
-                                d="M10 3v9m0 0-3.5-3.5M10 12l3.5-3.5M4 15.5h12"
+                    <button class="copy" type="button" data-copy="install-command">
+                        <svg aria-hidden="true" viewBox="0 0 20 20" width="16" height="16">
+                            <rect
+                                x="6.5"
+                                y="6.5"
+                                width="10"
+                                height="10"
+                                rx="2.2"
                                 fill="none"
                                 stroke="currentColor"
-                                stroke-width="1.8"
+                                stroke-width="1.6"
+                            />
+                            <path
+                                d="M13.5 4.2A1.8 1.8 0 0 0 11.8 3H5a2 2 0 0 0-2 2v6.8a1.8 1.8 0 0 0 1.2 1.7"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.6"
                                 stroke-linecap="round"
-                                stroke-linejoin="round"
                             />
                         </svg>
-                        Download Nightbar
-                    </a>
-                    <a class="button ghost" href="https://github.com/philfreshman/nightbar"
-                        >View the source</a
-                    >
+                        <span class="copy-label">Copy</span>
+                    </button>
                 </div>
-                <p class="fineprint">Version 0.1 · No account · No tracking</p>
+                <a class="source" href="https://github.com/philfreshman/nightbar">
+                    Source
+                    <svg aria-hidden="true" viewBox="0 0 16 16" width="16" height="16">
+                        <path
+                            fill="currentColor"
+                            d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"
+                        />
+                    </svg>
+                </a>
             </section>
 
             <section class="points" aria-label="Why Nightbar">
                 <article>
                     <h2>Readable at a glance</h2>
-                    <p>
-                        White icons on solid black. No more hunting for the clock on a bright photo,
-                        or icons that flip between dark and light as your wallpaper changes.
-                    </p>
+                    <p>White icons on solid black, whatever the wallpaper.</p>
                 </article>
                 <article>
                     <h2>The notch blends in</h2>
-                    <p>
-                        On a MacBook with a notch, a black bar makes the cut-out vanish into the
-                        menu bar. The top of your screen looks like one clean edge.
-                    </p>
+                    <p>The cut-out disappears into one clean edge.</p>
                 </article>
                 <article>
                     <h2>Your wallpaper stays yours</h2>
-                    <p>
-                        Nightbar never edits, crops or replaces your wallpaper. Turn it off from its
-                        menu and everything is exactly as it was.
-                    </p>
+                    <p>Never edited or replaced. Turn Nightbar off and it is all back.</p>
                 </article>
             </section>
 
@@ -257,15 +256,8 @@
                     <p class="eyebrow">How it works</p>
                     <h2 id="how-title">One thin black strip, slipped in under everything.</h2>
                     <p>
-                        Apps cannot paint the menu bar. macOS picks its look, and whether icons are
-                        dark or white, from whatever sits behind it. So Nightbar places a black
-                        strip right behind the menu bar, one layer above the wallpaper and below
-                        your windows and desktop icons.
-                    </p>
-                    <p>
-                        macOS sees black, draws a black menu bar and switches the icons to white.
-                        That is the whole trick, which is why it works with every wallpaper,
-                        including live ones.
+                        A black strip sits behind the menu bar, above the wallpaper and below your
+                        windows. macOS sees black, so it draws a black bar with white icons.
                     </p>
                 </div>
                 <div class="stack" aria-hidden="true">
@@ -320,80 +312,33 @@
                 <div class="menu-copy">
                     <p class="eyebrow">Settings</p>
                     <h2 id="menu-title">That is the whole menu.</h2>
-                    <p>
-                        Switch the black bar on or off, choose whether Nightbar starts with your
-                        Mac, and quit. There is nothing else to set up and nothing to tune.
-                    </p>
+                    <p>On or off, launch at login, quit. Nothing to tune.</p>
                     <ul class="facts">
-                        <li>Every display, and it adapts when you plug one in</li>
-                        <li>Follows you across all Spaces</li>
-                        <li>No Accessibility or Screen Recording permission</li>
-                        <li>Clicks pass straight through the strip</li>
-                        <li>Native Swift, no background helpers</li>
-                        <li>Open source, every line is on GitHub</li>
+                        <li>Every display</li>
+                        <li>All Spaces</li>
+                        <li>No special permissions</li>
                     </ul>
                 </div>
             </section>
 
             <section class="install" id="install" aria-labelledby="install-title">
-                <p class="eyebrow">Install</p>
-                <h2 id="install-title">Running in under a minute.</h2>
-                <p class="install-lede">
-                    Paste this into Terminal. It puts Nightbar in your Applications folder and opens
-                    it, with no security prompt.
-                </p>
-                <div class="command">
-                    <code id="install-command"
-                        >curl -fsSL https://nightbar.app/install.sh | bash</code
-                    >
-                    <button class="copy" type="button" data-copy="install-command">
-                        <svg aria-hidden="true" viewBox="0 0 20 20" width="16" height="16">
-                            <rect
-                                x="6.5"
-                                y="6.5"
-                                width="10"
-                                height="10"
-                                rx="2.2"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="1.6"
-                            />
-                            <path
-                                d="M13.5 4.2A1.8 1.8 0 0 0 11.8 3H5a2 2 0 0 0-2 2v6.8a1.8 1.8 0 0 0 1.2 1.7"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="1.6"
-                                stroke-linecap="round"
-                            />
-                        </svg>
-                        <span class="copy-label">Copy</span>
-                    </button>
-                </div>
-                <p class="install-alt">
-                    <a href="/install.sh">Read the script</a> · or install it by hand:
-                </p>
+                <p class="eyebrow">Install by hand</p>
+                <h2 id="install-title">Rather skip Terminal?</h2>
                 <ol class="steps">
                     <li>
                         <h3>Download</h3>
+                        <p>Unzip and move <strong>Nightbar</strong> to Applications.</p>
+                    </li>
+                    <li>
+                        <h3>Open it</h3>
                         <p>
-                            Get <code>Nightbar.zip</code> and open it. Move
-                            <strong>Nightbar</strong> into your Applications folder.
+                            Not notarized yet. If macOS refuses, click
+                            <strong>Open Anyway</strong> in Privacy &amp; Security.
                         </p>
                     </li>
                     <li>
-                        <h3>Open it once</h3>
-                        <p>
-                            Nightbar is not notarized by Apple yet, so macOS asks first. If it
-                            refuses, go to System Settings › Privacy &amp; Security and click
-                            <strong>Open Anyway</strong>.
-                        </p>
-                    </li>
-                    <li>
-                        <h3>Make it stick</h3>
-                        <p>
-                            Click the Nightbar icon in the menu bar and turn on
-                            <strong>Launch at Login</strong>. Done.
-                        </p>
+                        <h3>Keep it</h3>
+                        <p>Turn on <strong>Launch at Login</strong> in its menu.</p>
                     </li>
                 </ol>
                 <a
@@ -401,12 +346,17 @@
                     href="https://github.com/philfreshman/nightbar/releases/latest/download/Nightbar.zip"
                     >Download Nightbar</a
                 >
+                <p class="install-alt">
+                    <a href="https://github.com/philfreshman/nightbar/blob/main/install.sh"
+                        >Read the install script</a
+                    >
+                </p>
             </section>
         </main>
 
         <footer class="footer">
             <img src="/icon.png" alt="" width="20" height="20" />
-            <span>Nightbar · A minimal black menu bar for macOS.</span>
+            <span>Nightbar</span>
             <a href="https://github.com/philfreshman/nightbar">GitHub</a>
             <a href="https://github.com/philfreshman/nightbar/releases">Releases</a>
         </footer>
