@@ -12,7 +12,7 @@ Paste this into Terminal. It downloads the latest release, puts Nightbar in `/Ap
 curl -fsSL https://nightbar.app/install.sh | bash
 ```
 
-Run it again to update. The script is [`website/public/install.sh`](website/public/install.sh). Or download `Nightbar.zip` above and move Nightbar into Applications yourself; macOS then asks for confirmation the first time you open it.
+Run it again to update. The script is [`install.sh`](install.sh). Or download `Nightbar.zip` above and move Nightbar into Applications yourself; macOS then asks for confirmation the first time you open it.
 
 ## How it works
 
