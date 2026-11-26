@@ -79,7 +79,8 @@ h3 {
 }
 
 h2 {
-    font-size: clamp(2rem, 4.2vw, 3.5rem);
+    /* Part rem, part vw, so the text still grows when the visitor zooms in. */
+    font-size: clamp(2rem, 0.7rem + 3.5vw, 3.5rem);
     line-height: 1;
 }
 

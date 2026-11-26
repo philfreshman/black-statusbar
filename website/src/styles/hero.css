@@ -51,7 +51,8 @@
 }
 
 .hero h1 {
-    font-size: clamp(3rem, 8.4vw, 6.75rem);
+    /* Part rem, part vw, so the text still grows when the visitor zooms in. */
+    font-size: clamp(3rem, 1.3rem + 6.8vw, 6.75rem);
     font-weight: 600;
     line-height: 0.92;
     letter-spacing: -0.038em;
@@ -60,7 +61,7 @@
 .lede {
     max-width: 34em;
     margin: 26px 0 0;
-    font-size: clamp(1rem, 1.5vw, 1.1875rem);
+    font-size: clamp(1rem, 0.75rem + 0.6vw, 1.1875rem);
     color: var(--fog);
 }
 
