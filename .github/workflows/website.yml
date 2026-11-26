@@ -1,0 +1,45 @@
+name: Website
+
+# Checks the nightbar.app landing page in website/. Vercel deploys it on its own.
+on:
+  pull_request:
+    paths:
+      - "website/**"
+      - "install.sh"
+      - ".github/workflows/website.yml"
+  push:
+    branches: [development]
+    paths:
+      - "website/**"
+      - "install.sh"
+      - ".github/workflows/website.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: website-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    working-directory: website
+
+jobs:
+  check:
+    name: Check, test and build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: voidzero-dev/setup-vp@v1.22.0
+        with:
+          working-directory: website
+          node-version: "24"
+          cache: true
+          run-install: |
+            args: ["--frozen-lockfile"]
+
+      - run: vp check
+      - run: vp test
+      - run: vp run build
