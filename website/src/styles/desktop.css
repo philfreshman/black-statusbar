@@ -17,20 +17,20 @@
     text-align: left;
 }
 
-/* A violet storm glow, in the colours of the storm panels around it. */
+/* Violet satin, drawn by wallpaper.ts. */
 .wallpaper {
     position: absolute;
     inset: 0;
 }
 
-/* Film grain over the glow, like the grain on the storm panels. */
+/* Film grain over the satin, like the grain on the storm panels. */
 .wallpaper::after {
     content: '';
     position: absolute;
     inset: 0;
     background: var(--film-grain) 0 0 / 160px;
     mix-blend-mode: overlay;
-    opacity: 0.9;
+    opacity: 0.8;
     pointer-events: none;
 }
 
@@ -39,30 +39,6 @@
     inset: 0;
     width: 100%;
     height: 100%;
-}
-/* Lightning lights up the clouds about once every seven seconds: one flash, never more than one a second. */
-.scene .flash {
-    opacity: 0;
-}
-@media (prefers-reduced-motion: no-preference) {
-    .scene .flash {
-        animation: lightning-flash 7s 2s infinite;
-    }
-}
-@keyframes lightning-flash {
-    0%,
-    100% {
-        opacity: 0;
-    }
-    2% {
-        opacity: 1;
-    }
-    6% {
-        opacity: 0.5;
-    }
-    12% {
-        opacity: 0;
-    }
 }
 
 /* The mock menu bar. Off: translucent, tinted by the wallpaper. On: black with white icons. */

@@ -134,7 +134,7 @@
     overflow: hidden;
 }
 
-/* L1: the wallpaper, a small copy of the violet storm glow in the hero. */
+/* L1: the wallpaper, a small copy of the violet satin in the hero. */
 .layer-wallpaper .plane {
     box-shadow:
         0 0 0 1px rgb(255 255 255 / 0.18),
@@ -145,13 +145,6 @@
 .mini-wallpaper {
     position: absolute;
     inset: 0;
-    background:
-        linear-gradient(108deg, transparent 40%, rgb(239 232 255 / 0.5) 48%, transparent 58%),
-        radial-gradient(28% 22% at 66% 80%, rgb(255 122 69 / 0.45), transparent 70%),
-        radial-gradient(40% 40% at 82% 56%, rgb(255 111 207 / 0.6), transparent 70%),
-        radial-gradient(45% 40% at 16% 17%, #5f9dff, transparent 70%),
-        radial-gradient(60% 34% at 45% 92%, rgb(154 107 255 / 0.9), transparent 70%),
-        linear-gradient(180deg, #b9adff 0%, #7a5cf0 34%, #2e1873 66%, #0a0714 100%);
 }
 
 .mini-wallpaper::after {
@@ -160,7 +153,7 @@
     inset: 0;
     background: var(--film-grain) 0 0 / 90px;
     mix-blend-mode: overlay;
-    opacity: 0.9;
+    opacity: 0.8;
 }
 
 /* Guide posts at the corners, like the lines in an exploded drawing. */
