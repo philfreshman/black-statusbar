@@ -162,10 +162,17 @@ main > section {
     width: 100%;
 }
 
+/* Positioned so the desktop's glow doesn't paint over the text below it. */
+.works-with,
+.hero .command,
+.source {
+    position: relative;
+}
+
 .works-with {
     margin: 0 0 18px;
     font-size: clamp(16px, 1.4vw, 18px);
-    color: var(--muted);
+    color: var(--text);
 }
 
 .source {
