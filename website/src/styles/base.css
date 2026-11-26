@@ -6,10 +6,13 @@
     --rail-strong: #34343c;
     --fog: #8e8e99;
     --chalk: #f3f3ef;
-    /* Electric blue, like a lightning flash. The channels let rgb() add transparency. */
-    --accent-rgb: 76 157 255;
+    /* Electric blue, like a lightning flash, that blends into violet. The channels let rgb() add transparency. */
+    --accent-rgb: 92 150 255;
     --accent: rgb(var(--accent-rgb));
     --accent-soft: rgb(var(--accent-rgb) / 0.14);
+    --violet-rgb: 154 107 255;
+    --violet: rgb(var(--violet-rgb));
+    --accent-blend: linear-gradient(100deg, var(--accent), var(--violet));
     --arc: #7c5cff;
     --ember: #ff7a45;
 
@@ -97,9 +100,13 @@ p {
     color: var(--accent);
 }
 
+/* Accent text runs from blue into violet. A drop shadow, since text-shadow would cover the clipped gradient. */
 .accent {
     color: var(--accent);
-    text-shadow: 0 0 40px rgb(var(--accent-rgb) / 0.35);
+    background: var(--accent-blend);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 28px rgb(var(--violet-rgb) / 0.4));
 }
 
 /* Buttons: small radius, hairline border. Primary is the accent. */
@@ -129,18 +136,18 @@ p {
 }
 
 .button.primary {
-    border-color: var(--accent);
+    border-color: transparent;
     color: var(--ink);
-    background: var(--accent);
+    background: var(--accent-blend) border-box;
     box-shadow:
         0 0 0 4px var(--accent-soft),
-        0 10px 40px -12px rgb(var(--accent-rgb) / 0.6);
+        0 10px 40px -12px rgb(var(--violet-rgb) / 0.6);
 }
 
 .button.primary:hover {
     box-shadow:
         0 0 0 6px rgb(var(--accent-rgb) / 0.2),
-        0 14px 50px -10px rgb(var(--accent-rgb) / 0.75);
+        0 14px 50px -10px rgb(var(--violet-rgb) / 0.75);
 }
 
 .button.ghost {
@@ -201,4 +208,15 @@ p {
     mix-blend-mode: overlay;
     opacity: 0.55;
     pointer-events: none;
+}
+
+/* Holds the shared SVG paints from icons.ts. Out of the flow, so it takes no space. */
+.icon-defs {
+    position: absolute;
+}
+
+/* The thunder N in the accent blend, blue into violet. */
+.brand-mark path,
+.hero-mark path {
+    fill: url(#accent-blend);
 }

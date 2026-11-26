@@ -101,8 +101,8 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: var(--accent);
-    box-shadow: 0 0 12px var(--accent);
+    background: var(--accent-blend);
+    box-shadow: 0 0 12px var(--violet);
     transform-origin: left;
     scale: 1 1;
 }
@@ -219,7 +219,7 @@
     background: repeating-linear-gradient(135deg, #000 0 5px, rgb(var(--accent-rgb) / 0.4) 5px 6px);
     box-shadow:
         0 0 0 1px var(--accent),
-        0 0 24px rgb(var(--accent-rgb) / 0.45);
+        0 0 24px rgb(var(--violet-rgb) / 0.45);
 }
 
 .layer-strip .plane {
