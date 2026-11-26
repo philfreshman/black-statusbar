@@ -1,0 +1,21 @@
+{
+    "name": "nightbar-website",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "vp dev",
+        "build": "vp build",
+        "preview": "vp preview",
+        "check": "vp check",
+        "fmt": "vp fmt",
+        "lint": "vp lint"
+    },
+    "devDependencies": {
+        "vite": "npm:@voidzero-dev/vite-plus-core@8.3.8000",
+        "vite-plus": "1.7.0"
+    },
+    "overrides": {
+        "vite": "npm:@voidzero-dev/vite-plus-core@8.3.8000"
+    },
+    "packageManager": "bun@1.4.5"
+}
