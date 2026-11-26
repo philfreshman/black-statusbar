@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <!-- The thunder N: markPath from website/src/icons.ts, scaled 20 times and centred. -->
+  <path fill="#FFFFFF" transform="translate(192 192) scale(20)" d="M4 4H9L18 13V16.5L23 21.5V4H28V28H23L14 19V15.5L9 10.5V28H4Z"/>
+</svg>
