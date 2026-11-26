@@ -13,6 +13,25 @@
     border-bottom: 1px solid var(--rail);
 }
 
+/* Off screen until a keyboard user tabs to it, then it drops into the top bar. */
+.skip-link {
+    position: absolute;
+    top: 10px;
+    left: var(--pad);
+    z-index: 1;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-weight: 560;
+    text-decoration: none;
+    color: var(--ink);
+    background: var(--chalk);
+    translate: 0 -200%;
+}
+
+.skip-link:focus {
+    translate: 0 0;
+}
+
 .brand {
     display: flex;
     align-items: center;
