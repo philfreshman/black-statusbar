@@ -20,19 +20,19 @@
 .footer-brand p {
     margin: 18px 0 0;
     color: var(--fog);
-    font-size: 14px;
+    font-size: 0.875rem;
 }
 
 .footer-group {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    font-size: 14px;
+    font-size: 0.875rem;
 }
 
 .footer-group .label {
     margin-bottom: 8px;
-    font-size: 10.5px;
+    font-size: 0.65625rem;
 }
 
 .footer-group a {
@@ -48,7 +48,7 @@
 .footer-base {
     padding: 16px var(--pad);
     border-top: 1px solid var(--rail);
-    font-size: 10.5px;
+    font-size: 0.65625rem;
 }
 
 @media (max-width: 720px) {

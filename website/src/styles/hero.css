@@ -48,7 +48,7 @@
 }
 
 .hero h1 {
-    font-size: clamp(48px, 8.4vw, 108px);
+    font-size: clamp(3rem, 8.4vw, 6.75rem);
     font-weight: 600;
     line-height: 0.92;
     letter-spacing: -0.038em;
@@ -57,7 +57,7 @@
 .lede {
     max-width: 34em;
     margin: 26px 0 0;
-    font-size: clamp(16px, 1.5vw, 19px);
+    font-size: clamp(1rem, 1.5vw, 1.1875rem);
     color: var(--fog);
 }
 
@@ -106,7 +106,7 @@
 .command .label {
     padding: 10px 16px;
     border-bottom: 1px solid var(--rail);
-    font-size: 10.5px;
+    font-size: 0.65625rem;
 }
 
 .command-line {
@@ -123,7 +123,7 @@
     overflow-x: auto;
     white-space: nowrap;
     font-family: var(--font-mono);
-    font-size: 14px;
+    font-size: 0.875rem;
     color: var(--chalk);
     scrollbar-width: none;
 }
@@ -138,14 +138,14 @@
     flex: none;
     align-items: center;
     gap: 6px;
-    height: 32px;
+    min-block-size: 32px;
     padding: 0 12px;
     border: 1px solid var(--rail-strong);
     border-radius: 5px;
     background: transparent;
     color: var(--fog);
     font-family: var(--font-mono);
-    font-size: 12px;
+    font-size: 0.75rem;
     letter-spacing: 0.06em;
     text-transform: uppercase;
     cursor: pointer;

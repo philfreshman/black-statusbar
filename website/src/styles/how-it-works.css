@@ -44,12 +44,12 @@
 }
 
 .how-steps h3 {
-    font-size: 19px;
+    font-size: 1.1875rem;
 }
 
 .how-steps p {
     margin: 6px 0 0;
-    font-size: 15px;
+    font-size: 0.9375rem;
     color: var(--fog);
 }
 
@@ -247,7 +247,7 @@
     padding: 3px 7px;
     border: 1px solid var(--rail-strong);
     border-radius: 3px;
-    font-size: 10.5px;
+    font-size: 0.65625rem;
     white-space: nowrap;
     color: var(--chalk);
     background: var(--ink);
