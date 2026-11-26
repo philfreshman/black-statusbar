@@ -73,15 +73,6 @@
     opacity: 0.7;
 }
 
-.stage-hud {
-    position: absolute;
-    inset: 20px 24px auto;
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    font-size: 10.5px;
-}
-
 /* Shown once the layers have collapsed into the finished bar. */
 .stage-result {
     position: absolute;
@@ -534,8 +525,7 @@
         --plane-w: min(58vw, 300px);
     }
 
-    .tag,
-    .stage-hud .label + .label {
+    .tag {
         display: none;
     }
 }

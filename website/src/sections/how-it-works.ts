@@ -58,10 +58,6 @@ function renderMiniMenubar(): string {
 function renderStage(): string {
     return /* HTML */ `
         <div class="stage" aria-hidden="true">
-            <div class="stage-hud">
-                <span class="label">Orthographic camera</span>
-                <span class="label">No perspective · 3 layers</span>
-            </div>
             <div class="camera">
                 <div class="layer layer-wallpaper">
                     <div class="plane">
