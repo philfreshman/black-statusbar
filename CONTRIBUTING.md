@@ -79,6 +79,31 @@ swift test
 
 Please make sure `swift build` and `swift test` both pass before you open a pull request.
 
+## Website
+
+The landing page at [nightbar.app](https://nightbar.app) lives in `website/`: a [Vite+](https://viteplus.dev) project using [Bun](https://bun.sh), TypeScript and plain CSS. The page is written as small TypeScript modules in `website/src/sections/` and rendered into `index.html` at build time, so it ships as static HTML. Vercel deploys it with `website` as the project's root directory.
+
+```bash
+cd website
+bun install
+bun run dev     # http://localhost:8040
+bun run check   # format, lint and type check
+bun run test
+bun run build   # writes website/dist/
+```
+
+## Releases
+
+Releases are built by GitHub Actions (`.github/workflows/release.yml`). After `development` has been merged into `main`, tag the merge commit on `main` and push the tag:
+
+```bash
+git checkout main && git pull
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+The workflow tests and builds the app, sets the version from the tag and publishes `Nightbar.zip` on a GitHub release. The website's download button and `https://nightbar.app/download` always point at the latest release. The app is signed ad hoc, not notarized.
+
 ## Commit messages
 
 Use a short prefix that says what kind of change it is, followed by a summary in the imperative mood:

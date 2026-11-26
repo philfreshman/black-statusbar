@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+    <title>Nightbar</title>
+    <defs>
+        <linearGradient id="tile" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#17171c" />
+            <stop offset="1" stop-color="#050506" />
+        </linearGradient>
+        <radialGradient id="halo" cx=".5" cy=".55" r=".5">
+            <stop offset="0" stop-color="#4c9dff" stop-opacity=".28" />
+            <stop offset="1" stop-color="#4c9dff" stop-opacity="0" />
+        </radialGradient>
+        <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur stdDeviation="22" />
+        </filter>
+        <clipPath id="squircle">
+            <path d="M512 100c300 0 412 0 412 412s-112 412-412 412S100 924 100 512 212 100 512 100z" />
+        </clipPath>
+    </defs>
+    <g clip-path="url(#squircle)">
+        <rect width="1024" height="1024" fill="url(#tile)" />
+        <rect width="1024" height="1024" fill="url(#halo)" />
+        <!-- The menu bar edge: a black band with one hairline under it. -->
+        <rect width="1024" height="196" fill="#000" />
+        <rect y="196" width="1024" height="4" fill="#2a2a31" />
+        <g transform="translate(272 300) scale(15)">
+            <path d="M4 4H9L18 13V16.5L23 21.5V4H28V28H23L14 19V15.5L9 10.5V28H4Z" fill="#4c9dff" filter="url(#glow)" opacity=".7" />
+            <path d="M4 4H9L18 13V16.5L23 21.5V4H28V28H23L14 19V15.5L9 10.5V28H4Z" fill="#4c9dff" />
+        </g>
+    </g>
+    <path d="M512 100c300 0 412 0 412 412s-112 412-412 412S100 924 100 512 212 100 512 100z" fill="none" stroke="#ffffff" stroke-opacity=".1" stroke-width="3" />
+</svg>

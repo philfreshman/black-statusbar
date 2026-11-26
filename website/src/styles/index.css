@@ -1,0 +1,14 @@
+/* One file per page section. Vite bundles the imports into one stylesheet. */
+@import '@fontsource-variable/bricolage-grotesque/standard.css';
+@import '@fontsource-variable/geist';
+@import '@fontsource-variable/geist-mono';
+@import './base.css';
+@import './frame.css';
+@import './topbar.css';
+@import './hero.css';
+@import './desktop.css';
+@import './points.css';
+@import './how-it-works.css';
+@import './menu.css';
+@import './install.css';
+@import './footer.css';

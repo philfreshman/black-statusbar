@@ -1,0 +1,254 @@
+/* The desktop: a Mac screen sized by the storm panel around it. */
+.screen {
+    --bar-h: 3.4cqi;
+    position: relative;
+    width: 100%;
+    max-width: 1040px;
+    margin-inline: auto;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border-radius: clamp(10px, 1.6vw, 18px);
+    border: clamp(6px, 0.9vw, 11px) solid #020203;
+    box-shadow:
+        0 0 0 1px rgb(255 255 255 / 0.1),
+        0 60px 120px -30px rgb(0 0 0 / 0.95),
+        0 0 90px -30px rgb(124 92 255 / 0.7);
+    container-type: inline-size;
+    text-align: left;
+}
+
+/* Thunderhead at dusk. */
+.wallpaper {
+    position: absolute;
+    inset: 0;
+}
+
+/* Soft focus, like a wallpaper seen behind glass. Scaled up so the blur never shows its edges. */
+.scene {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    filter: blur(1.1cqi);
+    scale: 1.08;
+}
+.scene .mountains {
+    fill: #4a3270;
+    opacity: 0.75;
+}
+.scene .cloud-light {
+    fill: #f3ecff;
+    opacity: 0.3;
+    filter: blur(18px);
+}
+.scene .bolt path {
+    fill: none;
+    stroke: #f8ffd6;
+    stroke-width: 5;
+    stroke-linejoin: round;
+}
+.scene .bolt .bolt-glow {
+    stroke: var(--accent);
+    stroke-width: 18;
+}
+.scene .glints {
+    fill: none;
+    stroke: #ffcf8f;
+    stroke-width: 4;
+    stroke-linecap: round;
+    opacity: 0.45;
+}
+
+/* The bolt strikes about once every seven seconds: one flash, never more than one a second. */
+.scene .bolt {
+    opacity: 0.9;
+}
+@media (prefers-reduced-motion: no-preference) {
+    .scene .bolt {
+        animation: bolt-strike 7s 2s infinite;
+    }
+}
+@keyframes bolt-strike {
+    0%,
+    100% {
+        opacity: 0;
+    }
+    2% {
+        opacity: 1;
+    }
+    6% {
+        opacity: 0.6;
+    }
+    12% {
+        opacity: 0;
+    }
+}
+
+/* The mock menu bar. Off: translucent, tinted by the wallpaper. On: black with white icons. */
+.menubar {
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: var(--bar-h);
+    padding: 0 1.6cqi;
+    font-size: 1.3cqi;
+    color: #fff;
+    background: #000;
+    transition:
+        background 0.45s ease,
+        color 0.45s ease,
+        backdrop-filter 0.45s ease;
+}
+
+.screen[data-nightbar='off'] .menubar {
+    color: #1b1b1f;
+    background: rgb(255 255 255 / 0.3);
+    backdrop-filter: blur(18px) saturate(1.5);
+}
+
+.menubar-left,
+.menubar-right {
+    display: flex;
+    align-items: center;
+    gap: 1.7cqi;
+    white-space: nowrap;
+}
+
+.menubar-left b {
+    font-weight: 700;
+}
+.menubar-right {
+    gap: 1.3cqi;
+}
+.glyph {
+    width: 1.7cqi;
+    height: auto;
+    display: block;
+}
+.glyph.battery {
+    width: 2.4cqi;
+}
+.apple {
+    width: 1.35cqi;
+    height: auto;
+    display: block;
+    margin-top: -0.2cqi;
+}
+.clock {
+    font-variant-numeric: tabular-nums;
+}
+
+.status-item {
+    display: grid;
+    place-items: center;
+    padding: 0.35cqi 0.5cqi;
+    margin: 0 -0.5cqi;
+    border-radius: 0.5cqi;
+    transition: background 0.15s;
+}
+
+.status-item.is-open {
+    background: rgb(255 255 255 / 0.25);
+}
+.screen[data-nightbar='off'] .status-item.is-open {
+    background: rgb(0 0 0 / 0.12);
+}
+
+.notch {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 15cqi;
+    height: 100%;
+    translate: -50% 0;
+    background: #000;
+    border-radius: 0 0 1cqi 1cqi;
+}
+
+/* The app's own menu, as in the real app. */
+.status-menu {
+    position: absolute;
+    z-index: 3;
+    top: calc(var(--bar-h) + 0.5cqi);
+    right: 17.5cqi;
+    width: 21cqi;
+    margin: 0;
+    padding: 0.5cqi;
+    list-style: none;
+    font-size: 1.3cqi;
+    color: #f2f2f5;
+    border-radius: 1cqi;
+    background: rgb(38 38 44 / 0.9);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgb(255 255 255 / 0.14);
+    box-shadow: 0 2cqi 5cqi -1cqi rgb(0 0 0 / 0.7);
+    opacity: 0;
+    transform-origin: top right;
+    scale: 0.97;
+    transition:
+        opacity 0.15s ease,
+        scale 0.15s ease;
+    pointer-events: none;
+}
+
+.status-menu.is-open {
+    opacity: 1;
+    scale: 1;
+}
+
+.status-menu li {
+    display: flex;
+    align-items: center;
+    padding: 0.45cqi 0.8cqi;
+    border-radius: 0.55cqi;
+}
+
+.status-menu .check {
+    width: 1.8cqi;
+    font-size: 1.05cqi;
+    visibility: hidden;
+}
+.status-menu li.checked .check {
+    visibility: visible;
+}
+.status-menu li.is-hover {
+    background: #3d6fe0;
+}
+.status-menu .sep {
+    height: 1px;
+    margin: 0.45cqi 0.8cqi;
+    padding: 0;
+    background: rgb(255 255 255 / 0.12);
+}
+.status-menu kbd {
+    margin-left: auto;
+    font: inherit;
+    color: #8d8b97;
+}
+
+.cursor {
+    position: absolute;
+    z-index: 4;
+    width: 2.2cqi;
+    left: 60%;
+    top: 60%;
+    translate: -22% -10%;
+    filter: drop-shadow(0 0.2cqi 0.3cqi rgb(0 0 0 / 0.4));
+    transition:
+        left 0.9s cubic-bezier(0.45, 0, 0.2, 1),
+        top 0.9s cubic-bezier(0.45, 0, 0.2, 1),
+        scale 0.1s;
+}
+
+.cursor.is-pressed {
+    scale: 0.85;
+}
+
+@media (max-width: 860px) {
+    .menubar-left .wide {
+        display: none;
+    }
+}

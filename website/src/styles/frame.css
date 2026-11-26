@@ -1,0 +1,82 @@
+/*
+ * The frame: one centred column with hairline rails down both sides, cut into sections by
+ * hairlines. Where a section's hairline meets a rail sits a small registration tick.
+ */
+.rail {
+    width: min(var(--max), calc(100% - 2rem));
+    margin-inline: auto;
+    border-inline: 1px solid var(--rail);
+}
+
+main.rail {
+    overflow-x: clip;
+}
+
+main > section {
+    position: relative;
+    border-top: 1px solid var(--rail);
+    view-timeline: --section block;
+}
+
+/* Registration ticks: 5px triangles pointing in from each rail. */
+main > section::before,
+main > section::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    z-index: 5;
+    border: 5px solid transparent;
+    transition: border-color 0.3s;
+}
+
+main > section::before {
+    left: 0;
+    border-left-color: var(--rail-strong);
+}
+
+main > section::after {
+    right: 0;
+    border-right-color: var(--rail-strong);
+}
+
+/* The ticks of the section you are reading light up as its hairline passes. */
+@supports ((animation-timeline: view()) and (animation-range: 0% 100%)) {
+    @keyframes tick-left {
+        0%,
+        100% {
+            border-left-color: var(--rail-strong);
+        }
+        20%,
+        60% {
+            border-left-color: var(--accent);
+        }
+    }
+
+    @keyframes tick-right {
+        0%,
+        100% {
+            border-right-color: var(--rail-strong);
+        }
+        20%,
+        60% {
+            border-right-color: var(--accent);
+        }
+    }
+
+    main > section::before {
+        animation: tick-left linear both;
+        animation-timeline: --section;
+        animation-range: entry 0% exit 60%;
+    }
+
+    main > section::after {
+        animation: tick-right linear both;
+        animation-timeline: --section;
+        animation-range: entry 0% exit 60%;
+    }
+}
+
+/* Shared section header cell. */
+.section-head {
+    padding: clamp(56px, 8vw, 96px) var(--pad) clamp(36px, 5vw, 56px);
+}

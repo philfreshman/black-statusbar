@@ -1,0 +1,165 @@
+/* Hero: mark, headline and actions, then the live desktop in a storm panel, then install. */
+.hero {
+    border-top: 0;
+}
+
+.hero-head {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: clamp(56px, 9vw, 112px) var(--pad) clamp(48px, 7vw, 80px);
+    text-align: center;
+}
+
+.hero-mark {
+    width: 52px;
+    height: 52px;
+    margin-bottom: 26px;
+    color: var(--accent);
+    filter: drop-shadow(0 0 18px rgb(var(--accent-rgb) / 0.55));
+}
+
+/* One strike on load, then calm. A single flash stays far below the three-per-second limit. */
+@media (prefers-reduced-motion: no-preference) {
+    .hero-mark {
+        animation: strike 1.4s 0.3s var(--ease-out) both;
+    }
+}
+
+@keyframes strike {
+    0% {
+        opacity: 0;
+        translate: 0 -10px;
+        filter: drop-shadow(0 0 0 transparent);
+    }
+    35% {
+        opacity: 1;
+        translate: 0 0;
+        filter: drop-shadow(0 0 34px rgb(var(--accent-rgb) / 0.95));
+    }
+}
+
+.kicker {
+    margin-bottom: 22px;
+    color: var(--accent);
+}
+
+.hero h1 {
+    font-size: clamp(48px, 8.4vw, 108px);
+    font-weight: 640;
+    font-stretch: 82%;
+    line-height: 0.92;
+    letter-spacing: -0.038em;
+}
+
+.lede {
+    max-width: 34em;
+    margin: 26px 0 0;
+    font-size: clamp(16px, 1.5vw, 19px);
+    color: var(--fog);
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 36px;
+}
+
+/* The command is the way in, so it gets the accent glow a download button used to have. */
+.hero-head .command,
+.install-cta .command {
+    width: min(100%, 620px);
+    margin-top: 40px;
+    border-color: rgb(var(--accent-rgb) / 0.55);
+    box-shadow:
+        0 0 0 4px var(--accent-soft),
+        0 18px 60px -20px rgb(var(--accent-rgb) / 0.6);
+    text-align: left;
+}
+
+.hero-head .actions {
+    margin-top: 20px;
+}
+
+/* The storm band holding the desktop, rail to rail. */
+.hero .storm {
+    border-top: 1px solid var(--rail);
+    padding: clamp(28px, 6vw, 80px) clamp(12px, 6vw, 88px);
+}
+
+.screen-slot {
+    container-type: inline-size;
+}
+
+/* The install command with its copy button: a terminal card. */
+.command {
+    border: 1px solid var(--rail-strong);
+    border-radius: 8px;
+    background: var(--coal);
+    overflow: hidden;
+}
+
+.command .label {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--rail);
+    font-size: 10.5px;
+}
+
+.command-line {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 12px 12px 16px;
+}
+
+.command code {
+    flex: 1;
+    text-align: left;
+    min-width: 0;
+    overflow-x: auto;
+    white-space: nowrap;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: var(--chalk);
+    scrollbar-width: none;
+}
+
+.command code::before {
+    content: '$ ';
+    color: var(--accent);
+}
+
+.copy {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    gap: 6px;
+    height: 32px;
+    padding: 0 12px;
+    border: 1px solid var(--rail-strong);
+    border-radius: 5px;
+    background: transparent;
+    color: var(--fog);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition:
+        color 0.2s,
+        border-color 0.2s,
+        background 0.2s;
+}
+
+.copy:hover {
+    color: var(--chalk);
+    border-color: var(--fog);
+}
+
+.copy.is-copied {
+    color: var(--ink);
+    border-color: var(--accent);
+    background: var(--accent);
+}

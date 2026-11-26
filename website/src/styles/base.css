@@ -1,0 +1,204 @@
+/* Tokens: one electric blue on a black drafting sheet. Notes in .design/DESIGN.md (local). */
+:root {
+    --ink: #050506;
+    --coal: #0c0c0f;
+    --rail: #222228;
+    --rail-strong: #34343c;
+    --fog: #8e8e99;
+    --chalk: #f3f3ef;
+    /* Electric blue, like a lightning flash. The channels let rgb() add transparency. */
+    --accent-rgb: 76 157 255;
+    --accent: rgb(var(--accent-rgb));
+    --accent-soft: rgb(var(--accent-rgb) / 0.14);
+    --arc: #7c5cff;
+    --ember: #ff7a45;
+
+    --font-display: 'Bricolage Grotesque Variable', 'Geist Variable', system-ui, sans-serif;
+    --font-body: 'Geist Variable', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    --font-mono: 'Geist Mono Variable', ui-monospace, 'SF Mono', Menlo, monospace;
+
+    --max: 76rem;
+    --topbar-h: 56px;
+    --pad: clamp(20px, 4vw, 48px);
+    --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+    color-scheme: dark;
+    font-family: var(--font-body);
+    font-size-adjust: from-font;
+    color: var(--chalk);
+    background: var(--ink);
+    -webkit-font-smoothing: antialiased;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--ink);
+}
+
+a {
+    color: inherit;
+}
+
+h1,
+h2,
+h3 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 620;
+    font-stretch: 88%;
+    letter-spacing: -0.04em;
+    text-wrap: balance;
+}
+
+h2 {
+    font-size: clamp(32px, 4.2vw, 56px);
+    line-height: 1;
+}
+
+h3 {
+    font-size: 21px;
+    letter-spacing: -0.02em;
+}
+
+p {
+    line-height: 1.6;
+    text-wrap: pretty;
+}
+
+/* Meta text: section labels, numbers, commands. */
+.label,
+.eyebrow,
+.kicker {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--fog);
+}
+
+.eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 22px;
+}
+
+/* The section index, boxed like a registration number. */
+.eyebrow span {
+    padding: 2px 6px;
+    border: 1px solid var(--rail-strong);
+    color: var(--accent);
+}
+
+.accent {
+    color: var(--accent);
+    text-shadow: 0 0 40px rgb(var(--accent-rgb) / 0.35);
+}
+
+/* Buttons: small radius, hairline border. Primary is the accent. */
+.button {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    height: 46px;
+    padding: 0 20px;
+    border: 1px solid var(--rail-strong);
+    border-radius: 6px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 560;
+    text-decoration: none;
+    color: var(--chalk);
+    background: var(--coal);
+    transition:
+        border-color 0.2s,
+        background 0.2s,
+        box-shadow 0.2s,
+        color 0.2s;
+}
+
+.button:hover {
+    border-color: var(--fog);
+}
+
+.button.primary {
+    border-color: var(--accent);
+    color: var(--ink);
+    background: var(--accent);
+    box-shadow:
+        0 0 0 4px var(--accent-soft),
+        0 10px 40px -12px rgb(var(--accent-rgb) / 0.6);
+}
+
+.button.primary:hover {
+    box-shadow:
+        0 0 0 6px rgb(var(--accent-rgb) / 0.2),
+        0 14px 50px -10px rgb(var(--accent-rgb) / 0.75);
+}
+
+.button.ghost {
+    background: transparent;
+    border-color: transparent;
+    color: var(--fog);
+}
+
+.button.ghost:hover {
+    color: var(--chalk);
+    border-color: var(--rail-strong);
+}
+
+.button svg {
+    flex: none;
+}
+
+:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+/* Storm panels: black, light streaks and film grain. Only these carry glow. */
+.storm {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background:
+        radial-gradient(60% 70% at 50% 115%, rgb(124 92 255 / 0.55), transparent 70%),
+        radial-gradient(35% 45% at 18% -5%, rgb(var(--accent-rgb) / 0.28), transparent 70%),
+        radial-gradient(30% 40% at 85% 10%, rgb(124 92 255 / 0.35), transparent 70%), #07070b;
+}
+
+.storm::before {
+    content: '';
+    position: absolute;
+    inset: -20%;
+    z-index: -1;
+    background:
+        linear-gradient(
+            105deg,
+            transparent 30%,
+            rgb(var(--accent-rgb) / 0.16) 33%,
+            transparent 36%
+        ),
+        linear-gradient(112deg, transparent 48%, rgb(124 92 255 / 0.3) 52%, transparent 57%),
+        linear-gradient(98deg, transparent 66%, rgb(var(--accent-rgb) / 0.1) 68%, transparent 70%),
+        linear-gradient(120deg, transparent 12%, rgb(124 92 255 / 0.18) 16%, transparent 22%);
+    filter: blur(14px);
+}
+
+.storm::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+    opacity: 0.55;
+    pointer-events: none;
+}

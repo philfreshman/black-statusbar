@@ -1,0 +1,83 @@
+/* Install by hand: three numbered cells, then the closing call. */
+.steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--rail);
+}
+
+.steps li {
+    padding: 32px var(--pad) 40px;
+}
+
+.steps li + li {
+    border-left: 1px solid var(--rail);
+}
+
+.step-number {
+    display: block;
+    margin-bottom: 40px;
+    font-family: var(--font-mono);
+    font-size: 44px;
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--fog);
+}
+
+.steps li:hover .step-number {
+    -webkit-text-stroke-color: var(--accent);
+}
+
+.steps p {
+    margin: 10px 0 0;
+    color: var(--fog);
+    font-size: 15px;
+}
+
+.steps strong {
+    color: var(--chalk);
+    font-weight: 600;
+}
+
+.install-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: clamp(64px, 10vw, 120px) var(--pad);
+    border-top: 1px solid var(--rail);
+    text-align: center;
+    background: radial-gradient(
+        50% 80% at 50% 100%,
+        rgb(var(--accent-rgb) / 0.08),
+        transparent 70%
+    );
+}
+
+.install-big {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(56px, 11vw, 150px);
+    font-weight: 660;
+    font-stretch: 78%;
+    line-height: 0.9;
+    letter-spacing: -0.055em;
+}
+
+.install-cta .button {
+    margin-top: 20px;
+}
+
+@media (max-width: 860px) {
+    .steps {
+        grid-template-columns: 1fr;
+    }
+
+    .steps li + li {
+        border-left: 0;
+        border-top: 1px solid var(--rail);
+    }
+}
