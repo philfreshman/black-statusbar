@@ -336,18 +336,19 @@
             animation-range: contain 0% contain 100%;
         }
 
-        .how-steps li {
+        /* A step lights up when the story reaches it: grey until then, never faded out. */
+        .how-steps :is(.label, h3) {
             animation: how-step-on linear both;
             animation-timeline: --section;
         }
 
-        .how-steps li:nth-child(1) {
+        .how-steps li:nth-child(1) :is(.label, h3) {
             animation-range: contain 0% contain 4%;
         }
-        .how-steps li:nth-child(2) {
+        .how-steps li:nth-child(2) :is(.label, h3) {
             animation-range: contain 10% contain 24%;
         }
-        .how-steps li:nth-child(3) {
+        .how-steps li:nth-child(3) :is(.label, h3) {
             animation-range: contain 34% contain 44%;
         }
     }
@@ -477,12 +478,13 @@
     }
 }
 
+/*
+ * Steps waiting their turn are grey rather than see-through, so their text keeps enough
+ * contrast to read. The end state is each element's own colour.
+ */
 @keyframes how-step-on {
     from {
-        opacity: 0.3;
-    }
-    to {
-        opacity: 1;
+        color: var(--fog);
     }
 }
 

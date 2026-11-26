@@ -22,6 +22,33 @@ function prerenderPage(): Plugin {
     }
 }
 
+/**
+ * Puts the built stylesheet straight into index.html, so the first paint does not wait for a
+ * second request. The page is a single page, so nothing else would reuse the file from cache.
+ */
+function inlineStylesheet(): Plugin {
+    return {
+        name: 'nightbar-inline-stylesheet',
+        apply: 'build',
+        transformIndexHtml: {
+            order: 'post',
+            handler: (html, { bundle }) => {
+                for (const [fileName, output] of Object.entries(bundle ?? {})) {
+                    if (output.type !== 'asset' || !fileName.endsWith('.css')) continue
+
+                    // Hashed asset names hold only letters, digits, '-', '_', '/' and dots.
+                    const href = `/${fileName}`.replaceAll('.', '\\.')
+                    const link = new RegExp(`<link rel="stylesheet"[^>]*href="${href}"[^>]*>`)
+                    const css = String(output.source)
+                    html = html.replace(link, () => `<style>${css}</style>`)
+                    delete bundle?.[fileName]
+                }
+                return html
+            },
+        },
+    }
+}
+
 function serveInstallScript(): Plugin {
     return {
         name: 'nightbar-install-script',
@@ -42,7 +69,7 @@ function serveInstallScript(): Plugin {
 }
 
 export default defineConfig({
-    plugins: lazyPlugins(() => [prerenderPage(), serveInstallScript()]),
+    plugins: lazyPlugins(() => [prerenderPage(), inlineStylesheet(), serveInstallScript()]),
     fmt: {
         singleQuote: true,
         semi: false,

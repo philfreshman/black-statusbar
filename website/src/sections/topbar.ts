@@ -4,6 +4,7 @@ import { links } from '../site.ts'
 export function renderTopbar(): string {
     return /* HTML */ `
         <header class="topbar rail">
+            <a class="skip-link" href="#top">Skip to content</a>
             <a class="brand" href="#top" aria-label="Nightbar home">
                 ${icon('mark', { className: 'brand-mark' })}
                 <span>Nightbar</span>

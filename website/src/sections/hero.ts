@@ -3,6 +3,22 @@ import { ids, links } from '../site.ts'
 import { renderDesktop } from './desktop.ts'
 import { renderInstallCommand } from './install-command.ts'
 
+/**
+ * Pauses and plays the looping demo, so it can be stopped (WCAG 2.2.2 Pause, Stop, Hide).
+ * Hidden until demo.ts starts the loop: without JavaScript or with reduced motion nothing moves.
+ */
+function renderDemoToggle(): string {
+    return /* HTML */ `
+        <div class="demo-controls">
+            <button class="chip demo-toggle" type="button" id="${ids.demoToggle}" hidden>
+                ${icon('pause', { className: 'icon-pause', size: 14 })}
+                ${icon('play', { className: 'icon-play', size: 14 })}
+                <span class="demo-toggle-label">Pause demo</span>
+            </button>
+        </div>
+    `
+}
+
 export function renderHero(): string {
     return /* HTML */ `
         <section class="hero" aria-labelledby="hero-title">
@@ -26,6 +42,7 @@ export function renderHero(): string {
             </div>
             <div class="storm">
                 <div class="screen-slot">${renderDesktop()}</div>
+                ${renderDemoToggle()}
             </div>
         </section>
     `

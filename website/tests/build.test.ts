@@ -53,6 +53,10 @@ function parseHtml(html: string): Document {
     return new window.DOMParser().parseFromString(html, 'text/html') as unknown as Document
 }
 
+function inlineStylesheet(document: Document): string {
+    return [...document.querySelectorAll('head style')].map((style) => style.textContent).join('')
+}
+
 describe('production build', () => {
     let output: BuildOutput
     let document: Document
@@ -67,12 +71,11 @@ describe('production build', () => {
         expect(document.querySelector('body > main#top h1 .accent')?.textContent).toBe('macOS')
     })
 
-    it('links the hashed stylesheet with every section bundled in', () => {
-        const stylesheet = document.querySelector('link[rel="stylesheet"]')?.getAttribute('href')
+    it('inlines the stylesheet with every section bundled in', () => {
+        const css = inlineStylesheet(document)
 
-        expect(stylesheet).toMatch(/^\/assets\/index-[\w-]+\.css$/)
-        const css = output.sources.get(stylesheet?.slice(1) ?? '')
-        expect(css).toBeDefined()
+        expect(document.querySelector('link[rel="stylesheet"]')).toBeNull()
+        expect(output.fileNames.filter((fileName) => fileName.endsWith('.css'))).toEqual([])
         expect(css).not.toContain('@import')
         for (const selector of [
             '.topbar',
@@ -95,8 +98,7 @@ describe('production build', () => {
 
     it('preloads the Latin font files the stylesheet uses', () => {
         const preloads = [...document.querySelectorAll('link[rel="preload"][as="font"]')]
-        const stylesheet = document.querySelector('link[rel="stylesheet"]')?.getAttribute('href')
-        const css = output.sources.get(stylesheet?.slice(1) ?? '') ?? ''
+        const css = inlineStylesheet(document)
 
         expect(preloads).toHaveLength(3)
         for (const preload of preloads) {

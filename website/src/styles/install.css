@@ -56,7 +56,11 @@
 .install-big {
     margin: 0;
     font-family: var(--font-display);
-    font-size: clamp(3.5rem, 11vw, 9.375rem);
+    /*
+     * Part rem, part vw, so the text still grows when the visitor zooms in. The largest size
+     * stays within 2.5 times the smallest, so zooming can still double it.
+     */
+    font-size: clamp(3.5rem, 1.3rem + 9.3vw, 8.75rem);
     font-weight: 600;
     line-height: 0.9;
     letter-spacing: -0.055em;

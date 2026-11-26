@@ -170,6 +170,14 @@ const shapes = {
         viewBox: '0 0 24 24',
         content: line(/* HTML */ `<path d="M5 12h14m-5.5-5.5L19 12l-5.5 5.5" />`),
     },
+    pause: {
+        viewBox: '0 0 24 24',
+        content: line(/* HTML */ `<path d="M9 6v12M15 6v12" />`),
+    },
+    play: {
+        viewBox: '0 0 24 24',
+        content: line(/* HTML */ `<path d="M8 5.5v13l10.5-6.5z" />`),
+    },
     check: {
         viewBox: '0 0 24 24',
         content: line(/* HTML */ `<path d="m5.5 12.5 4 4 9-9" />`),
