@@ -3,6 +3,12 @@
     "cleanUrls": true,
     "redirects": [
         {
+            "source": "/:path*",
+            "has": [{ "type": "host", "value": ".*\\.vercel\\.app" }],
+            "destination": "https://nightbar.app/:path*",
+            "permanent": false
+        },
+        {
             "source": "/download",
             "destination": "https://github.com/philfreshman/nightbar/releases/latest/download/Nightbar.zip",
             "permanent": false
