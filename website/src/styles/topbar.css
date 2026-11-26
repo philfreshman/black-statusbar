@@ -58,3 +58,20 @@
         display: none;
     }
 }
+
+/* The star badge: the count sits behind a hairline, in mono like every other number. */
+.star-count {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-left: 2px;
+    padding-left: 10px;
+    border-left: 1px solid rgb(5 5 6 / 0.28);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.star-count[hidden] {
+    display: none;
+}
