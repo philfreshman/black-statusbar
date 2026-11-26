@@ -67,6 +67,22 @@
     margin-top: 36px;
 }
 
+/* The command is the way in, so it gets the accent glow a download button used to have. */
+.hero-head .command,
+.install-cta .command {
+    width: min(100%, 620px);
+    margin-top: 40px;
+    border-color: rgb(var(--accent-rgb) / 0.55);
+    box-shadow:
+        0 0 0 4px var(--accent-soft),
+        0 18px 60px -20px rgb(var(--accent-rgb) / 0.6);
+    text-align: left;
+}
+
+.hero-head .actions {
+    margin-top: 20px;
+}
+
 /* The storm band holding the desktop, rail to rail. */
 .hero .storm {
     border-top: 1px solid var(--rail);
@@ -75,32 +91,6 @@
 
 .screen-slot {
     container-type: inline-size;
-}
-
-/* Install: copy cell and command cell side by side, split by a hairline. */
-.hero-install {
-    display: grid;
-    grid-template-columns: 0.9fr 1.1fr;
-    border-top: 1px solid var(--rail);
-}
-
-.hero-install .cell {
-    padding: clamp(32px, 5vw, 56px) var(--pad);
-}
-
-.hero-install .cell + .cell {
-    display: grid;
-    align-items: center;
-    border-left: 1px solid var(--rail);
-}
-
-.hero-install h2 {
-    font-size: clamp(26px, 2.8vw, 36px);
-}
-
-.hero-install p:not(.eyebrow) {
-    margin: 14px 0 0;
-    color: var(--fog);
 }
 
 /* The install command with its copy button: a terminal card. */
@@ -126,6 +116,7 @@
 
 .command code {
     flex: 1;
+    text-align: left;
     min-width: 0;
     overflow-x: auto;
     white-space: nowrap;
@@ -171,15 +162,4 @@
     color: var(--ink);
     border-color: var(--accent);
     background: var(--accent);
-}
-
-@media (max-width: 860px) {
-    .hero-install {
-        grid-template-columns: 1fr;
-    }
-
-    .hero-install .cell + .cell {
-        border-left: 0;
-        border-top: 1px solid var(--rail);
-    }
 }

@@ -67,8 +67,8 @@
     letter-spacing: -0.055em;
 }
 
-.install-cta .actions {
-    margin-top: 40px;
+.install-cta .button {
+    margin-top: 20px;
 }
 
 @media (max-width: 860px) {
