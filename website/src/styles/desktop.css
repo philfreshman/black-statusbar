@@ -1,68 +1,84 @@
-/* The desktop. Sized so the whole screen fits in the window under the headline. */
+/* The desktop: a Mac screen sized by the storm panel around it. */
 .screen {
     --bar-h: 3.4cqi;
     position: relative;
-    width: min(85cqw, 100cqh * 1.6);
+    width: 100%;
+    max-width: 1040px;
+    margin-inline: auto;
     aspect-ratio: 16 / 10;
     overflow: hidden;
-    border-radius: clamp(10px, 1.6vw, 20px);
-    border: clamp(6px, 1vw, 12px) solid #050507;
+    border-radius: clamp(10px, 1.6vw, 18px);
+    border: clamp(6px, 0.9vw, 11px) solid #020203;
     box-shadow:
-        0 0 0 1px rgb(255 255 255 / 0.08),
-        0 60px 120px -30px rgb(0 0 0 / 0.9),
-        0 30px 90px -40px rgb(194 87 122 / 0.6);
+        0 0 0 1px rgb(255 255 255 / 0.1),
+        0 60px 120px -30px rgb(0 0 0 / 0.95),
+        0 0 90px -30px rgb(93 123 255 / 0.7);
     container-type: inline-size;
     text-align: left;
 }
 
-/* Desert dusk: magenta sky, an orange glow on the horizon, near-black land. */
+/* Thunderhead at dusk. */
 .wallpaper {
     position: absolute;
     inset: 0;
 }
 
-.sky {
+.scene {
     position: absolute;
     inset: 0;
-    background:
-        radial-gradient(70% 22% at 30% 47%, rgb(255 196 120 / 0.85), transparent 70%),
-        linear-gradient(
-            180deg,
-            #d77ab0 0%,
-            #c4609a 18%,
-            #b85a86 34%,
-            #d98a7c 42%,
-            #f2b37a 47%,
-            #f6c487 49%
-        );
+    width: 100%;
+    height: 100%;
+}
+.scene .mountains {
+    fill: #4a3270;
+    opacity: 0.75;
+}
+.scene .cloud-light {
+    fill: #f3ecff;
+    opacity: 0.3;
+    filter: blur(18px);
+}
+.scene .bolt path {
+    fill: none;
+    stroke: #f8ffd6;
+    stroke-width: 5;
+    stroke-linejoin: round;
+}
+.scene .bolt .bolt-glow {
+    stroke: var(--volt);
+    stroke-width: 18;
+}
+.scene .glints {
+    fill: none;
+    stroke: #ffcf8f;
+    stroke-width: 4;
+    stroke-linecap: round;
+    opacity: 0.45;
 }
 
-.land {
-    position: absolute;
-    inset: -1px;
-    width: calc(100% + 2px);
-    height: calc(100% + 2px);
+/* The bolt strikes about once every seven seconds: one flash, never more than one a second. */
+.scene .bolt {
+    opacity: 0.9;
 }
-.land .hills {
-    fill: #1d0f16;
+@media (prefers-reduced-motion: no-preference) {
+    .scene .bolt {
+        animation: bolt-strike 7s 2s infinite;
+    }
 }
-.land .ground {
-    fill: #120910;
-}
-.land .road {
-    fill: #1a1015;
-}
-.land .road-line {
-    fill: rgb(242 179 122 / 0.16);
-}
-.land .poles,
-.land .wire {
-    fill: none;
-    stroke: #1d0f16;
-    stroke-width: 5;
-}
-.land .wire {
-    stroke-width: 1.6;
+@keyframes bolt-strike {
+    0%,
+    100% {
+        opacity: 0;
+    }
+    2% {
+        opacity: 1;
+    }
+    6% {
+        opacity: 0.6;
+    }
+    12% {
+        opacity: 0;
+    }
 }
 
 /* The mock menu bar. Off: translucent, tinted by the wallpaper. On: black with white icons. */

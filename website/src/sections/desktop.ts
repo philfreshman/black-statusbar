@@ -7,31 +7,85 @@ const appMenus = ['File', 'Edit', 'View']
 const wideAppMenus = ['Go', 'Window', 'Help']
 
 const description =
-    'A Mac desktop at dusk. The Nightbar menu opens, Nightbar is switched on and the menu bar turns black with white icons, then it is switched off again.'
+    'A Mac desktop with a stormy dusk wallpaper. The Nightbar menu opens, Nightbar is switched on and the menu bar turns black with white icons, then it is switched off again.'
 
-/** Desert dusk: sky, hills, a road and a few power poles. */
+/** Thunderhead at dusk: a pastel sky, a storm cloud with a lightning bolt, a dark sea. */
 function renderWallpaper(): string {
     return /* HTML */ `
         <div class="wallpaper" aria-hidden="true">
-            <div class="sky"></div>
-            <svg class="land" viewBox="0 0 1600 1000" preserveAspectRatio="none">
+            <svg
+                class="scene"
+                viewBox="0 0 1600 1000"
+                preserveAspectRatio="xMidYMid slice"
+                aria-hidden="true"
+            >
+                <defs>
+                    <linearGradient id="scene-sky" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0" stop-color="#aab6ff" />
+                        <stop offset=".3" stop-color="#b9a0f2" />
+                        <stop offset=".52" stop-color="#f0a0c0" />
+                        <stop offset=".66" stop-color="#ffb98f" />
+                        <stop offset=".7" stop-color="#ffd59c" />
+                    </linearGradient>
+                    <linearGradient id="scene-sea" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0" stop-color="#3a2354" />
+                        <stop offset="1" stop-color="#0c0814" />
+                    </linearGradient>
+                    <radialGradient id="scene-sun" cx=".5" cy=".5" r=".5">
+                        <stop offset="0" stop-color="#fff2c4" />
+                        <stop offset=".35" stop-color="#ffcf8f" stop-opacity=".8" />
+                        <stop offset="1" stop-color="#ffb98f" stop-opacity="0" />
+                    </radialGradient>
+                    <linearGradient
+                        id="scene-cloud"
+                        gradientUnits="userSpaceOnUse"
+                        x1="0"
+                        y1="180"
+                        x2="0"
+                        y2="560"
+                    >
+                        <stop offset="0" stop-color="#e0d2fa" />
+                        <stop offset=".45" stop-color="#9580d6" />
+                        <stop offset="1" stop-color="#4f3f8c" />
+                    </linearGradient>
+                    <filter id="scene-soft" x="-10%" y="-10%" width="120%" height="120%">
+                        <feGaussianBlur stdDeviation="3" />
+                    </filter>
+                    <filter id="scene-glow" x="-50%" y="-50%" width="200%" height="200%">
+                        <feGaussianBlur stdDeviation="9" />
+                    </filter>
+                </defs>
+                <rect width="1600" height="700" fill="url(#scene-sky)" />
+                <ellipse cx="560" cy="690" rx="420" ry="180" fill="url(#scene-sun)" />
                 <path
-                    class="hills"
-                    d="M0 470 L120 455 L210 462 L300 440 L380 452 L470 430 L560 446 L640 418 L720 428 L790 400 L860 412 L940 395 L1010 420 L1100 410 L1180 432 L1260 418 L1350 440 L1440 428 L1530 446 L1600 438 V1000 H0 Z"
+                    class="mountains"
+                    d="M0 700V560l90-40 80 30 110-90 90 70 70-30 120 100h60l90-60 70 40 60-20 60 90z"
                 />
-                <path class="ground" d="M0 490 Q800 470 1600 488 V1000 H0 Z" />
-                <path class="road" d="M700 482 L760 482 L1100 1000 L-200 1000 Z" />
-                <path class="road-line" d="M735 484 L739 484 L668 1000 L646 1000 Z" />
-                <g class="poles">
-                    <path d="M1180 486 V330 M1150 345 H1210 M1155 360 H1205" />
-                    <path d="M1320 492 V300 M1284 318 H1356 M1290 336 H1350" />
-                    <path d="M1080 482 V385 M1062 394 H1098" />
-                    <path d="M1010 480 V420 M1000 425 H1020" />
+                <g class="cloud" fill="url(#scene-cloud)" filter="url(#scene-soft)">
+                    <ellipse cx="1220" cy="228" rx="320" ry="34" />
+                    <circle cx="1220" cy="300" r="95" />
+                    <circle cx="1150" cy="360" r="110" />
+                    <circle cx="1290" cy="360" r="105" />
+                    <circle cx="1080" cy="440" r="95" />
+                    <circle cx="1360" cy="440" r="95" />
+                    <circle cx="1220" cy="430" r="130" />
+                    <circle cx="1140" cy="500" r="85" />
+                    <circle cx="1300" cy="505" r="85" />
+                    <rect x="1030" y="480" width="380" height="70" rx="35" />
                 </g>
-                <path
-                    class="wire"
-                    d="M1010 425 Q1045 440 1080 394 Q1130 410 1180 345 Q1250 370 1320 318 Q1460 380 1600 300"
-                />
+                <circle class="cloud-light" cx="1185" cy="290" r="70" />
+                <g class="bolt">
+                    <path
+                        class="bolt-glow"
+                        d="M1200 540 1168 600h26l-40 70h22l-46 60"
+                        filter="url(#scene-glow)"
+                    />
+                    <path d="M1200 540 1168 600h26l-40 70h22l-46 60" />
+                </g>
+                <rect y="700" width="1600" height="300" fill="url(#scene-sea)" />
+                <g class="glints">
+                    <path d="M470 722h180M420 752h280M500 790h120M380 830h340M470 880h170" />
+                </g>
             </svg>
         </div>
     `
@@ -51,7 +105,7 @@ function renderMenubar(): string {
             <div class="notch"></div>
             <div class="menubar-right">
                 <span class="status-item" id="${ids.statusItem}"
-                    >${icon('nightbar', { className: 'glyph' })}</span
+                    >${icon('mark', { className: 'glyph' })}</span
                 >
                 ${icon('wifi', { className: 'glyph' })}
                 ${icon('battery', { className: 'glyph battery' })}

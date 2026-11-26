@@ -26,23 +26,6 @@ const shapes = {
         viewBox: '0 0 32 32',
         content: `<path d="${markPath}" fill="currentColor" />`,
     },
-    nightbar: {
-        viewBox: '0 0 20 16',
-        content: /* HTML */ `
-            <rect
-                x="1.85"
-                y="1.85"
-                width="16.3"
-                height="12.3"
-                rx="2.6"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.7"
-            />
-            <rect x="1" y="1" width="18" height="4.6" rx="3.4" fill="currentColor" />
-            <rect x="1" y="3" width="18" height="2.6" fill="currentColor" />
-        `,
-    },
     apple: {
         viewBox: '0 0 14 17',
         content: /* HTML */ `

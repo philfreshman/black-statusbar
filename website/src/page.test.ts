@@ -75,7 +75,7 @@ describe('renderPage', () => {
     })
 
     it('hides decorative icons from screen readers', () => {
-        const icons = [...page.querySelectorAll('svg:not(.land)')]
+        const icons = [...page.querySelectorAll('svg')]
 
         expect(icons.length).toBeGreaterThan(0)
         for (const icon of icons) {
