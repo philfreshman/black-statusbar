@@ -19,8 +19,8 @@
     --ember: #ff7a45;
 
     --font-body: 'Geist Variable', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-    /* Headlines use the same family as the text: one quiet sans, set tighter and bolder. */
-    --font-display: var(--font-body);
+    /* Headlines use Space Grotesk, a grotesque with quirky details; the text stays in Geist. */
+    --font-display: 'Space Grotesk Variable', 'Geist Variable', system-ui, sans-serif;
     --font-mono: 'Geist Mono Variable', ui-monospace, 'SF Mono', Menlo, monospace;
 
     --max: 76rem;
