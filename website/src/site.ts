@@ -22,6 +22,7 @@ export const ids = {
     statusItem: 'status-item',
     statusMenu: 'status-menu',
     nightbarMenuItem: 'menu-nightbar',
+    demoToggle: 'demo-toggle',
     clock: 'clock',
     installCommand: 'install-command',
     installCommandClosing: 'install-command-closing',

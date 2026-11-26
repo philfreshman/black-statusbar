@@ -94,6 +94,29 @@
     padding: clamp(28px, 6vw, 80px) clamp(12px, 6vw, 88px);
 }
 
+/* Lines the pause button up with the desktop's right edge. */
+.demo-controls {
+    display: flex;
+    justify-content: flex-end;
+    max-width: 1040px;
+    margin: 16px auto 0;
+}
+
+/* Over the storm glow, so it gets a dark backing to stay readable. */
+.demo-toggle {
+    background: rgb(5 5 6 / 0.6);
+}
+
+.demo-toggle[hidden] {
+    display: none;
+}
+
+/* Shows what the button does next: pause while playing, play while paused. */
+.demo-toggle[data-paused='true'] .icon-pause,
+.demo-toggle:not([data-paused='true']) .icon-play {
+    display: none;
+}
+
 .screen-slot {
     container-type: inline-size;
 }
