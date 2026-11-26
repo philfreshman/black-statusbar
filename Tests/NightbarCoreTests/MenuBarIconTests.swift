@@ -10,16 +10,31 @@ struct MenuBarIconTests {
     }
 
     @Test func isAsTallAsOtherMenuBarIcons() {
-        #expect(MenuBarIcon.make().size == NSSize(width: 20, height: 16))
+        #expect(MenuBarIcon.make().size == NSSize(width: 16, height: 16))
     }
 
-    @Test func drawsWindowWithSolidTopBar() throws {
-        let bitmap = try render(MenuBarIcon.make())
-        let window = MenuBarIcon.window
+    /// Points on the mark's 24 unit grid, from the top left.
+    @Test(arguments: [
+        CGPoint(x: 2.5, y: 20),  // left stem
+        CGPoint(x: 21.5, y: 4),  // right stem
+        CGPoint(x: 12, y: 10),   // the diagonal, where it breaks
+    ])
+    func fillsTheN(at point: CGPoint) throws {
+        #expect(try alpha(atGrid: point) > 0.5)
+    }
 
-        #expect(alpha(in: bitmap, x: window.midX, y: window.minY + MenuBarIcon.topBarHeight / 2) > 0.5)
-        #expect(alpha(in: bitmap, x: window.minX + 0.5, y: window.midY) > 0.5)
-        #expect(alpha(in: bitmap, x: window.midX, y: window.midY + 2) < 0.1)
+    @Test(arguments: [
+        CGPoint(x: 12, y: 3),   // above the diagonal
+        CGPoint(x: 12, y: 22),  // below the diagonal
+    ])
+    func leavesGapsBetweenTheStems(at point: CGPoint) throws {
+        #expect(try alpha(atGrid: point) < 0.1)
+    }
+
+    private func alpha(atGrid point: CGPoint) throws -> CGFloat {
+        let bitmap = try render(MenuBarIcon.make())
+        let imagePoint = MenuBarIcon.imagePoint(onGrid: point)
+        return alpha(in: bitmap, x: imagePoint.x, y: imagePoint.y)
     }
 
     private func render(_ image: NSImage) throws -> NSBitmapImageRep {
