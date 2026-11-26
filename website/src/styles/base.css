@@ -1,4 +1,4 @@
-/* Tokens: one electric colour on a black drafting sheet. Notes in .design/DESIGN.md (local). */
+/* Tokens: one electric blue on a black drafting sheet. Notes in .design/DESIGN.md (local). */
 :root {
     --ink: #050506;
     --coal: #0c0c0f;
@@ -6,9 +6,11 @@
     --rail-strong: #34343c;
     --fog: #8e8e99;
     --chalk: #f3f3ef;
-    --volt: #dcff3c;
-    --volt-soft: rgb(220 255 60 / 0.14);
-    --arc: #5d7bff;
+    /* Electric blue, like a lightning flash. The channels let rgb() add transparency. */
+    --accent-rgb: 76 157 255;
+    --accent: rgb(var(--accent-rgb));
+    --accent-soft: rgb(var(--accent-rgb) / 0.14);
+    --arc: #7c5cff;
     --ember: #ff7a45;
 
     --font-display: 'Bricolage Grotesque Variable', 'Geist Variable', system-ui, sans-serif;
@@ -92,15 +94,15 @@ p {
 .eyebrow span {
     padding: 2px 6px;
     border: 1px solid var(--rail-strong);
-    color: var(--volt);
+    color: var(--accent);
 }
 
-.volt {
-    color: var(--volt);
-    text-shadow: 0 0 40px rgb(220 255 60 / 0.35);
+.accent {
+    color: var(--accent);
+    text-shadow: 0 0 40px rgb(var(--accent-rgb) / 0.35);
 }
 
-/* Buttons: small radius, hairline border. Primary is volt. */
+/* Buttons: small radius, hairline border. Primary is the accent. */
 .button {
     display: inline-flex;
     align-items: center;
@@ -127,18 +129,18 @@ p {
 }
 
 .button.primary {
-    border-color: var(--volt);
+    border-color: var(--accent);
     color: var(--ink);
-    background: var(--volt);
+    background: var(--accent);
     box-shadow:
-        0 0 0 4px var(--volt-soft),
-        0 10px 40px -12px rgb(220 255 60 / 0.6);
+        0 0 0 4px var(--accent-soft),
+        0 10px 40px -12px rgb(var(--accent-rgb) / 0.6);
 }
 
 .button.primary:hover {
     box-shadow:
-        0 0 0 6px rgb(220 255 60 / 0.2),
-        0 14px 50px -10px rgb(220 255 60 / 0.75);
+        0 0 0 6px rgb(var(--accent-rgb) / 0.2),
+        0 14px 50px -10px rgb(var(--accent-rgb) / 0.75);
 }
 
 .button.ghost {
@@ -164,7 +166,7 @@ p {
 }
 
 :focus-visible {
-    outline: 2px solid var(--volt);
+    outline: 2px solid var(--accent);
     outline-offset: 3px;
 }
 
@@ -174,9 +176,9 @@ p {
     isolation: isolate;
     overflow: hidden;
     background:
-        radial-gradient(60% 70% at 50% 115%, rgb(93 123 255 / 0.55), transparent 70%),
-        radial-gradient(35% 45% at 18% -5%, rgb(220 255 60 / 0.28), transparent 70%),
-        radial-gradient(30% 40% at 85% 10%, rgb(93 123 255 / 0.35), transparent 70%), #07070b;
+        radial-gradient(60% 70% at 50% 115%, rgb(124 92 255 / 0.55), transparent 70%),
+        radial-gradient(35% 45% at 18% -5%, rgb(var(--accent-rgb) / 0.28), transparent 70%),
+        radial-gradient(30% 40% at 85% 10%, rgb(124 92 255 / 0.35), transparent 70%), #07070b;
 }
 
 .storm::before {
@@ -185,10 +187,15 @@ p {
     inset: -20%;
     z-index: -1;
     background:
-        linear-gradient(105deg, transparent 30%, rgb(220 255 60 / 0.16) 33%, transparent 36%),
-        linear-gradient(112deg, transparent 48%, rgb(93 123 255 / 0.3) 52%, transparent 57%),
-        linear-gradient(98deg, transparent 66%, rgb(220 255 60 / 0.1) 68%, transparent 70%),
-        linear-gradient(120deg, transparent 12%, rgb(93 123 255 / 0.18) 16%, transparent 22%);
+        linear-gradient(
+            105deg,
+            transparent 30%,
+            rgb(var(--accent-rgb) / 0.16) 33%,
+            transparent 36%
+        ),
+        linear-gradient(112deg, transparent 48%, rgb(124 92 255 / 0.3) 52%, transparent 57%),
+        linear-gradient(98deg, transparent 66%, rgb(var(--accent-rgb) / 0.1) 68%, transparent 70%),
+        linear-gradient(120deg, transparent 12%, rgb(124 92 255 / 0.18) 16%, transparent 22%);
     filter: blur(14px);
 }
 

@@ -15,7 +15,7 @@
 }
 
 .points article:hover {
-    background: linear-gradient(180deg, var(--volt-soft), transparent 60%);
+    background: linear-gradient(180deg, var(--accent-soft), transparent 60%);
 }
 
 .point-top {
@@ -31,7 +31,7 @@
     padding: 11px;
     border: 1px solid var(--rail-strong);
     border-radius: 6px;
-    color: var(--volt);
+    color: var(--accent);
     background: var(--coal);
 }
 

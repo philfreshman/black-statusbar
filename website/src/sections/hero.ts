@@ -23,7 +23,7 @@ export function renderHero(): string {
             <div class="hero-head">
                 ${icon('mark', { className: 'hero-mark' })}
                 <p class="kicker">Free · open source · every display</p>
-                <h1 id="hero-title">A black menu bar<br />for <span class="volt">macOS</span></h1>
+                <h1 id="hero-title">A black menu bar<br />for <span class="accent">macOS</span></h1>
                 <p class="lede">
                     White icons on solid black, on any wallpaper. The notch disappears, your
                     wallpaper stays untouched.

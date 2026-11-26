@@ -43,7 +43,7 @@ export function renderInstall(): string {
                 ${steps.map(renderStep).join('')}
             </ol>
             <div class="install-cta">
-                <p class="install-big">Lights out<span class="volt">.</span></p>
+                <p class="install-big">Lights out<span class="accent">.</span></p>
                 <div class="actions">
                     <a class="button primary" href="${links.download}">
                         ${icon('download', { size: 18 })} Download Nightbar

@@ -48,7 +48,7 @@ main > section::after {
         }
         20%,
         60% {
-            border-left-color: var(--volt);
+            border-left-color: var(--accent);
         }
     }
 
@@ -59,7 +59,7 @@ main > section::after {
         }
         20%,
         60% {
-            border-right-color: var(--volt);
+            border-right-color: var(--accent);
         }
     }
 

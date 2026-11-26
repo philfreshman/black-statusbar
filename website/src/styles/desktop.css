@@ -12,7 +12,7 @@
     box-shadow:
         0 0 0 1px rgb(255 255 255 / 0.1),
         0 60px 120px -30px rgb(0 0 0 / 0.95),
-        0 0 90px -30px rgb(93 123 255 / 0.7);
+        0 0 90px -30px rgb(124 92 255 / 0.7);
     container-type: inline-size;
     text-align: left;
 }
@@ -45,7 +45,7 @@
     stroke-linejoin: round;
 }
 .scene .bolt .bolt-glow {
-    stroke: var(--volt);
+    stroke: var(--accent);
     stroke-width: 18;
 }
 .scene .glints {
