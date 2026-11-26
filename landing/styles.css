@@ -142,7 +142,7 @@ main > section {
 .screen {
   --bar-h: 3.4cqi;
   position: relative;
-  width: min(100%, calc((100svh - 300px) * 1.6));
+  width: min(85%, calc((100svh - 300px) * 1.36));
   min-width: min(100%, 320px);
   margin: 36px auto 0;
   aspect-ratio: 16 / 10;
@@ -208,7 +208,8 @@ main > section {
 .menubar-left b { font-weight: 700; }
 .menubar-right { gap: 1.3cqi; }
 .glyph { width: 1.7cqi; height: auto; display: block; }
-.glyph.battery { width: 2.2cqi; }
+.glyph.battery { width: 2.4cqi; }
+.apple { width: 1.35cqi; height: auto; display: block; margin-top: -0.2cqi; }
 .clock { font-variant-numeric: tabular-nums; }
 
 .status-item {
