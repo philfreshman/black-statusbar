@@ -84,6 +84,13 @@ describe('renderPage', () => {
         ])
     })
 
+    // Safari drops list semantics from lists styled with list-style: none, unless they say role="list".
+    it('keeps the role of lists the page shows without bullets', () => {
+        for (const list of page.querySelectorAll('.how-steps, .steps, .facts')) {
+            expect(list.getAttribute('role'), list.className).toBe('list')
+        }
+    })
+
     it('hides decorative icons from screen readers', () => {
         const icons = [...page.querySelectorAll('svg')]
 

@@ -40,7 +40,7 @@ export function renderInstall(): string {
                 <p class="eyebrow"><span>04</span> Install</p>
                 <h2 id="install-title">One line in Terminal.</h2>
             </div>
-            <ol class="steps">
+            <ol class="steps" role="list">
                 ${steps.map(renderStep).join('')}
             </ol>
             <div class="install-cta">

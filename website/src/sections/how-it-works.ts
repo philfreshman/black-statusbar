@@ -89,7 +89,7 @@ export function renderHowItWorks(): string {
                 <div class="how-copy">
                     <p class="eyebrow"><span>02</span> How it works</p>
                     <h2 id="how-title">Three layers. One of them is ours.</h2>
-                    <ol class="how-steps">
+                    <ol class="how-steps" role="list">
                         ${steps.map(renderStep).join('')}
                     </ol>
                 </div>
