@@ -1,3 +1,4 @@
+import { icon } from '../icons.ts'
 import { links } from '../site.ts'
 
 interface Step {
@@ -21,9 +22,10 @@ const steps: Step[] = [
     },
 ]
 
-function renderStep({ title, html }: Step): string {
+function renderStep({ title, html }: Step, index: number): string {
     return /* HTML */ `
         <li>
+            <span class="step-number">0${index + 1}</span>
             <h3>${title}</h3>
             <p>${html}</p>
         </li>
@@ -33,15 +35,24 @@ function renderStep({ title, html }: Step): string {
 export function renderInstall(): string {
     return /* HTML */ `
         <section class="install" id="install" aria-labelledby="install-title">
-            <p class="eyebrow">Install by hand</p>
-            <h2 id="install-title">Rather skip Terminal?</h2>
+            <div class="section-head">
+                <p class="eyebrow"><span>04</span> Install by hand</p>
+                <h2 id="install-title">Rather skip Terminal?</h2>
+            </div>
             <ol class="steps">
                 ${steps.map(renderStep).join('')}
             </ol>
-            <a class="button primary" href="${links.download}">Download Nightbar</a>
-            <p class="install-alt">
-                <a href="${links.installScriptSource}">Read the install script</a>
-            </p>
+            <div class="install-cta">
+                <p class="install-big">Lights out<span class="volt">.</span></p>
+                <div class="actions">
+                    <a class="button primary" href="${links.download}">
+                        ${icon('download', { size: 18 })} Download Nightbar
+                    </a>
+                    <a class="button ghost" href="${links.installScriptSource}">
+                        Read the install script ${icon('arrow', { size: 18 })}
+                    </a>
+                </div>
+            </div>
         </section>
     `
 }

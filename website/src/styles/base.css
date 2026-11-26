@@ -1,19 +1,30 @@
+/* Tokens: one electric colour on a black drafting sheet. Notes in .design/DESIGN.md (local). */
 :root {
-    --night: #08080d;
-    --night-2: #101019;
-    --line: rgb(255 255 255 / 0.09);
-    --text: #f3f1f6;
-    --muted: #a19fae;
-    --dusk-1: #6b3a6b;
-    --dusk-2: #c2577a;
-    --dusk-3: #f2a272;
-    --dusk: linear-gradient(100deg, #b98fd8 0%, #e58aa4 45%, #f7b98a 100%);
-    --radius: 22px;
-    --max: 1120px;
-    font-family:
-        -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter', 'Segoe UI', system-ui, sans-serif;
-    color: var(--text);
-    background: var(--night);
+    --ink: #050506;
+    --coal: #0c0c0f;
+    --rail: #222228;
+    --rail-strong: #34343c;
+    --fog: #8e8e99;
+    --chalk: #f3f3ef;
+    --volt: #dcff3c;
+    --volt-soft: rgb(220 255 60 / 0.14);
+    --arc: #5d7bff;
+    --ember: #ff7a45;
+
+    --font-display: 'Bricolage Grotesque Variable', 'Geist Variable', system-ui, sans-serif;
+    --font-body: 'Geist Variable', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    --font-mono: 'Geist Mono Variable', ui-monospace, 'SF Mono', Menlo, monospace;
+
+    --max: 76rem;
+    --topbar-h: 56px;
+    --pad: clamp(20px, 4vw, 48px);
+    --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+    color-scheme: dark;
+    font-family: var(--font-body);
+    font-size-adjust: from-font;
+    color: var(--chalk);
+    background: var(--ink);
     -webkit-font-smoothing: antialiased;
 }
 
@@ -24,11 +35,7 @@
 body {
     margin: 0;
     min-height: 100vh;
-    background:
-        radial-gradient(1200px 600px at 50% -10%, rgb(194 87 122 / 0.22), transparent 70%),
-        radial-gradient(900px 500px at 85% 30%, rgb(107 58 107 / 0.25), transparent 70%),
-        var(--night);
-    background-repeat: no-repeat;
+    background: var(--ink);
 }
 
 a {
@@ -39,90 +46,159 @@ h1,
 h2,
 h3 {
     margin: 0;
-    letter-spacing: -0.025em;
-    font-weight: 650;
+    font-family: var(--font-display);
+    font-weight: 620;
+    font-stretch: 88%;
+    letter-spacing: -0.04em;
+    text-wrap: balance;
 }
+
+h2 {
+    font-size: clamp(32px, 4.2vw, 56px);
+    line-height: 1;
+}
+
+h3 {
+    font-size: 21px;
+    letter-spacing: -0.02em;
+}
+
 p {
     line-height: 1.6;
+    text-wrap: pretty;
+}
+
+/* Meta text: section labels, numbers, commands. */
+.label,
+.eyebrow,
+.kicker {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--fog);
 }
 
 .eyebrow {
-    margin: 0 0 14px;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: #e6a0b0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 22px;
 }
 
-.dusk {
-    background: var(--dusk);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+/* The section index, boxed like a registration number. */
+.eyebrow span {
+    padding: 2px 6px;
+    border: 1px solid var(--rail-strong);
+    color: var(--volt);
 }
 
-main > section {
-    width: min(var(--max), calc(100% - 40px));
-    margin: 0 auto;
+.volt {
+    color: var(--volt);
+    text-shadow: 0 0 40px rgb(220 255 60 / 0.35);
 }
 
+/* Buttons: small radius, hairline border. Primary is volt. */
 .button {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 13px 22px;
-    border-radius: 999px;
-    font-size: 16px;
-    font-weight: 600;
+    gap: 9px;
+    height: 46px;
+    padding: 0 20px;
+    border: 1px solid var(--rail-strong);
+    border-radius: 6px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 560;
     text-decoration: none;
+    color: var(--chalk);
+    background: var(--coal);
     transition:
-        transform 0.2s,
+        border-color 0.2s,
         background 0.2s,
-        box-shadow 0.2s;
+        box-shadow 0.2s,
+        color 0.2s;
 }
 
-.button:active {
-    transform: scale(0.97);
+.button:hover {
+    border-color: var(--fog);
 }
 
 .button.primary {
-    color: #160b12;
-    background: var(--dusk);
-    box-shadow: 0 10px 40px -10px rgb(229 138 164 / 0.7);
+    border-color: var(--volt);
+    color: var(--ink);
+    background: var(--volt);
+    box-shadow:
+        0 0 0 4px var(--volt-soft),
+        0 10px 40px -12px rgb(220 255 60 / 0.6);
 }
 
 .button.primary:hover {
-    box-shadow: 0 14px 50px -10px rgb(229 138 164 / 0.9);
+    box-shadow:
+        0 0 0 6px rgb(220 255 60 / 0.2),
+        0 14px 50px -10px rgb(220 255 60 / 0.75);
 }
 
-/* Two-column sections: How it works and the menu. */
-.how,
-.menu-section {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: center;
-    gap: 64px;
-    padding: 100px 0;
+.button.ghost {
+    background: transparent;
+    border-color: transparent;
+    color: var(--fog);
 }
 
-.how h2,
-.menu-section h2,
-.install h2 {
-    font-size: clamp(30px, 3.6vw, 44px);
-    line-height: 1.1;
-}
-.how-copy p:not(.eyebrow),
-.menu-copy p:not(.eyebrow) {
-    color: var(--muted);
-    font-size: 17px;
+.button.ghost:hover {
+    color: var(--chalk);
+    border-color: var(--rail-strong);
 }
 
-@media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-        transition-duration: 0.01ms !important;
-        animation: none !important;
-    }
+.button.small {
+    height: 34px;
+    padding: 0 12px;
+    font-size: 13.5px;
+    box-shadow: none;
+}
+
+.button svg {
+    flex: none;
+}
+
+:focus-visible {
+    outline: 2px solid var(--volt);
+    outline-offset: 3px;
+}
+
+/* Storm panels: black, light streaks and film grain. Only these carry glow. */
+.storm {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background:
+        radial-gradient(60% 70% at 50% 115%, rgb(93 123 255 / 0.55), transparent 70%),
+        radial-gradient(35% 45% at 18% -5%, rgb(220 255 60 / 0.28), transparent 70%),
+        radial-gradient(30% 40% at 85% 10%, rgb(93 123 255 / 0.35), transparent 70%), #07070b;
+}
+
+.storm::before {
+    content: '';
+    position: absolute;
+    inset: -20%;
+    z-index: -1;
+    background:
+        linear-gradient(105deg, transparent 30%, rgb(220 255 60 / 0.16) 33%, transparent 36%),
+        linear-gradient(112deg, transparent 48%, rgb(93 123 255 / 0.3) 52%, transparent 57%),
+        linear-gradient(98deg, transparent 66%, rgb(220 255 60 / 0.1) 68%, transparent 70%),
+        linear-gradient(120deg, transparent 12%, rgb(93 123 255 / 0.18) 16%, transparent 22%);
+    filter: blur(14px);
+}
+
+.storm::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+    opacity: 0.55;
+    pointer-events: none;
 }

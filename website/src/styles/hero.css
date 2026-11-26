@@ -1,82 +1,127 @@
-/* Hero: headline, the live desktop, then the pitch. */
+/* Hero: mark, headline and actions, then the live desktop in a storm panel, then install. */
 .hero {
+    border-top: 0;
+}
+
+.hero-head {
     display: flex;
     flex-direction: column;
-    height: calc(100svh - 52px);
-    min-height: 560px;
-    padding: 32px 0 28px;
+    align-items: center;
+    padding: clamp(56px, 9vw, 112px) var(--pad) clamp(48px, 7vw, 80px);
     text-align: center;
 }
 
-/* Takes whatever height is left, so the whole hero fits in the window. */
-.screen-slot {
-    flex: 1;
-    min-height: 0;
-    display: grid;
-    place-items: center;
-    margin: 24px 0 18px;
-    container-type: size;
+.hero-mark {
+    width: 52px;
+    height: 52px;
+    margin-bottom: 26px;
+    color: var(--volt);
+    filter: drop-shadow(0 0 18px rgb(220 255 60 / 0.55));
+}
+
+/* One strike on load, then calm. A single flash stays far below the three-per-second limit. */
+@media (prefers-reduced-motion: no-preference) {
+    .hero-mark {
+        animation: strike 1.4s 0.3s var(--ease-out) both;
+    }
+}
+
+@keyframes strike {
+    0% {
+        opacity: 0;
+        translate: 0 -10px;
+        filter: drop-shadow(0 0 0 transparent);
+    }
+    35% {
+        opacity: 1;
+        translate: 0 0;
+        filter: drop-shadow(0 0 34px rgb(220 255 60 / 0.95));
+    }
+}
+
+.kicker {
+    margin-bottom: 22px;
+    color: var(--volt);
 }
 
 .hero h1 {
-    font-size: clamp(34px, 5.6vw, 68px);
-    line-height: 1.04;
+    font-size: clamp(48px, 8.4vw, 108px);
+    font-weight: 640;
+    font-stretch: 82%;
+    line-height: 0.92;
+    letter-spacing: -0.038em;
 }
 
-.hero .command {
-    width: 100%;
+.lede {
+    max-width: 34em;
+    margin: 26px 0 0;
+    font-size: clamp(16px, 1.5vw, 19px);
+    color: var(--fog);
 }
 
-/* Positioned so the desktop's glow doesn't paint over the text below it. */
-.works-with,
-.hero .command,
-.source {
-    position: relative;
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 36px;
 }
 
-.works-with {
-    margin: 0 0 18px;
-    font-size: clamp(16px, 1.4vw, 18px);
-    color: var(--text);
+/* The storm band holding the desktop, rail to rail. */
+.hero .storm {
+    border-top: 1px solid var(--rail);
+    padding: clamp(28px, 6vw, 80px) clamp(12px, 6vw, 88px);
 }
 
-.source {
-    display: inline-flex;
-    align-self: center;
+.screen-slot {
+    container-type: inline-size;
+}
+
+/* Install: copy cell and command cell side by side, split by a hairline. */
+.hero-install {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    border-top: 1px solid var(--rail);
+}
+
+.hero-install .cell {
+    padding: clamp(32px, 5vw, 56px) var(--pad);
+}
+
+.hero-install .cell + .cell {
+    display: grid;
     align-items: center;
-    gap: 8px;
-    margin-top: 16px;
-    padding: 6px 12px;
-    border-radius: 999px;
-    color: var(--muted);
-    font-size: 14px;
-    font-weight: 600;
-    text-decoration: none;
-    transition:
-        color 0.2s,
-        background 0.2s;
+    border-left: 1px solid var(--rail);
 }
 
-.source:hover {
-    color: var(--text);
-    background: rgb(255 255 255 / 0.06);
+.hero-install h2 {
+    font-size: clamp(26px, 2.8vw, 36px);
 }
 
-/* The install command with its copy button. */
+.hero-install p:not(.eyebrow) {
+    margin: 14px 0 0;
+    color: var(--fog);
+}
+
+/* The install command with its copy button: a terminal card. */
 .command {
+    border: 1px solid var(--rail-strong);
+    border-radius: 8px;
+    background: var(--coal);
+    overflow: hidden;
+}
+
+.command .label {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--rail);
+    font-size: 10.5px;
+}
+
+.command-line {
     display: flex;
     align-items: center;
     gap: 12px;
-    max-width: 640px;
-    margin: 0 auto;
-    padding: 10px 10px 10px 22px;
-    border: 1.5px solid transparent;
-    border-radius: 16px;
-    background:
-        linear-gradient(#000, #000) padding-box,
-        var(--dusk) border-box;
-    box-shadow: 0 18px 50px -24px rgb(229 138 164 / 0.6);
-    text-align: left;
+    padding: 12px 12px 12px 16px;
 }
 
 .command code {
@@ -84,15 +129,15 @@
     min-width: 0;
     overflow-x: auto;
     white-space: nowrap;
-    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
-    font-size: 15px;
-    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: var(--chalk);
     scrollbar-width: none;
 }
 
 .command code::before {
     content: '$ ';
-    color: #75737f;
+    color: var(--volt);
 }
 
 .copy {
@@ -100,22 +145,41 @@
     flex: none;
     align-items: center;
     gap: 6px;
-    padding: 9px 14px;
-    border: 0;
-    border-radius: 10px;
-    background: var(--dusk);
-    color: #160b12;
-    font: inherit;
-    font-size: 14px;
-    font-weight: 600;
+    height: 32px;
+    padding: 0 12px;
+    border: 1px solid var(--rail-strong);
+    border-radius: 5px;
+    background: transparent;
+    color: var(--fog);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
     cursor: pointer;
-    transition: filter 0.2s;
+    transition:
+        color 0.2s,
+        border-color 0.2s,
+        background 0.2s;
 }
 
 .copy:hover {
-    filter: brightness(1.08);
+    color: var(--chalk);
+    border-color: var(--fog);
 }
 
 .copy.is-copied {
-    background: var(--text);
+    color: var(--ink);
+    border-color: var(--volt);
+    background: var(--volt);
+}
+
+@media (max-width: 860px) {
+    .hero-install {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-install .cell + .cell {
+        border-left: 0;
+        border-top: 1px solid var(--rail);
+    }
 }

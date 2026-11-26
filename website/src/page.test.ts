@@ -25,7 +25,7 @@ describe('renderPage', () => {
 
         expect(headings).toHaveLength(1)
         expect(headings[0].textContent).toContain('A black menu bar')
-        expect(headings[0].querySelector('.dusk')?.textContent).toBe('macOS')
+        expect(headings[0].querySelector('.volt')?.textContent).toBe('macOS')
     })
 
     it('renders every section in order', () => {
