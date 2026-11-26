@@ -7,8 +7,7 @@
     align-items: center;
     gap: 28px;
     height: var(--topbar-h);
-    padding: 0 0 0 var(--pad);
-    padding-right: 11px;
+    padding: 0 var(--pad);
     background: rgb(5 5 6 / 0.82);
     backdrop-filter: blur(14px) saturate(1.4);
     border-bottom: 1px solid var(--rail);
@@ -54,24 +53,20 @@
 }
 
 @media (max-width: 720px) {
-    .topbar-links {
+    .topbar-links .section-link {
         display: none;
     }
 }
 
-/* The star badge: the count sits behind a hairline, in mono like every other number. */
-.star-count {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    margin-left: 2px;
-    padding-left: 10px;
-    border-left: 1px solid rgb(5 5 6 / 0.28);
-    font-family: var(--font-mono);
-    font-size: 13px;
-    font-weight: 600;
+/* The live star count, in the accent colour like every other number that matters. */
+.topbar-links .stars {
+    color: var(--chalk);
 }
 
-.star-count[hidden] {
+.topbar-links .stars[hidden] {
     display: none;
+}
+
+.star-count {
+    color: var(--accent);
 }

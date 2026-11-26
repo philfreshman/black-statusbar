@@ -5,30 +5,11 @@ interface Repository {
     stargazers_count: number
 }
 
-interface CachedCount {
-    stars: number
-    savedAt: number
-}
-
-/** GitHub allows 60 calls an hour without a login, so reloads reuse the last answer. */
-const CACHE_KEY = 'nightbar-star-count'
-const CACHE_FOR_MS = 60 * 60 * 1000
-
-function readCachedStars(): number | undefined {
-    try {
-        const cached = JSON.parse(sessionStorage.getItem(CACHE_KEY) ?? 'null') as CachedCount | null
-        return cached && Date.now() - cached.savedAt < CACHE_FOR_MS ? cached.stars : undefined
-    } catch {
-        return undefined
-    }
-}
-
-function cacheStars(stars: number): void {
-    try {
-        sessionStorage.setItem(CACHE_KEY, JSON.stringify({ stars, savedAt: Date.now() }))
-    } catch {
-        // Storage can be blocked; the count still shows, it is just fetched again next time.
-    }
+/** Formats a star count the way GitHub shows it, for example 1234 as "1.2k". */
+export function formatStarCount(count: number, locale = 'en'): string {
+    return new Intl.NumberFormat(locale, { notation: 'compact', maximumFractionDigits: 1 })
+        .format(count)
+        .toLowerCase()
 }
 
 async function fetchStars(): Promise<number | undefined> {
@@ -39,33 +20,25 @@ async function fetchStars(): Promise<number | undefined> {
         return undefined
     }
     const { stargazers_count: stars } = (await response.json()) as Repository
-    cacheStars(stars)
     return stars
 }
 
-/** Formats a star count the way GitHub shows it, for example 1234 as "1.2k". */
-export function formatStarCount(count: number, locale = 'en'): string {
-    return new Intl.NumberFormat(locale, { notation: 'compact', maximumFractionDigits: 1 })
-        .format(count)
-        .toLowerCase()
-}
-
 /**
- * Fills in the repository's star count. With no stars yet, or if GitHub can't be reached, the
- * badge just says "Star".
+ * Reads the star count live from GitHub and shows the Stars link. If GitHub can't be reached
+ * (offline, or past its 60 calls an hour without a login), the link stays hidden.
  */
 export async function showStarCount(): Promise<void> {
+    const starsLink = requireElement(ids.stars)
     const count = requireElement(ids.starCount)
 
     try {
-        const stars = readCachedStars() ?? (await fetchStars())
-        // A zero reads like a warning; without a number the badge still invites a star.
-        if (!stars) {
+        const stars = await fetchStars()
+        if (stars === undefined) {
             return
         }
         count.textContent = formatStarCount(stars)
-        count.hidden = false
+        starsLink.hidden = false
     } catch {
-        // Offline or rate limited: the badge keeps working as a plain link.
+        // Network error: nothing to show.
     }
 }

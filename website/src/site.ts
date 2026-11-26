@@ -5,6 +5,7 @@ export const links = {
     repository,
     /** GitHub's public API for the repository, for the star count. */
     repositoryApi: `https://api.github.com/repos/${repositoryPath}`,
+    stargazers: `${repository}/stargazers`,
     releases: `${repository}/releases`,
     installScriptSource: `${repository}/blob/main/install.sh`,
 } as const
@@ -21,5 +22,6 @@ export const ids = {
     clock: 'clock',
     installCommand: 'install-command',
     installCommandClosing: 'install-command-closing',
+    stars: 'stars',
     starCount: 'star-count',
 } as const

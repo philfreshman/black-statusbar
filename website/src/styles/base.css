@@ -154,13 +154,6 @@ p {
     border-color: var(--rail-strong);
 }
 
-.button.small {
-    height: 34px;
-    padding: 0 12px;
-    font-size: 13.5px;
-    box-shadow: none;
-}
-
 .button svg {
     flex: none;
 }
