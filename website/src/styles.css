@@ -666,9 +666,12 @@ main > section {
     max-width: 640px;
     margin: 0 auto;
     padding: 10px 10px 10px 22px;
+    border: 1.5px solid transparent;
     border-radius: 16px;
-    background: var(--dusk);
-    box-shadow: 0 18px 50px -14px rgb(229 138 164 / 0.65);
+    background:
+        linear-gradient(#000, #000) padding-box,
+        var(--dusk) border-box;
+    box-shadow: 0 18px 50px -24px rgb(229 138 164 / 0.6);
     text-align: left;
 }
 
@@ -679,14 +682,13 @@ main > section {
     white-space: nowrap;
     font-family: ui-monospace, "SF Mono", Menlo, monospace;
     font-size: 15px;
-    font-weight: 600;
-    color: #160b12;
+    color: var(--text);
     scrollbar-width: none;
 }
 
 .command code::before {
     content: "$ ";
-    color: rgb(22 11 18 / 0.5);
+    color: #75737f;
 }
 
 .copy {
@@ -697,24 +699,21 @@ main > section {
     padding: 9px 14px;
     border: 0;
     border-radius: 10px;
-    background: rgb(22 11 18 / 0.14);
+    background: var(--dusk);
     color: #160b12;
     font: inherit;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
-    transition:
-        background 0.2s,
-        color 0.2s;
+    transition: filter 0.2s;
 }
 
 .copy:hover {
-    background: rgb(22 11 18 / 0.24);
+    filter: brightness(1.08);
 }
 
 .copy.is-copied {
-    color: var(--text);
-    background: #000;
+    background: var(--text);
 }
 
 .install-alt {
