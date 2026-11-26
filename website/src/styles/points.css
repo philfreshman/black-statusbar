@@ -38,7 +38,7 @@
 .points p {
     margin: 10px 0 0;
     color: var(--fog);
-    font-size: 15.5px;
+    font-size: 0.96875rem;
 }
 
 @media (max-width: 860px) {

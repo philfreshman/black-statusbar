@@ -17,71 +17,28 @@
     text-align: left;
 }
 
-/* Thunderhead at dusk. */
+/* Violet satin, drawn by wallpaper.ts. */
 .wallpaper {
     position: absolute;
     inset: 0;
 }
 
-/* Soft focus, like a wallpaper seen behind glass. Scaled up so the blur never shows its edges. */
+/* Film grain over the satin, like the grain on the storm panels. */
+.wallpaper::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--film-grain) 0 0 / 160px;
+    mix-blend-mode: overlay;
+    opacity: 0.8;
+    pointer-events: none;
+}
+
 .scene {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
-    filter: blur(1.1cqi);
-    scale: 1.08;
-}
-.scene .mountains {
-    fill: #4a3270;
-    opacity: 0.75;
-}
-.scene .cloud-light {
-    fill: #f3ecff;
-    opacity: 0.3;
-    filter: blur(18px);
-}
-.scene .bolt path {
-    fill: none;
-    stroke: #f8ffd6;
-    stroke-width: 5;
-    stroke-linejoin: round;
-}
-.scene .bolt .bolt-glow {
-    stroke: var(--accent);
-    stroke-width: 18;
-}
-.scene .glints {
-    fill: none;
-    stroke: #ffcf8f;
-    stroke-width: 4;
-    stroke-linecap: round;
-    opacity: 0.45;
-}
-
-/* The bolt strikes about once every seven seconds: one flash, never more than one a second. */
-.scene .bolt {
-    opacity: 0.9;
-}
-@media (prefers-reduced-motion: no-preference) {
-    .scene .bolt {
-        animation: bolt-strike 7s 2s infinite;
-    }
-}
-@keyframes bolt-strike {
-    0%,
-    100% {
-        opacity: 0;
-    }
-    2% {
-        opacity: 1;
-    }
-    6% {
-        opacity: 0.6;
-    }
-    12% {
-        opacity: 0;
-    }
 }
 
 /* The mock menu bar. Off: translucent, tinted by the wallpaper. On: black with white icons. */
@@ -185,18 +142,24 @@
     backdrop-filter: blur(20px);
     border: 1px solid rgb(255 255 255 / 0.14);
     box-shadow: 0 2cqi 5cqi -1cqi rgb(0 0 0 / 0.7);
+    /* Closed, it is not painted at all, so it can never flash open. */
+    visibility: hidden;
     opacity: 0;
     transform-origin: top right;
     scale: 0.97;
+    /* Closing: stay visible until the fade-out ends, then hide. */
     transition:
         opacity 0.15s ease,
-        scale 0.15s ease;
+        scale 0.15s ease,
+        visibility 0s 0.15s;
     pointer-events: none;
 }
 
 .status-menu.is-open {
+    visibility: visible;
     opacity: 1;
     scale: 1;
+    transition-delay: 0s;
 }
 
 .status-menu li {
@@ -233,8 +196,9 @@
     position: absolute;
     z-index: 4;
     width: 2.2cqi;
-    left: 60%;
-    top: 60%;
+    /* Where the demo rests the cursor (REST_POSITION in demo.ts), so it does not slide there on load. */
+    left: 62%;
+    top: 58%;
     translate: -22% -10%;
     filter: drop-shadow(0 0.2cqi 0.3cqi rgb(0 0 0 / 0.4));
     transition:

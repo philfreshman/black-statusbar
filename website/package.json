@@ -12,9 +12,9 @@
         "lint": "vp lint"
     },
     "devDependencies": {
-        "@fontsource-variable/bricolage-grotesque": "^5.3.0",
         "@fontsource-variable/geist": "^5.3.0",
         "@fontsource-variable/geist-mono": "^5.3.0",
+        "@fontsource-variable/space-grotesk": "^5.3.0",
         "happy-dom": "^21.0.4",
         "typescript": "~7.0.2",
         "vite": "npm:@voidzero-dev/vite-plus-core@8.3.8001",

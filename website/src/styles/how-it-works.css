@@ -44,12 +44,12 @@
 }
 
 .how-steps h3 {
-    font-size: 19px;
+    font-size: 1.1875rem;
 }
 
 .how-steps p {
     margin: 6px 0 0;
-    font-size: 15px;
+    font-size: 0.9375rem;
     color: var(--fog);
 }
 
@@ -73,15 +73,6 @@
     opacity: 0.7;
 }
 
-.stage-hud {
-    position: absolute;
-    inset: 20px 24px auto;
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    font-size: 10.5px;
-}
-
 /* Shown once the layers have collapsed into the finished bar. */
 .stage-result {
     position: absolute;
@@ -101,8 +92,8 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: var(--accent);
-    box-shadow: 0 0 12px var(--accent);
+    background: var(--accent-blend);
+    box-shadow: 0 0 12px var(--violet);
     transform-origin: left;
     scale: 1 1;
 }
@@ -143,40 +134,26 @@
     overflow: hidden;
 }
 
-/* L1: the wallpaper, a small copy of the storm scene in the hero. */
+/* L1: the wallpaper, a small copy of the violet satin in the hero. */
 .layer-wallpaper .plane {
     box-shadow:
         0 0 0 1px rgb(255 255 255 / 0.18),
         0 0 60px -10px rgb(124 92 255 / 0.5);
 }
 
-/* The picture sits in its own box, so the blur softens it without fuzzing the plane's edges. */
+/* Grainy like the hero wallpaper, with a finer grain to suit the smaller picture. */
 .mini-wallpaper {
     position: absolute;
-    inset: -8%;
-    filter: blur(calc(var(--plane-w) * 0.014));
-    background:
-        radial-gradient(45% 22% at 36% 68%, rgb(255 242 196 / 0.9), transparent 70%),
-        linear-gradient(
-            180deg,
-            #aab6ff 0%,
-            #b9a0f2 21%,
-            #f0a0c0 37%,
-            #ffb98f 47%,
-            #ffd59c 70%,
-            #3a2354 70.4%,
-            #0c0814 100%
-        );
+    inset: 0;
 }
 
-.mini-cloud {
+.mini-wallpaper::after {
+    content: '';
     position: absolute;
-    left: 58%;
-    top: 22%;
-    width: 30%;
-    height: 34%;
-    border-radius: 50% 50% 40% 40%;
-    background: radial-gradient(circle at 40% 30%, #c7b3f4, #7d6bc4 60%);
+    inset: 0;
+    background: var(--film-grain) 0 0 / 90px;
+    mix-blend-mode: overlay;
+    opacity: 0.8;
 }
 
 /* Guide posts at the corners, like the lines in an exploded drawing. */
@@ -219,7 +196,7 @@
     background: repeating-linear-gradient(135deg, #000 0 5px, rgb(var(--accent-rgb) / 0.4) 5px 6px);
     box-shadow:
         0 0 0 1px var(--accent),
-        0 0 24px rgb(var(--accent-rgb) / 0.45);
+        0 0 24px rgb(var(--violet-rgb) / 0.45);
 }
 
 .layer-strip .plane {
@@ -270,7 +247,7 @@
     padding: 3px 7px;
     border: 1px solid var(--rail-strong);
     border-radius: 3px;
-    font-size: 10.5px;
+    font-size: 0.65625rem;
     white-space: nowrap;
     color: var(--chalk);
     background: var(--ink);
@@ -541,8 +518,7 @@
         --plane-w: min(58vw, 300px);
     }
 
-    .tag,
-    .stage-hud .label + .label {
+    .tag {
         display: none;
     }
 }

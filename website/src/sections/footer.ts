@@ -43,7 +43,6 @@ export function renderFooter(): string {
                 </div>
                 ${groups.map(renderGroup).join('')}
             </div>
-            <p class="footer-word" aria-hidden="true">Nightbar</p>
             <p class="footer-base label">Nightbar · for macOS 14 and later</p>
         </footer>
     `
