@@ -11,7 +11,7 @@
     --radius: 22px;
     --max: 1120px;
     font-family:
-        -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", system-ui, sans-serif;
+        -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter', 'Segoe UI', system-ui, sans-serif;
     color: var(--text);
     background: var(--night);
     -webkit-font-smoothing: antialiased;
@@ -283,7 +283,7 @@ main > section {
         backdrop-filter 0.45s ease;
 }
 
-.screen[data-nightbar="off"] .menubar {
+.screen[data-nightbar='off'] .menubar {
     color: #1b1b1f;
     background: rgb(255 255 255 / 0.3);
     backdrop-filter: blur(18px) saturate(1.5);
@@ -333,7 +333,7 @@ main > section {
 .status-item.is-open {
     background: rgb(255 255 255 / 0.25);
 }
-.screen[data-nightbar="off"] .status-item.is-open {
+.screen[data-nightbar='off'] .status-item.is-open {
     background: rgb(0 0 0 / 0.12);
 }
 
@@ -650,7 +650,7 @@ main > section {
 }
 
 .facts li::before {
-    content: "";
+    content: '';
     position: absolute;
     left: 0;
     top: 0.55em;
@@ -687,14 +687,14 @@ main > section {
     min-width: 0;
     overflow-x: auto;
     white-space: nowrap;
-    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
     font-size: 15px;
     color: var(--text);
     scrollbar-width: none;
 }
 
 .command code::before {
-    content: "$ ";
+    content: '$ ';
     color: #75737f;
 }
 
@@ -775,7 +775,7 @@ main > section {
     font-size: 15px;
 }
 .steps code {
-    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
     font-size: 0.92em;
     color: var(--text);
 }
