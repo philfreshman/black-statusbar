@@ -4,8 +4,9 @@
     "type": "module",
     "scripts": {
         "dev": "vp dev",
-        "build": "vp build",
+        "build": "tsc && vp build",
         "preview": "vp preview",
+        "test": "vp test",
         "check": "vp check",
         "fmt": "vp fmt",
         "lint": "vp lint"
