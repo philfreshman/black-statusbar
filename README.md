@@ -50,10 +50,10 @@ The app is signed ad hoc, not notarized, so macOS asks for confirmation the firs
 
 ## Website
 
-The landing page at [nightbar.app](https://nightbar.app) lives in `landing/`. It is a minimal [Vite+](https://viteplus.dev) project with plain HTML, CSS and JavaScript, deployed by Vercel with `landing` as the project's root directory. To preview it locally:
+The landing page at [nightbar.app](https://nightbar.app) lives in `website/`. It is a minimal [Vite+](https://viteplus.dev) project with plain HTML, CSS and JavaScript, deployed by Vercel with `website` as the project's root directory. To preview it locally:
 
 ```bash
-cd landing && npm install && npm run dev
+cd website && npm install && npm run dev
 ```
 
-It runs at http://localhost:8040. `npm run build` writes the site to `landing/dist/`, and `npm run check` checks the formatting (4-space indents) and lints it.
+It runs at http://localhost:8040. `npm run build` writes the site to `website/dist/`, and `npm run check` checks the formatting (4-space indents) and lints it.

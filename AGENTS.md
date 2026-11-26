@@ -11,7 +11,7 @@ Swift Package (tools 6.0, Swift 5 language mode), AppKit, no dependencies. It bu
 - `Tests/NightbarCoreTests/` — tests (swift-testing).
 - `Resources/` — `Info.plist` and the `AppIcon.icon` Icon Composer source.
 - `scripts/build-app.sh` — builds `build/Nightbar.app` and compiles the icon.
-- `landing/` — the nightbar.app landing page, a minimal Vite+ project (`npm run dev`, `npm run check`, `npm run build` writes `landing/dist/`; 4-space indents via `vp fmt`).
+- `website/` — the nightbar.app landing page, a minimal Vite+ project (`npm run dev`, `npm run check`, `npm run build` writes `website/dist/`; 4-space indents via `vp fmt`).
 - `.github/workflows/` — release and branch-name checks.
 
 ## Build and test
