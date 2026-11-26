@@ -7,9 +7,9 @@ const appMenus = ['File', 'Edit', 'View']
 const wideAppMenus = ['Go', 'Window', 'Help']
 
 const description =
-    'A Mac desktop with a stormy dusk wallpaper. The Nightbar menu opens, Nightbar is switched on and the menu bar turns black with white icons, then it is switched off again.'
+    'A Mac desktop with a glowing violet storm wallpaper. The Nightbar menu opens, Nightbar is switched on and the menu bar turns black with white icons, then it is switched off again.'
 
-/** Thunderhead at dusk: a pastel sky, a storm cloud with a lightning bolt, a dark sea. */
+/** A soft-glow storm: violet and blue light pooled on a dark sky, crossed by streaks of light. */
 function renderWallpaper(): string {
     return /* HTML */ `
         <div class="wallpaper" aria-hidden="true">
@@ -21,73 +21,82 @@ function renderWallpaper(): string {
             >
                 <defs>
                     <linearGradient id="scene-sky" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0" stop-color="#aab6ff" />
-                        <stop offset=".3" stop-color="#b9a0f2" />
-                        <stop offset=".52" stop-color="#f0a0c0" />
-                        <stop offset=".66" stop-color="#ffb98f" />
-                        <stop offset=".7" stop-color="#ffd59c" />
+                        <stop offset="0" stop-color="#b9adff" />
+                        <stop offset=".34" stop-color="#7a5cf0" />
+                        <stop offset=".66" stop-color="#2e1873" />
+                        <stop offset="1" stop-color="#0a0714" />
                     </linearGradient>
-                    <linearGradient id="scene-sea" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0" stop-color="#3a2354" />
-                        <stop offset="1" stop-color="#0c0814" />
-                    </linearGradient>
-                    <radialGradient id="scene-sun" cx=".5" cy=".5" r=".5">
-                        <stop offset="0" stop-color="#fff2c4" />
-                        <stop offset=".35" stop-color="#ffcf8f" stop-opacity=".8" />
-                        <stop offset="1" stop-color="#ffb98f" stop-opacity="0" />
-                    </radialGradient>
-                    <linearGradient
-                        id="scene-cloud"
-                        gradientUnits="userSpaceOnUse"
-                        x1="0"
-                        y1="180"
-                        x2="0"
-                        y2="560"
-                    >
-                        <stop offset="0" stop-color="#e0d2fa" />
-                        <stop offset=".45" stop-color="#9580d6" />
-                        <stop offset="1" stop-color="#4f3f8c" />
-                    </linearGradient>
-                    <filter id="scene-soft" x="-10%" y="-10%" width="120%" height="120%">
-                        <feGaussianBlur stdDeviation="3" />
-                    </filter>
-                    <filter id="scene-glow" x="-50%" y="-50%" width="200%" height="200%">
-                        <feGaussianBlur stdDeviation="9" />
-                    </filter>
+                    ${renderGlow('scene-blue', '#5f9dff')} ${renderGlow('scene-pink', '#ff6fcf')}
+                    ${renderGlow('scene-violet', '#9a6bff')} ${renderGlow('scene-ember', '#ff7a45')}
+                    ${renderGlow('scene-flash', '#f4efff')}
+                    ${renderStreak('scene-streak-a', '#efe8ff', 0.55, [0, 0, 1600, 520])}
+                    ${renderStreak('scene-streak-b', '#c9b6ff', 0.4, [0, 200, 1600, 0])}
                 </defs>
-                <rect width="1600" height="700" fill="url(#scene-sky)" />
-                <ellipse cx="560" cy="690" rx="420" ry="180" fill="url(#scene-sun)" />
-                <path
-                    class="mountains"
-                    d="M0 700V560l90-40 80 30 110-90 90 70 70-30 120 100h60l90-60 70 40 60-20 60 90z"
+                <rect width="1600" height="1000" fill="url(#scene-sky)" />
+                <ellipse cx="260" cy="170" rx="620" ry="340" fill="url(#scene-blue)" />
+                <ellipse
+                    cx="1320"
+                    cy="560"
+                    rx="560"
+                    ry="360"
+                    fill="url(#scene-pink)"
+                    opacity=".75"
                 />
-                <g class="cloud" fill="url(#scene-cloud)" filter="url(#scene-soft)">
-                    <ellipse cx="1220" cy="228" rx="320" ry="34" />
-                    <circle cx="1220" cy="300" r="95" />
-                    <circle cx="1150" cy="360" r="110" />
-                    <circle cx="1290" cy="360" r="105" />
-                    <circle cx="1080" cy="440" r="95" />
-                    <circle cx="1360" cy="440" r="95" />
-                    <circle cx="1220" cy="430" r="130" />
-                    <circle cx="1140" cy="500" r="85" />
-                    <circle cx="1300" cy="505" r="85" />
-                    <rect x="1030" y="480" width="380" height="70" rx="35" />
-                </g>
-                <circle class="cloud-light" cx="1185" cy="290" r="70" />
-                <g class="bolt">
-                    <path
-                        class="bolt-glow"
-                        d="M1200 540 1168 600h26l-40 70h22l-46 60"
-                        filter="url(#scene-glow)"
-                    />
-                    <path d="M1200 540 1168 600h26l-40 70h22l-46 60" />
-                </g>
-                <rect y="700" width="1600" height="300" fill="url(#scene-sea)" />
-                <g class="glints">
-                    <path d="M470 722h180M420 752h280M500 790h120M380 830h340M470 880h170" />
-                </g>
+                <ellipse cx="720" cy="860" rx="820" ry="300" fill="url(#scene-violet)" />
+                <ellipse
+                    cx="1060"
+                    cy="800"
+                    rx="260"
+                    ry="130"
+                    fill="url(#scene-ember)"
+                    opacity=".55"
+                />
+                <rect width="1600" height="1000" fill="url(#scene-streak-a)" />
+                <rect width="1600" height="1000" fill="url(#scene-streak-b)" />
+                <ellipse
+                    class="flash"
+                    cx="1180"
+                    cy="300"
+                    rx="420"
+                    ry="300"
+                    fill="url(#scene-flash)"
+                />
             </svg>
         </div>
+    `
+}
+
+/** A round pool of light: full colour in the middle, fading out to nothing at the edge. */
+function renderGlow(id: string, color: string): string {
+    return /* HTML */ `
+        <radialGradient id="${id}" cx=".5" cy=".5" r=".5">
+            <stop offset="0" stop-color="${color}" />
+            <stop offset=".45" stop-color="${color}" stop-opacity=".55" />
+            <stop offset="1" stop-color="${color}" stop-opacity="0" />
+        </radialGradient>
+    `
+}
+
+/** A diagonal band of light across the whole scene, like the streaks in the storm panels. */
+function renderStreak(
+    id: string,
+    color: string,
+    opacity: number,
+    [x1, y1, x2, y2]: [number, number, number, number],
+): string {
+    return /* HTML */ `
+        <linearGradient
+            id="${id}"
+            gradientUnits="userSpaceOnUse"
+            x1="${x1}"
+            y1="${y1}"
+            x2="${x2}"
+            y2="${y2}"
+        >
+            <stop offset=".42" stop-color="${color}" stop-opacity="0" />
+            <stop offset=".5" stop-color="${color}" stop-opacity="${opacity}" />
+            <stop offset=".6" stop-color="${color}" stop-opacity="0" />
+        </linearGradient>
     `
 }
 

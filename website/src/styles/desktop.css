@@ -17,58 +17,39 @@
     text-align: left;
 }
 
-/* Thunderhead at dusk. */
+/* A violet storm glow, in the colours of the storm panels around it. */
 .wallpaper {
     position: absolute;
     inset: 0;
 }
 
-/* Soft focus, like a wallpaper seen behind glass. Scaled up so the blur never shows its edges. */
+/* Film grain over the glow, like the grain on the storm panels. */
+.wallpaper::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--film-grain) 0 0 / 160px;
+    mix-blend-mode: overlay;
+    opacity: 0.9;
+    pointer-events: none;
+}
+
 .scene {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
-    filter: blur(1.1cqi);
-    scale: 1.08;
 }
-.scene .mountains {
-    fill: #4a3270;
-    opacity: 0.75;
-}
-.scene .cloud-light {
-    fill: #f3ecff;
-    opacity: 0.3;
-    filter: blur(18px);
-}
-.scene .bolt path {
-    fill: none;
-    stroke: #f8ffd6;
-    stroke-width: 5;
-    stroke-linejoin: round;
-}
-.scene .bolt .bolt-glow {
-    stroke: var(--accent);
-    stroke-width: 18;
-}
-.scene .glints {
-    fill: none;
-    stroke: #ffcf8f;
-    stroke-width: 4;
-    stroke-linecap: round;
-    opacity: 0.45;
-}
-
-/* The bolt strikes about once every seven seconds: one flash, never more than one a second. */
-.scene .bolt {
-    opacity: 0.9;
+/* Lightning lights up the clouds about once every seven seconds: one flash, never more than one a second. */
+.scene .flash {
+    opacity: 0;
 }
 @media (prefers-reduced-motion: no-preference) {
-    .scene .bolt {
-        animation: bolt-strike 7s 2s infinite;
+    .scene .flash {
+        animation: lightning-flash 7s 2s infinite;
     }
 }
-@keyframes bolt-strike {
+@keyframes lightning-flash {
     0%,
     100% {
         opacity: 0;
@@ -77,7 +58,7 @@
         opacity: 1;
     }
     6% {
-        opacity: 0.6;
+        opacity: 0.5;
     }
     12% {
         opacity: 0;

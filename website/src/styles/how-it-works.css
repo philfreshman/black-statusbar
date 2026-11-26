@@ -143,40 +143,33 @@
     overflow: hidden;
 }
 
-/* L1: the wallpaper, a small copy of the storm scene in the hero. */
+/* L1: the wallpaper, a small copy of the violet storm glow in the hero. */
 .layer-wallpaper .plane {
     box-shadow:
         0 0 0 1px rgb(255 255 255 / 0.18),
         0 0 60px -10px rgb(124 92 255 / 0.5);
 }
 
-/* The picture sits in its own box, so the blur softens it without fuzzing the plane's edges. */
+/* Grainy like the hero wallpaper, with a finer grain to suit the smaller picture. */
 .mini-wallpaper {
     position: absolute;
-    inset: -8%;
-    filter: blur(calc(var(--plane-w) * 0.014));
+    inset: 0;
     background:
-        radial-gradient(45% 22% at 36% 68%, rgb(255 242 196 / 0.9), transparent 70%),
-        linear-gradient(
-            180deg,
-            #aab6ff 0%,
-            #b9a0f2 21%,
-            #f0a0c0 37%,
-            #ffb98f 47%,
-            #ffd59c 70%,
-            #3a2354 70.4%,
-            #0c0814 100%
-        );
+        linear-gradient(108deg, transparent 40%, rgb(239 232 255 / 0.5) 48%, transparent 58%),
+        radial-gradient(28% 22% at 66% 80%, rgb(255 122 69 / 0.45), transparent 70%),
+        radial-gradient(40% 40% at 82% 56%, rgb(255 111 207 / 0.6), transparent 70%),
+        radial-gradient(45% 40% at 16% 17%, #5f9dff, transparent 70%),
+        radial-gradient(60% 34% at 45% 92%, rgb(154 107 255 / 0.9), transparent 70%),
+        linear-gradient(180deg, #b9adff 0%, #7a5cf0 34%, #2e1873 66%, #0a0714 100%);
 }
 
-.mini-cloud {
+.mini-wallpaper::after {
+    content: '';
     position: absolute;
-    left: 58%;
-    top: 22%;
-    width: 30%;
-    height: 34%;
-    border-radius: 50% 50% 40% 40%;
-    background: radial-gradient(circle at 40% 30%, #c7b3f4, #7d6bc4 60%);
+    inset: 0;
+    background: var(--film-grain) 0 0 / 90px;
+    mix-blend-mode: overlay;
+    opacity: 0.9;
 }
 
 /* Guide posts at the corners, like the lines in an exploded drawing. */
