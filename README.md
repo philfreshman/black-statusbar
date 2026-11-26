@@ -50,8 +50,10 @@ The app is signed ad hoc, not notarized, so macOS asks for confirmation the firs
 
 ## Website
 
-The landing page at [nightbar.app](https://nightbar.app) lives in `site/`. It is plain HTML and CSS with no build step, deployed by Vercel with `site` as the project's root directory. To preview it locally:
+The landing page at [nightbar.app](https://nightbar.app) lives in `website/`. It is a minimal [Vite+](https://viteplus.dev) project using [Bun](https://bun.sh) with plain HTML, CSS and JavaScript, deployed by Vercel with `website` as the project's root directory. To preview it locally:
 
 ```bash
-python3 -m http.server --directory site 8000
+cd website && bun install && bun run dev
 ```
+
+It runs at http://localhost:8040. `bun run build` writes the site to `website/dist/`, and `bun run check` checks the formatting (4-space indents) and lints it.
