@@ -10,7 +10,7 @@ import { renderTopbar } from './sections/topbar.ts'
 export function renderPage(): string {
     return /* HTML */ `
         ${renderTopbar()}
-        <main id="top">
+        <main id="top" class="rail">
             ${renderHero()} ${renderPoints()} ${renderHowItWorks()} ${renderMenuSection()}
             ${renderInstall()}
         </main>

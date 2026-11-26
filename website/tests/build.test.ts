@@ -63,7 +63,7 @@ describe('production build', () => {
 
     it('prerenders the page into index.html', () => {
         expect(output.html).not.toContain('<!--page-->')
-        expect(document.querySelector('body > main#top h1 .dusk')?.textContent).toBe('macOS')
+        expect(document.querySelector('body > main#top h1 .accent')?.textContent).toBe('macOS')
     })
 
     it('links the hashed stylesheet with every section bundled in', () => {
@@ -76,7 +76,7 @@ describe('production build', () => {
         for (const selector of [
             '.topbar',
             '.screen',
-            '.stack',
+            '.camera',
             '.menu-mock',
             '.steps',
             '.footer',

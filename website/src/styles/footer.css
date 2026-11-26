@@ -1,22 +1,89 @@
-/* Footer: black, like everything up top. */
+/* Footer: the rails carry on to the very bottom. */
 .footer {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 10px 22px;
-    padding: 28px max(20px, calc((100vw - var(--max)) / 2));
-    border-top: 1px solid var(--line);
-    background: #000;
-    color: var(--muted);
+    border-top: 1px solid var(--rail);
+    overflow: hidden;
+}
+
+.footer-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+}
+
+.footer-top > * {
+    padding: 40px var(--pad);
+}
+
+.footer-top > * + * {
+    border-left: 1px solid var(--rail);
+}
+
+.footer-brand p {
+    margin: 18px 0 0;
+    color: var(--fog);
     font-size: 14px;
 }
 
-.footer span {
-    margin-right: auto;
+.footer-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 14px;
 }
-.footer a {
+
+.footer-group .label {
+    margin-bottom: 8px;
+    font-size: 10.5px;
+}
+
+.footer-group a {
+    color: var(--fog);
     text-decoration: none;
+    transition: color 0.2s;
 }
-.footer a:hover {
-    color: var(--text);
+
+.footer-group a:hover {
+    color: var(--chalk);
+}
+
+/* The name, huge, cut off by the bottom hairline. */
+.footer-word {
+    margin: 0;
+    border-top: 1px solid var(--rail);
+    font-family: var(--font-display);
+    font-size: clamp(96px, 27vw, 360px);
+    font-weight: 700;
+    font-stretch: 75%;
+    line-height: 0.74;
+    letter-spacing: -0.06em;
+    text-align: center;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--rail-strong);
+    translate: 0 0.12em;
+}
+
+.footer-base {
+    position: relative;
+    padding: 16px var(--pad);
+    border-top: 1px solid var(--rail);
+    background: var(--ink);
+    font-size: 10.5px;
+}
+
+@media (max-width: 720px) {
+    .footer-top {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .footer-brand {
+        grid-column: 1 / -1;
+    }
+
+    .footer-top > * + * {
+        border-left: 0;
+        border-top: 1px solid var(--rail);
+    }
+
+    .footer-group + .footer-group {
+        border-left: 1px solid var(--rail);
+    }
 }

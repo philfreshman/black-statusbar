@@ -1,104 +1,548 @@
-/* How it works: the stack of layers. */
-.stack {
+/*
+ * How it works: an exploded stack of the three layers macOS composes, seen through an
+ * orthographic camera (3D transforms with no perspective, so parallel lines stay parallel).
+ *
+ * Without scroll-driven animations, or with reduced motion, it is a still exploded view with
+ * the strip in place. With them, scrolling plays the story: the strip slides into its slot,
+ * the menu bar turns black with white icons, then the camera swings to the front and the
+ * layers collapse into the finished bar.
+ */
+.how {
+    padding: 0;
+}
+
+.how-sticky {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+}
+
+.how-copy {
+    padding: clamp(56px, 8vw, 96px) var(--pad);
+    border-right: 1px solid var(--rail);
+}
+
+.how-steps {
+    margin: 40px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.how-steps li {
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    padding: 20px 0;
+    border-top: 1px solid var(--rail);
+}
+
+.how-steps .label {
+    align-self: start;
+    justify-self: start;
+    margin-top: 3px;
+    padding: 2px 6px;
+    border: 1px solid var(--rail-strong);
+    color: var(--accent);
+}
+
+.how-steps h3 {
+    font-size: 19px;
+}
+
+.how-steps p {
+    margin: 6px 0 0;
+    font-size: 15px;
+    color: var(--fog);
+}
+
+/* The stage: a blueprint grid that fades out towards the edges. */
+.stage {
     position: relative;
-    height: 380px;
-    perspective: 1200px;
+    display: grid;
+    place-items: center;
+    min-height: 560px;
+    overflow: hidden;
+}
+
+.stage::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(var(--rail) 1px, transparent 1px) center / 40px 40px,
+        linear-gradient(90deg, var(--rail) 1px, transparent 1px) center / 40px 40px;
+    mask-image: radial-gradient(closest-side, #000 30%, transparent);
+    opacity: 0.7;
+}
+
+.stage-hud {
+    position: absolute;
+    inset: 20px 24px auto;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 10.5px;
+}
+
+/* Shown once the layers have collapsed into the finished bar. */
+.stage-result {
+    position: absolute;
+    bottom: 48px;
+    display: none;
+    color: var(--accent);
+}
+
+.stage-progress {
+    position: absolute;
+    inset: auto 24px 24px;
+    height: 1px;
+    background: var(--rail-strong);
+}
+
+.stage-progress::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--accent);
+    box-shadow: 0 0 12px var(--accent);
+    transform-origin: left;
+    scale: 1 1;
+}
+
+/* The camera. No `perspective` anywhere above it: that is what makes the view orthographic. */
+.camera {
+    --plane-w: clamp(240px, 30vw, 420px);
+    --gap: calc(var(--plane-w) * 0.24);
+    --bar: calc(var(--plane-w) * 0.052);
+    position: relative;
+    width: var(--plane-w);
+    aspect-ratio: 16 / 10;
+    margin-top: calc(var(--gap) * 1.1);
+    transform-style: preserve-3d;
+    transform: rotateX(56deg) rotateZ(-36deg) scale(0.92);
 }
 
 .layer {
+    --level: 0;
     position: absolute;
-    left: 0;
-    width: 100%;
-    height: 200px;
-    transition: translate 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+    inset: 0;
+    transform-style: preserve-3d;
+    transform: translateZ(calc(var(--level) * var(--gap)));
+}
+
+.layer-strip {
+    --level: 1;
+}
+
+.layer-menubar {
+    --level: 2;
 }
 
 .plane {
     position: absolute;
-    inset: 0 34% 0 0;
-    border-radius: 16px;
-    transform: rotateX(58deg) rotateZ(-32deg);
-    box-shadow: 0 30px 60px -20px rgb(0 0 0 / 0.8);
+    inset: 0;
+    border-radius: calc(var(--plane-w) * 0.022);
+    overflow: hidden;
 }
 
-.layer span {
-    position: absolute;
-    right: 0;
-    top: 50%;
-    translate: 0 -50%;
-    padding: 5px 12px;
-    border-radius: 999px;
-    font-size: 13px;
-    font-weight: 600;
-    white-space: nowrap;
-    color: var(--muted);
-    background: rgb(0 0 0 / 0.6);
-    border: 1px solid var(--line);
-}
-
-.layer-wallpaper {
-    top: 170px;
-    z-index: 1;
-}
-.layer-strip {
-    top: 95px;
-    z-index: 2;
-}
-.layer-windows {
-    top: 20px;
-    z-index: 3;
-}
-
+/* L1: the wallpaper, a small copy of the storm scene in the hero. */
 .layer-wallpaper .plane {
-    background: linear-gradient(
-        180deg,
-        #d77ab0 0%,
-        #b85a86 40%,
-        #f2b37a 62%,
-        #1d0f16 63%,
-        #120910 100%
-    );
+    box-shadow:
+        0 0 0 1px rgb(255 255 255 / 0.18),
+        0 0 60px -10px rgb(124 92 255 / 0.5);
+}
+
+/* The picture sits in its own box, so the blur softens it without fuzzing the plane's edges. */
+.mini-wallpaper {
+    position: absolute;
+    inset: -8%;
+    filter: blur(calc(var(--plane-w) * 0.014));
+    background:
+        radial-gradient(45% 22% at 36% 68%, rgb(255 242 196 / 0.9), transparent 70%),
+        linear-gradient(
+            180deg,
+            #aab6ff 0%,
+            #b9a0f2 21%,
+            #f0a0c0 37%,
+            #ffb98f 47%,
+            #ffd59c 70%,
+            #3a2354 70.4%,
+            #0c0814 100%
+        );
+}
+
+.mini-cloud {
+    position: absolute;
+    left: 58%;
+    top: 22%;
+    width: 30%;
+    height: 34%;
+    border-radius: 50% 50% 40% 40%;
+    background: radial-gradient(circle at 40% 30%, #c7b3f4, #7d6bc4 60%);
+}
+
+/* Guide posts at the corners, like the lines in an exploded drawing. */
+.post {
+    position: absolute;
+    width: 0;
+    height: calc(var(--gap) * 2);
+    border-left: 1px dashed rgb(243 243 239 / 0.3);
+    transform-origin: top;
+    transform: rotateX(90deg);
+}
+
+.post:nth-of-type(1) {
+    left: 0;
+    top: 0;
+}
+.post:nth-of-type(2) {
+    right: 0;
+    top: 0;
+}
+.post:nth-of-type(3) {
+    left: 0;
+    top: 100%;
+}
+.post:nth-of-type(4) {
+    right: 0;
+    top: 100%;
+}
+
+/* L2: Nightbar's strip. Only its top band is painted; the rest is drawn as a dashed outline. */
+.layer-strip .plane,
+.layer-menubar .plane {
+    outline: 1px dashed rgb(243 243 239 / 0.32);
+    outline-offset: -1px;
+}
+
+/* Hatched, so the black strip reads as a material even against the black page. */
+.strip {
+    height: var(--bar);
+    background: repeating-linear-gradient(135deg, #000 0 5px, rgb(var(--accent-rgb) / 0.4) 5px 6px);
+    box-shadow:
+        0 0 0 1px var(--accent),
+        0 0 24px rgb(var(--accent-rgb) / 0.45);
 }
 
 .layer-strip .plane {
-    background: linear-gradient(180deg, #000 0 16%, transparent 16%);
-    outline: 1px dashed rgb(255 255 255 / 0.22);
-    outline-offset: -1px;
-    box-shadow: none;
+    outline-color: rgb(var(--accent-rgb) / 0.45);
+    background: rgb(var(--accent-rgb) / 0.05);
 }
 
-.layer-strip span {
-    color: #f7b98a;
-    border-color: rgb(247 185 138 / 0.4);
+.layer-menubar .plane {
+    background: rgb(243 243 239 / 0.03);
 }
 
-.layer-windows .plane {
-    background:
-        linear-gradient(#fafafc, #fafafc) 22% 45% / 40% 42% no-repeat,
-        linear-gradient(#e8e8ee, #e8e8ee) 70% 70% / 30% 34% no-repeat;
-    outline: 1px dashed rgb(255 255 255 / 0.22);
-    outline-offset: -1px;
-    box-shadow: none;
+/* L3: the menu bar, before (glass, dark icons) and after (black, white icons). */
+.mini-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: var(--bar);
+    padding: 0 calc(var(--plane-w) * 0.025);
+    font-size: calc(var(--plane-w) * 0.026);
+    white-space: nowrap;
+    color: #fff;
+    background: #000;
 }
 
-.stack:hover .layer-windows {
-    translate: 0 -24px;
+.mini-left,
+.mini-right {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--plane-w) * 0.022);
 }
-.stack:hover .layer-wallpaper {
-    translate: 0 24px;
+
+.mini-apple {
+    width: calc(var(--plane-w) * 0.022);
+}
+
+.mini-glyph {
+    width: calc(var(--plane-w) * 0.026);
+}
+
+.mini-battery {
+    width: calc(var(--plane-w) * 0.038);
+}
+
+.tag {
+    position: absolute;
+    left: calc(100% + 30px);
+    top: 0;
+    padding: 3px 7px;
+    border: 1px solid var(--rail-strong);
+    border-radius: 3px;
+    font-size: 10.5px;
+    white-space: nowrap;
+    color: var(--chalk);
+    background: var(--ink);
+    /* Undo the camera's rotation, so labels face the viewer like billboards. */
+    transform-origin: left top;
+    transform: rotateZ(36deg) rotateX(-56deg);
+}
+
+.layer-strip .tag {
+    color: var(--accent);
+    border-color: rgb(var(--accent-rgb) / 0.5);
+}
+
+/* The story, played by scrolling through the section. */
+@supports ((animation-timeline: view()) and (animation-range: 0% 100%)) {
+    @media (prefers-reduced-motion: no-preference) {
+        .how {
+            height: 300vh;
+        }
+
+        .how-sticky {
+            position: sticky;
+            top: var(--topbar-h);
+            height: calc(100svh - var(--topbar-h));
+        }
+
+        .how-copy {
+            overflow: auto;
+            scrollbar-width: none;
+        }
+
+        .camera {
+            animation: how-camera linear both;
+            animation-timeline: --section;
+            animation-range: contain 0% contain 100%;
+        }
+
+        .layer,
+        .post {
+            animation: how-collapse linear both;
+            animation-timeline: --section;
+            animation-range: contain 0% contain 100%;
+        }
+
+        .post {
+            animation-name: how-posts;
+        }
+
+        .layer-strip {
+            animation-name: how-strip;
+        }
+
+        .mini-bar {
+            animation: how-react linear both;
+            animation-timeline: --section;
+            animation-range: contain 0% contain 100%;
+        }
+
+        .tag {
+            animation: how-tags linear both;
+            animation-timeline: --section;
+            animation-range: contain 0% contain 100%;
+        }
+
+        .layer-strip .plane,
+        .layer-menubar .plane {
+            animation: how-outline linear both;
+            animation-timeline: --section;
+            animation-range: contain 0% contain 100%;
+        }
+
+        .layer-strip .plane {
+            animation-name: how-outline, how-strip-fade;
+        }
+
+        .stage-result {
+            display: block;
+            animation: how-result linear both;
+            animation-timeline: --section;
+            animation-range: contain 0% contain 100%;
+        }
+
+        .stage-progress::after {
+            animation: how-progress linear both;
+            animation-timeline: --section;
+            animation-range: contain 0% contain 100%;
+        }
+
+        .how-steps li {
+            animation: how-step-on linear both;
+            animation-timeline: --section;
+        }
+
+        .how-steps li:nth-child(1) {
+            animation-range: contain 0% contain 4%;
+        }
+        .how-steps li:nth-child(2) {
+            animation-range: contain 10% contain 24%;
+        }
+        .how-steps li:nth-child(3) {
+            animation-range: contain 34% contain 44%;
+        }
+    }
+}
+
+@keyframes how-camera {
+    0%,
+    56% {
+        transform: rotateX(56deg) rotateZ(-36deg) scale(0.92);
+    }
+    86%,
+    100% {
+        transform: rotateX(0deg) rotateZ(0deg) scale(1.15);
+    }
+}
+
+@keyframes how-collapse {
+    0%,
+    56% {
+        transform: translateZ(calc(var(--level) * var(--gap)));
+    }
+    86%,
+    100% {
+        transform: translateZ(calc(var(--level) * 1px));
+    }
+}
+
+@keyframes how-posts {
+    0%,
+    56% {
+        transform: rotateX(90deg) scaleY(1);
+        opacity: 1;
+    }
+    80%,
+    100% {
+        transform: rotateX(90deg) scaleY(0);
+        opacity: 0;
+    }
+}
+
+/*
+ * The strip slides in sideways, between the wallpaper and the menu bar. Only its plane fades:
+ * animating opacity on the layer itself would flatten its 3D and squash its label.
+ */
+@keyframes how-strip {
+    0%,
+    8% {
+        transform: translate3d(-140%, 0, var(--gap));
+    }
+    30%,
+    56% {
+        transform: translate3d(0, 0, var(--gap));
+    }
+    86%,
+    100% {
+        transform: translate3d(0, 0, 1px);
+    }
+}
+
+@keyframes how-strip-fade {
+    0%,
+    8% {
+        opacity: 0;
+    }
+    30%,
+    100% {
+        opacity: 1;
+    }
+}
+
+/* macOS reacts: glass with dark icons, then black with white icons. */
+@keyframes how-react {
+    0%,
+    36% {
+        color: #1b1b1f;
+        background: rgb(255 255 255 / 0.4);
+    }
+    46%,
+    100% {
+        color: #fff;
+        background: #000;
+    }
+}
+
+@keyframes how-tags {
+    0%,
+    54% {
+        opacity: 1;
+    }
+    62%,
+    100% {
+        opacity: 0;
+    }
+}
+
+/* The dashed construction lines fade once the layers are flat. */
+@keyframes how-outline {
+    0%,
+    76% {
+        outline-color: rgb(243 243 239 / 0.32);
+    }
+    88%,
+    100% {
+        outline-color: transparent;
+    }
+}
+
+@keyframes how-result {
+    0%,
+    84% {
+        opacity: 0;
+        translate: 0 8px;
+    }
+    92%,
+    100% {
+        opacity: 1;
+        translate: 0 0;
+    }
+}
+
+@keyframes how-progress {
+    from {
+        scale: 0 1;
+    }
+    to {
+        scale: 1 1;
+    }
+}
+
+@keyframes how-step-on {
+    from {
+        opacity: 0.3;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 @media (max-width: 860px) {
-    .how {
+    .how-sticky {
         grid-template-columns: 1fr;
-        gap: 40px;
-        padding: 70px 0;
+        grid-template-rows: auto 1fr;
     }
-    .stack {
-        height: 320px;
-        max-width: 420px;
+
+    .how-copy {
+        border-right: 0;
+        border-bottom: 1px solid var(--rail);
+        padding-block: 40px 24px;
     }
-    .layer span {
-        font-size: 12px;
+
+    .how-steps {
+        margin-top: 24px;
+    }
+
+    .how-steps li {
+        padding: 12px 0;
+    }
+
+    .how-steps p {
+        display: none;
+    }
+
+    .stage {
+        min-height: 380px;
+    }
+
+    .camera {
+        --plane-w: min(58vw, 300px);
+    }
+
+    .tag,
+    .stage-hud .label + .label {
+        display: none;
     }
 }

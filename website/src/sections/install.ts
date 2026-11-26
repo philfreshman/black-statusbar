@@ -1,4 +1,6 @@
-import { links } from '../site.ts'
+import { icon } from '../icons.ts'
+import { ids, links } from '../site.ts'
+import { renderInstallCommand } from './install-command.ts'
 
 interface Step {
     title: string
@@ -8,12 +10,12 @@ interface Step {
 
 const steps: Step[] = [
     {
-        title: 'Download',
-        html: 'Unzip and move <strong>Nightbar</strong> to Applications.',
+        title: 'Paste it',
+        html: 'Copy the command into <strong>Terminal</strong> and press Return. It fetches the latest release from GitHub.',
     },
     {
-        title: 'Open it',
-        html: 'Not notarized yet. If macOS refuses, click <strong>Open Anyway</strong> in Privacy &amp; Security.',
+        title: 'It opens by itself',
+        html: 'Nightbar lands in <strong>Applications</strong> and starts. curl sets no quarantine flag, so macOS opens it without a warning.',
     },
     {
         title: 'Keep it',
@@ -21,9 +23,10 @@ const steps: Step[] = [
     },
 ]
 
-function renderStep({ title, html }: Step): string {
+function renderStep({ title, html }: Step, index: number): string {
     return /* HTML */ `
         <li>
+            <span class="step-number">0${index + 1}</span>
             <h3>${title}</h3>
             <p>${html}</p>
         </li>
@@ -33,15 +36,20 @@ function renderStep({ title, html }: Step): string {
 export function renderInstall(): string {
     return /* HTML */ `
         <section class="install" id="install" aria-labelledby="install-title">
-            <p class="eyebrow">Install by hand</p>
-            <h2 id="install-title">Rather skip Terminal?</h2>
+            <div class="section-head">
+                <p class="eyebrow"><span>04</span> Install</p>
+                <h2 id="install-title">One line in Terminal.</h2>
+            </div>
             <ol class="steps">
                 ${steps.map(renderStep).join('')}
             </ol>
-            <a class="button primary" href="${links.download}">Download Nightbar</a>
-            <p class="install-alt">
-                <a href="${links.installScriptSource}">Read the install script</a>
-            </p>
+            <div class="install-cta">
+                <p class="install-big">Lights out<span class="accent">.</span></p>
+                ${renderInstallCommand(ids.installCommandClosing)}
+                <a class="button ghost" href="${links.installScriptSource}">
+                    Read the install script ${icon('arrow', { size: 18 })}
+                </a>
+            </div>
         </section>
     `
 }

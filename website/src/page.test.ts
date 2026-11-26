@@ -1,7 +1,7 @@
 // @vitest-environment happy-dom
 import { beforeAll, describe, expect, it } from 'vite-plus/test'
 import { renderPage } from './page.ts'
-import { ids, installCommand, links } from './site.ts'
+import { ids, installCommand } from './site.ts'
 
 function parsePage(): Document {
     return new DOMParser().parseFromString(renderPage(), 'text/html')
@@ -25,7 +25,7 @@ describe('renderPage', () => {
 
         expect(headings).toHaveLength(1)
         expect(headings[0].textContent).toContain('A black menu bar')
-        expect(headings[0].querySelector('.dusk')?.textContent).toBe('macOS')
+        expect(headings[0].querySelector('.accent')?.textContent).toBe('macOS')
     })
 
     it('renders every section in order', () => {
@@ -49,17 +49,18 @@ describe('renderPage', () => {
         }
     })
 
-    it('shows the install command next to a button that copies it', () => {
-        const button = page.querySelector<HTMLButtonElement>('button[data-copy]')
-        const target = page.getElementById(button?.dataset.copy ?? '')
+    it('shows the install command next to every copy button', () => {
+        const buttons = [...page.querySelectorAll<HTMLButtonElement>('button[data-copy]')]
 
-        expect(target?.textContent).toBe(installCommand)
+        expect(buttons.length).toBeGreaterThan(0)
+        for (const button of buttons) {
+            const target = page.getElementById(button.dataset.copy ?? '')
+            expect(target?.textContent).toBe(installCommand)
+        }
     })
 
-    it('links the download button to the latest release', () => {
-        expect(page.querySelector('.install .button.primary')?.getAttribute('href')).toBe(
-            links.download,
-        )
+    it('installs through the command, not a direct download', () => {
+        expect(page.querySelector('a[href$="Nightbar.zip"]')).toBeNull()
     })
 
     it('starts the demo with Nightbar off and Launch at Login on', () => {
@@ -75,7 +76,7 @@ describe('renderPage', () => {
     })
 
     it('hides decorative icons from screen readers', () => {
-        const icons = [...page.querySelectorAll('svg:not(.land)')]
+        const icons = [...page.querySelectorAll('svg')]
 
         expect(icons.length).toBeGreaterThan(0)
         for (const icon of icons) {

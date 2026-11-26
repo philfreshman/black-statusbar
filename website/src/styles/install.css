@@ -1,68 +1,83 @@
-/* Install */
-.install {
-    padding: 100px 0 120px;
-    text-align: center;
-}
-
-.install-alt {
-    margin: 20px 0 0;
-    color: var(--muted);
-    font-size: 15px;
-}
-
-.install-alt a {
-    color: var(--text);
-}
-
+/* Install by hand: three numbered cells, then the closing call. */
 .steps {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    margin: 32px 0 40px;
+    margin: 0;
     padding: 0;
     list-style: none;
-    counter-reset: step;
-    text-align: left;
+    border-top: 1px solid var(--rail);
 }
 
 .steps li {
-    position: relative;
-    padding: 28px;
-    border-radius: var(--radius);
-    border: 1px solid var(--line);
-    background: var(--night-2);
-    counter-increment: step;
+    padding: 32px var(--pad) 40px;
 }
 
-.steps li::before {
-    content: counter(step);
-    display: grid;
-    place-items: center;
-    width: 32px;
-    height: 32px;
-    margin-bottom: 18px;
-    border-radius: 50%;
-    font-weight: 700;
-    color: #160b12;
-    background: var(--dusk);
+.steps li + li {
+    border-left: 1px solid var(--rail);
 }
 
-.steps h3 {
-    font-size: 18px;
+.step-number {
+    display: block;
+    margin-bottom: 40px;
+    font-family: var(--font-mono);
+    font-size: 44px;
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--fog);
 }
+
+.steps li:hover .step-number {
+    -webkit-text-stroke-color: var(--accent);
+}
+
 .steps p {
-    margin: 8px 0 0;
-    color: var(--muted);
+    margin: 10px 0 0;
+    color: var(--fog);
     font-size: 15px;
 }
 
 .steps strong {
-    color: var(--text);
+    color: var(--chalk);
     font-weight: 600;
+}
+
+.install-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: clamp(64px, 10vw, 120px) var(--pad);
+    border-top: 1px solid var(--rail);
+    text-align: center;
+    background: radial-gradient(
+        50% 80% at 50% 100%,
+        rgb(var(--accent-rgb) / 0.08),
+        transparent 70%
+    );
+}
+
+.install-big {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(56px, 11vw, 150px);
+    font-weight: 660;
+    font-stretch: 78%;
+    line-height: 0.9;
+    letter-spacing: -0.055em;
+}
+
+.install-cta .button {
+    margin-top: 20px;
 }
 
 @media (max-width: 860px) {
     .steps {
         grid-template-columns: 1fr;
+    }
+
+    .steps li + li {
+        border-left: 0;
+        border-top: 1px solid var(--rail);
     }
 }
