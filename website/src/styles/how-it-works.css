@@ -335,6 +335,10 @@
             animation-range: contain 0% contain 100%;
         }
 
+        .layer-strip .plane {
+            animation-name: how-outline, how-strip-fade;
+        }
+
         .stage-result {
             display: block;
             animation: how-result linear both;
@@ -400,21 +404,32 @@
     }
 }
 
-/* The strip slides in sideways, between the wallpaper and the menu bar. */
+/*
+ * The strip slides in sideways, between the wallpaper and the menu bar. Only its plane fades:
+ * animating opacity on the layer itself would flatten its 3D and squash its label.
+ */
 @keyframes how-strip {
     0%,
     8% {
         transform: translate3d(-140%, 0, var(--gap));
-        opacity: 0;
     }
     30%,
     56% {
         transform: translate3d(0, 0, var(--gap));
-        opacity: 1;
     }
     86%,
     100% {
         transform: translate3d(0, 0, 1px);
+    }
+}
+
+@keyframes how-strip-fade {
+    0%,
+    8% {
+        opacity: 0;
+    }
+    30%,
+    100% {
         opacity: 1;
     }
 }
