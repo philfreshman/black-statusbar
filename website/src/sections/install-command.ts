@@ -10,8 +10,11 @@ export function renderInstallCommand(id: string): string {
                 <code id="${id}">${installCommand}</code>
                 <button class="copy" type="button" data-copy="${id}">
                     ${icon('copy', { size: 16 })}
-                    <span class="copy-label">Copy</span>
+                    <span class="copy-label">Copy</span
+                    ><span class="visually-hidden"> install command</span>
                 </button>
+                <!-- Announces the result. Outside the button, where screen readers reliably read it. -->
+                <span class="copy-status visually-hidden" role="status"></span>
             </div>
         </div>
     `
