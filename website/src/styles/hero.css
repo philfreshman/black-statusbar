@@ -136,33 +136,6 @@
     color: var(--accent);
 }
 
-.copy {
-    display: inline-flex;
-    flex: none;
-    align-items: center;
-    gap: 6px;
-    min-block-size: 32px;
-    padding: 0 12px;
-    border: 1px solid var(--rail-strong);
-    border-radius: 5px;
-    background: transparent;
-    color: var(--fog);
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition:
-        color 0.2s,
-        border-color 0.2s,
-        background 0.2s;
-}
-
-.copy:hover {
-    color: var(--chalk);
-    border-color: var(--fog);
-}
-
 .copy.is-copied {
     color: var(--ink);
     border-color: transparent;

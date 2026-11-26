@@ -8,7 +8,7 @@ export function renderInstallCommand(id: string): string {
             <p class="label">Terminal · macOS 14 or later</p>
             <div class="command-line">
                 <code id="${id}">${installCommand}</code>
-                <button class="copy" type="button" data-copy="${id}">
+                <button class="chip copy" type="button" data-copy="${id}">
                     ${icon('copy', { size: 16 })}
                     <span class="copy-label">Copy</span
                     ><span class="visually-hidden"> install command</span>
