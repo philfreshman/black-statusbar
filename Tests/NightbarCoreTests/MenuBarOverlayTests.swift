@@ -4,13 +4,14 @@ import Testing
 
 @MainActor
 struct MenuBarOverlayTests {
-    @Test func stripSitsAboveMenuBarUnderbelly() {
+    @Test func stripSitsBelowMenuBarUnderbelly() {
         let underbellyLevel = Int(CGWindowLevelForKey(.desktopIconWindow)) + 1
 
-        #expect(MenuBarOverlay.stripLevel.rawValue > underbellyLevel)
+        #expect(MenuBarOverlay.stripLevel.rawValue < underbellyLevel)
     }
 
-    @Test func stripSitsBelowAppWindows() {
-        #expect(MenuBarOverlay.stripLevel < .normal)
+    @Test func contrastLayerSitsAboveMenuBarIconsAndBelowMenus() {
+        #expect(MenuBarOverlay.contrastLevel > .statusBar)
+        #expect(MenuBarOverlay.contrastLevel < .popUpMenu)
     }
 }
