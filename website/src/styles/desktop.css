@@ -1,6 +1,9 @@
 /* The desktop: a Mac screen sized by the storm panel around it. */
 .screen {
     --bar-h: 3.4cqi;
+    --bezel: #020203;
+    --bezel-width: clamp(6px, 0.9vw, 11px);
+    --bezel-radius: clamp(10px, 1.6vw, 18px);
     font-family: var(--font-system);
     position: relative;
     width: 100%;
@@ -9,14 +12,29 @@
     aspect-ratio: 16 / 10;
     overflow: hidden;
     /* Square at the bottom, so Nightbar's rounded corners have an edge to round. */
-    border-radius: clamp(10px, 1.6vw, 18px) clamp(10px, 1.6vw, 18px) 0 0;
-    border: clamp(6px, 0.9vw, 11px) solid #020203;
+    border-radius: var(--bezel-radius) var(--bezel-radius) 0 0;
+    border: var(--bezel-width) solid var(--bezel);
     box-shadow:
         0 0 0 1px rgb(255 255 255 / 0.1),
         0 60px 120px -30px rgb(0 0 0 / 0.95),
         0 0 90px -30px rgb(124 92 255 / 0.7);
     container-type: inline-size;
     text-align: left;
+}
+
+/*
+ * Covers the screen's inner edge with a hairline of bezel. The wallpaper and the black bar are
+ * both clipped by that edge, and where it is anti-aliased the wallpaper showed through the black.
+ */
+.screen::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    border-radius: calc(var(--bezel-radius) - var(--bezel-width))
+        calc(var(--bezel-radius) - var(--bezel-width)) 0 0;
+    box-shadow: inset 0 0 0 1px var(--bezel);
+    pointer-events: none;
 }
 
 /* Violet satin, drawn by wallpaper.ts. */
