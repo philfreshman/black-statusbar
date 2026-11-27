@@ -190,8 +190,16 @@
 
 /* Hatched, so the black strip reads as a material even against the black page. */
 .strip {
+    position: relative;
     height: var(--bar);
     background: repeating-linear-gradient(135deg, #000 0 5px, rgb(var(--accent-rgb) / 0.4) 5px 6px);
+}
+
+/* The outline and glow, on their own layer so they can fade once the bar is finished. */
+.strip::after {
+    content: '';
+    position: absolute;
+    inset: 0;
     box-shadow:
         0 0 0 1px var(--accent),
         0 0 24px rgb(var(--violet-rgb) / 0.45);
@@ -331,7 +339,8 @@
         }
 
         .layer-strip .plane::after,
-        .layer-menubar .plane::after {
+        .layer-menubar .plane::after,
+        .strip::after {
             animation: how-outline linear both;
             animation-timeline: --section;
             animation-range: contain 0% contain 100%;
@@ -478,7 +487,7 @@
     }
 }
 
-/* The dashed construction lines fade once the layers are flat. */
+/* The dashed construction lines and the strip's outline fade once the layers are flat. */
 @keyframes how-outline {
     0%,
     76% {
