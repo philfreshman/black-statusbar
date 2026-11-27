@@ -34,4 +34,4 @@ SwiftLint leaves layout to swift-format, so its layout rules stay off. Fix findi
 
 Periphery reads the index at `.build/out`, where SwiftPM's swift-build writes it, so build the tests before scanning. Remove dead code it finds; for code that is in fact used, prefer a setting in `.periphery.yml` over `// periphery:ignore`, and give the comment a short reason. jscpd fails on any copied block; extract the shared code instead of raising its limits.
 
-Branching, commit and pull request rules are in [CONTRIBUTING.md](CONTRIBUTING.md).
+Branching, commit, code style and pull request rules are in [CONTRIBUTING.md](CONTRIBUTING.md).
