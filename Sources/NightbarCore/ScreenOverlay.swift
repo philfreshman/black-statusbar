@@ -30,6 +30,14 @@ final class ScreenOverlay {
     /// Above the menu bar and its icons, below menus.
     static let contrastLevel = NSWindow.Level(NSWindow.Level.statusBar.rawValue + 1)
 
+    /// How a window behaves while its Space is not shown: it slides in with the Space when the
+    /// user swipes to it. A transient window would only appear once the swipe ends, and showing
+    /// one would move it to the active Space.
+    static let inactiveSpaceBehavior: NSWindow.CollectionBehavior = [.stationary, .ignoresCycle]
+    /// How a window behaves while its Space is shown: Mission Control hides it, so it never
+    /// colours or rounds the Mission Control view. A stationary window would stay on top of it.
+    static let activeSpaceBehavior: NSWindow.CollectionBehavior = [.transient, .ignoresCycle]
+
     let displayID: CGDirectDisplayID?
     private let strip: NSWindow
     private let contrastLayer: NSWindow?
@@ -66,6 +74,15 @@ final class ScreenOverlay {
         (contrastLayer?.contentView as? ColorRemapView)?.remap = remap
     }
 
+    /// Makes the windows transient while their Space is shown and stationary while it is not (see
+    /// `activeSpaceBehavior`). Call it whenever the active Space changes.
+    func updateBehavior() {
+        let behavior = isOnActiveSpace ? Self.activeSpaceBehavior : Self.inactiveSpaceBehavior
+        for window in windowsInShowingOrder where window.collectionBehavior != behavior {
+            window.collectionBehavior = behavior
+        }
+    }
+
     /// Hides the windows in the opposite order of showing them.
     func close() {
         for window in windowsInShowingOrder.reversed() {
@@ -74,6 +91,8 @@ final class ScreenOverlay {
     }
 
     /// Puts the windows on their Space before showing them, so they never appear on the active one.
+    /// They are shown stationary, so they stay on that Space, and only then get the behaviour of
+    /// their Space.
     private func show(on space: SpaceID?) {
         if let space {
             Spaces.move(windowsInShowingOrder, to: space)
@@ -81,6 +100,7 @@ final class ScreenOverlay {
         for window in windowsInShowingOrder {
             window.orderFrontRegardless()
         }
+        updateBehavior()
     }
 
     // MARK: - Making the windows
@@ -132,10 +152,9 @@ final class ScreenOverlay {
         }
     }
 
-    /// A borderless window that clicks pass through. It stays on the Space where it appears and
-    /// keeps out of window cycling. Mission Control hides it, so it never colours or rounds the
-    /// Mission Control view. It appears and disappears at once, without the fade macOS may give
-    /// new windows.
+    /// A borderless window that clicks pass through. It stays on the Space where it appears (see
+    /// `updateBehavior`). It appears and disappears at once, without the fade
+    /// macOS may give new windows.
     private static func makeOverlayWindow(frame: CGRect, level: NSWindow.Level) -> NSWindow {
         let window = NSWindow(contentRect: frame, styleMask: .borderless, backing: .buffered, defer: false)
         window.isReleasedWhenClosed = false
@@ -143,7 +162,7 @@ final class ScreenOverlay {
         window.level = level
         window.hasShadow = false
         window.ignoresMouseEvents = true
-        window.collectionBehavior = [.transient, .ignoresCycle]
+        window.collectionBehavior = inactiveSpaceBehavior
         return window
     }
 }
