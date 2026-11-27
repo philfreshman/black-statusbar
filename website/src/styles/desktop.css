@@ -111,9 +111,9 @@
 }
 
 /*
- * The mock menu bar. Off: translucent, tinted by the wallpaper. On: black with white icons.
- * The glass and the black are separate layers, and the icons flip by a filter, so switching
- * plays on the GPU by opacity and filter instead of repainting colours.
+ * The mock menu bar. Off: fully transparent over the dark wallpaper, with white icons, as on
+ * current macOS. On: black with white icons. The black is its own layer, so switching plays on
+ * the GPU by opacity instead of repainting colours.
  */
 .menubar {
     position: absolute;
@@ -128,20 +128,11 @@
     color: #fff;
 }
 
-.menubar::before,
 .menubar::after {
     content: '';
     position: absolute;
     inset: 0;
     z-index: -1;
-}
-
-.menubar::before {
-    background: rgb(255 255 255 / 0.3);
-    backdrop-filter: blur(18px) saturate(1.5);
-}
-
-.menubar::after {
     background: #000;
     transition: opacity 0.45s ease;
 }
@@ -156,12 +147,6 @@
     align-items: center;
     gap: 1.7cqi;
     white-space: nowrap;
-    transition: filter 0.45s ease;
-}
-
-/* Turns the white icons and text into the near-black #1b1b1b. */
-.screen[data-nightbar='off'] :is(.menubar-left, .menubar-right) {
-    filter: invert(0.894);
 }
 
 .menubar-left b {
@@ -199,10 +184,6 @@
 
 .status-item.is-open {
     background: rgb(255 255 255 / 0.25);
-}
-/* The bar's filter inverts this white into a faint dark highlight. */
-.screen[data-nightbar='off'] .status-item.is-open {
-    background: rgb(255 255 255 / 0.13);
 }
 
 .notch {
