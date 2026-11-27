@@ -70,7 +70,9 @@ final class MenuBarOverlay: NSObject {
 
     /// Rebuilds the strips, contrast layers and corners, so they match the current screens and settings.
     private func updateWindows() {
-        windows.forEach { $0.orderOut(nil) }
+        // Hide the windows in the opposite order of showing them, so a contrast layer never sits
+        // over a menu bar that has already lost its strip. That would flash for a frame.
+        windows.reversed().forEach { $0.orderOut(nil) }
         windows = isEnabled ? NSScreen.screens.flatMap(makeWindows) : []
         contrastViews = windows.compactMap { $0.contentView as? ColorRemapView }
     }
