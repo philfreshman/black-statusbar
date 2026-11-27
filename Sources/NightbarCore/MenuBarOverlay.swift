@@ -17,7 +17,9 @@ final class MenuBarOverlay: NSObject {
     /// Whether macOS currently draws the menu bar dark, with white text.
     var isMenuBarDark = true {
         didSet {
-            screenOverlays.forEach { $0.setRemap(remap) }
+            for overlay in screenOverlays {
+                overlay.setRemap(remap)
+            }
         }
     }
 
@@ -62,7 +64,9 @@ final class MenuBarOverlay: NSObject {
     /// Drops the overlays of every Space and covers the active ones again, so they match the
     /// current screens and settings. Other Spaces get theirs when the user next visits them.
     private func rebuild() {
-        screenOverlays.forEach { $0.close() }
+        for overlay in screenOverlays {
+            overlay.close()
+        }
         screenOverlays = []
         coverActiveSpaces()
     }
@@ -87,7 +91,9 @@ final class MenuBarOverlay: NSObject {
     /// When the user removes a Space, macOS moves its windows to another one, which then has
     /// two overlays. Two contrast layers would remap the menu bar twice.
     private func removeOverlays(_ duplicates: ArraySlice<ScreenOverlay>) {
-        duplicates.forEach { $0.close() }
+        for duplicate in duplicates {
+            duplicate.close()
+        }
         screenOverlays.removeAll { overlay in duplicates.contains { $0 === overlay } }
     }
 
