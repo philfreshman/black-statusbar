@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Nightbar is a small macOS 14+ menu bar app that makes the menu bar black with white icons. It puts a black borderless strip behind each screen's menu bar, just above the wallpaper, so macOS draws a dark menu bar with white icons.
+Nightbar is a small macOS 14+ menu bar app that makes the menu bar black with white icons. It puts a black borderless strip behind each screen's menu bar, just above the wallpaper. On light wallpapers macOS still tints the bar grey and may draw black text, so a contrast window over the menu bar remaps its colours to black with white text (`ColorRemap`, `ColorRemapView`, which uses private Core Animation classes). Nightbar's own status item reports whether macOS draws the menu bar light or dark (`MenuBarAppearanceWatcher`).
 
 Swift Package (tools 6.0, Swift 5 language mode), AppKit, no dependencies. It builds and tests only on macOS with Xcode 26 or later.
 
