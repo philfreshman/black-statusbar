@@ -62,48 +62,32 @@ const shapes = {
         `,
     },
     battery: {
-        viewBox: '0 0 28 14',
+        viewBox: '0 0 26 12',
         content: /* HTML */ `
-            <rect
-                x="1"
-                y="1.5"
-                width="23"
-                height="11"
-                rx="3.4"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.2"
-                opacity=".6"
-            />
-            <rect x="2.9" y="3.4" width="17.5" height="7.2" rx="1.9" fill="currentColor" />
-            <path d="M25.3 5v4a2 2 0 0 0 0-4z" fill="currentColor" opacity=".45" />
+            <path d="M6 0H9V12H6A6 6 0 0 1 6 0Z" fill="currentColor" />
+            <path d="M9 0H17A6 6 0 0 1 17 12H9Z" fill="currentColor" opacity=".45" />
+            <path d="M24 4A2 2 0 0 1 24 8Z" fill="currentColor" opacity=".5" />
         `,
     },
     controlCenter: {
         viewBox: '0 0 20 16',
         content: /* HTML */ `
             <rect
-                x="1.6"
-                y="1.4"
-                width="16.8"
-                height="6"
-                rx="3"
+                x="2.64"
+                y="0.64"
+                width="14.72"
+                height="5.76"
+                rx="2.88"
                 fill="none"
                 stroke="currentColor"
-                stroke-width="1.6"
+                stroke-width="1.28"
             />
-            <circle cx="15.2" cy="4.4" r="1.9" fill="currentColor" />
-            <rect
-                x="1.6"
-                y="8.6"
-                width="16.8"
-                height="6"
-                rx="3"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.6"
+            <rect x="4.6" y="1.76" width="5.8" height="3.52" rx="1.76" fill="currentColor" />
+            <path
+                d="M5.52 8.96H14.48A3.52 3.52 0 0 1 14.48 16H5.52A3.52 3.52 0 0 1 5.52 8.96ZM11.94 10.24H14.46A2.24 2.24 0 0 1 14.46 14.72H11.94A2.24 2.24 0 0 1 11.94 10.24Z"
+                fill="currentColor"
+                fill-rule="evenodd"
             />
-            <circle cx="4.8" cy="11.6" r="1.9" fill="currentColor" />
         `,
     },
     cursor: {
