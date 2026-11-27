@@ -35,6 +35,10 @@ extension NSScreen {
         return MenuBarGeometry.frame(screenFrame: frame, menuBarHeight: height)
     }
 
+    var displayID: CGDirectDisplayID? {
+        deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? CGDirectDisplayID
+    }
+
     var reservesSpaceForMenuBar: Bool {
         MenuBarGeometry.reservesSpace(screenFrame: frame, visibleFrame: visibleFrame)
     }
