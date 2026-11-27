@@ -94,12 +94,15 @@ export function startDemo(): void {
     }
     const clock = new PausableClock()
 
+    /** In percent of the screen inside its bezel, where the cursor track sits. */
     function centreOf(element: Element): Position {
         const desktopBox = desktop.getBoundingClientRect()
+        const left = desktopBox.left + desktop.clientLeft
+        const top = desktopBox.top + desktop.clientTop
         const box = element.getBoundingClientRect()
         return {
-            x: ((box.left + box.width / 2 - desktopBox.left) / desktopBox.width) * 100,
-            y: ((box.top + box.height / 2 - desktopBox.top) / desktopBox.height) * 100,
+            x: ((box.left + box.width / 2 - left) / desktop.clientWidth) * 100,
+            y: ((box.top + box.height / 2 - top) / desktop.clientHeight) * 100,
         }
     }
 
