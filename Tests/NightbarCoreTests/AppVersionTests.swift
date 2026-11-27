@@ -16,6 +16,7 @@ struct AppVersionTests {
     @Test func comparesEachPartAsANumber() throws {
         #expect(try #require(AppVersion("0.2.0")) < #require(AppVersion("0.10.0")))
         #expect(try #require(AppVersion("0.1.2")) < #require(AppVersion("0.2.0")))
+        // swiftlint:disable:next identical_operands - checks on purpose that a version is not less than itself
         #expect(try !(#require(AppVersion("1.0.0")) < #require(AppVersion("1.0.0"))))
     }
 

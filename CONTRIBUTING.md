@@ -86,7 +86,15 @@ swift format format --in-place --recursive Sources Tests Package.swift   # forma
 swift format lint --strict --recursive Sources Tests Package.swift       # check formatting and style
 ```
 
-Please make sure `swift build`, `swift test` and the lint check all pass before you open a pull request.
+## Lint
+
+The Swift code is linted with [SwiftLint](https://github.com/realm/SwiftLint), which looks for risky patterns such as force unwrapping and keeps functions, types and files small. Install it with `brew install swiftlint`. Its settings are in `.swiftlint.yml` at the repo root; `Tests/.swiftlint.yml` relaxes a rule for the tests. SwiftLint leaves layout to `swift format`, so the two never disagree.
+
+```bash
+swiftlint lint --strict
+```
+
+Please make sure `swift build`, `swift test` and both lint checks pass before you open a pull request.
 
 ## Website
 
