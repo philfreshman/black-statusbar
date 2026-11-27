@@ -22,6 +22,8 @@
     /* Headlines use Space Grotesk, a grotesque with quirky details; the text stays in Geist. */
     --font-display: 'Space Grotesk Variable', 'Geist Variable', system-ui, sans-serif;
     --font-mono: 'Geist Mono Variable', ui-monospace, 'SF Mono', Menlo, monospace;
+    /* The Mac's own font (SF Pro) for the mock menu bars and menus. Other systems use their own. */
+    --font-system: -apple-system, BlinkMacSystemFont, system-ui, 'Helvetica Neue', sans-serif;
 
     --max: 76rem;
     --topbar-h: 56px;

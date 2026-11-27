@@ -23,6 +23,7 @@
 
 .menu-mock {
     width: 290px;
+    font-family: var(--font-system);
 }
 
 .menu-mock-bar {

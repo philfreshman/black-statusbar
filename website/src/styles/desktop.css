@@ -1,6 +1,7 @@
 /* The desktop: a Mac screen sized by the storm panel around it. */
 .screen {
     --bar-h: 3.4cqi;
+    font-family: var(--font-system);
     position: relative;
     width: 100%;
     max-width: 1040px;

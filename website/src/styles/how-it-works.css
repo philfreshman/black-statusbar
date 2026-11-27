@@ -221,6 +221,7 @@
  */
 .mini-bar {
     position: relative;
+    font-family: var(--font-system);
     isolation: isolate;
     display: flex;
     align-items: center;
