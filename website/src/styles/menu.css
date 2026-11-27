@@ -81,8 +81,11 @@
     width: 20px;
     font-size: 0.75rem;
 }
-.menu-mock-list li:not(:has(.check)):not(.sep) {
+.menu-mock-list li:not(:has(> .check)):not(.sep) {
     padding-left: 30px;
+}
+.menu-mock-list .submenu {
+    display: none;
 }
 .menu-mock-list .sep {
     height: 1px;
