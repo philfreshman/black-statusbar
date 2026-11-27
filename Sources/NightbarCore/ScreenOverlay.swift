@@ -39,11 +39,19 @@ final class ScreenOverlay {
         strip.isOnActiveSpace
     }
 
+    /// The windows from bottom to top: the strip first, so the contrast layer never sits over a
+    /// menu bar without its strip. That would flash for a frame.
+    private var windowsInShowingOrder: [NSWindow] {
+        [strip] + [contrastLayer].compactMap { $0 } + corners
+    }
+
+    /// Shows the windows on the active Space.
     init(screen: NSScreen, cornerRadius: CornerRadius, remap: ColorRemap) {
         displayID = screen.displayID
         strip = Self.makeStrip(for: screen)
         contrastLayer = Self.makeContrastLayer(for: screen, remap: remap)
         corners = Self.makeCorners(for: screen, radius: cornerRadius.points)
+        show()
     }
 
     /// Changes the colours of the contrast layer. Does nothing when the screen has none.
@@ -51,12 +59,16 @@ final class ScreenOverlay {
         (contrastLayer?.contentView as? ColorRemapView)?.remap = remap
     }
 
-    /// Hides the windows in the opposite order of showing them, so the contrast layer never sits
-    /// over a menu bar that has already lost its strip. That would flash for a frame.
+    /// Hides the windows in the opposite order of showing them.
     func close() {
-        let windowsInHidingOrder = corners + [contrastLayer].compactMap { $0 } + [strip]
-        for window in windowsInHidingOrder {
+        for window in windowsInShowingOrder.reversed() {
             window.orderOut(nil)
+        }
+    }
+
+    private func show() {
+        for window in windowsInShowingOrder {
+            window.orderFrontRegardless()
         }
     }
 
@@ -66,7 +78,6 @@ final class ScreenOverlay {
         let strip = makeOverlayWindow(frame: screen.menuBarFrame, level: stripLevel)
         strip.backgroundColor = .black
         strip.isOpaque = true
-        strip.orderFrontRegardless()
         return strip
     }
 
@@ -81,7 +92,6 @@ final class ScreenOverlay {
         let remapView = ColorRemapView(remap: remap)
         remapView.addSubview(makeBottomEdgeCover(width: window.frame.width))
         window.contentView = remapView
-        window.orderFrontRegardless()
         return window
     }
 
@@ -107,7 +117,6 @@ final class ScreenOverlay {
             window.backgroundColor = .clear
             window.isOpaque = false
             window.contentView = CornerView(corner: corner, radius: radius)
-            window.orderFrontRegardless()
             return window
         }
     }
