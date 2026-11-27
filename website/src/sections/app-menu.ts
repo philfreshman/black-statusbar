@@ -58,6 +58,7 @@ export function renderStatusMenuEntries(isOn: boolean, nightbarItemId?: string):
         { label: 'Launch at Login', checked: true },
         { label: 'Hide Icon' },
         'separator',
+        { label: 'Check for Updates…' },
         { label: 'Quit', shortcut: '⌘Q' },
     ])
 }
