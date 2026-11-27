@@ -8,7 +8,7 @@ final class UpdateWindowController {
     private lazy var window = makeWindow()
     private var hasBeenShown = false
 
-    init(model: UpdateModel) {
+    private init(model: UpdateModel) {
         self.model = model
     }
 

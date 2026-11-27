@@ -46,6 +46,7 @@ final class ScreenOverlay {
         corners = Self.makeCorners(for: screen, radius: cornerRadius.points)
     }
 
+    /// Changes the colours of the contrast layer. Does nothing when the screen has none.
     func setRemap(_ remap: ColorRemap) {
         (contrastLayer?.contentView as? ColorRemapView)?.remap = remap
     }
@@ -58,6 +59,8 @@ final class ScreenOverlay {
             window.orderOut(nil)
         }
     }
+
+    // MARK: - Making the windows
 
     private static func makeStrip(for screen: NSScreen) -> NSWindow {
         let strip = makeOverlayWindow(frame: screen.menuBarFrame, level: stripLevel)

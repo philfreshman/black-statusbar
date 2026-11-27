@@ -23,6 +23,7 @@ final class MenuBarOverlay: NSObject {
         }
     }
 
+    /// Whether Nightbar blacks out the menu bar. Saved in user defaults; changing it rebuilds the overlays.
     var isEnabled: Bool {
         get { defaults.object(forKey: Self.enabledKey) as? Bool ?? true }
         set {
@@ -31,6 +32,7 @@ final class MenuBarOverlay: NSObject {
         }
     }
 
+    /// How round the screen corners are. Saved in user defaults; changing it rebuilds the overlays.
     var cornerRadius: CornerRadius {
         get { defaults.string(forKey: Self.cornerRadiusKey).flatMap(CornerRadius.init(rawValue:)) ?? .standard }
         set {
@@ -48,6 +50,7 @@ final class MenuBarOverlay: NSObject {
         super.init()
     }
 
+    /// Covers the screens' active Spaces and starts following changes to screens and Spaces.
     func start() {
         NotificationCenter.default.addObserver(
             self, selector: #selector(screensDidChange),
@@ -60,6 +63,8 @@ final class MenuBarOverlay: NSObject {
         screenLayouts = ScreenLayout.current
         rebuild()
     }
+
+    // MARK: - Overlays
 
     /// Drops the overlays of every Space and covers the active ones again, so they match the
     /// current screens and settings. Other Spaces get theirs when the user next visits them.
@@ -97,6 +102,8 @@ final class MenuBarOverlay: NSObject {
         screenOverlays.removeAll { overlay in duplicates.contains { $0 === overlay } }
     }
 
+    // MARK: - Notifications
+
     @objc private func activeSpaceDidChange(_: Notification) {
         coverActiveSpaces()
     }
@@ -119,9 +126,9 @@ private struct ScreenLayout: Equatable {
     let reservesSpaceForMenuBar: Bool
 
     @MainActor
-    static var current: [ScreenLayout] {
+    static var current: [Self] {
         NSScreen.screens.map {
-            ScreenLayout(
+            Self(
                 displayID: $0.displayID, frame: $0.frame,
                 menuBarFrame: $0.menuBarFrame, reservesSpaceForMenuBar: $0.reservesSpaceForMenuBar
             )

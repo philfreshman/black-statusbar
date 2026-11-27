@@ -4,7 +4,7 @@ import Testing
 @testable import NightbarCore
 
 @MainActor
-struct MenuBarOverlayTests {
+struct ScreenOverlayTests {
     @Test func stripSitsBelowMenuBarUnderbelly() {
         let underbellyLevel = Int(CGWindowLevelForKey(.desktopIconWindow)) + 1
 
