@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="website/public/icon-192.png" width="96" height="96" alt="Nightbar icon">
+  <img src=".github/assets/icon.png" width="128" height="128" alt="Nightbar icon">
 </p>
 
 <h1 align="center">Nightbar</h1>
