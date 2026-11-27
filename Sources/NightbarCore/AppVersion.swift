@@ -14,11 +14,11 @@ struct AppVersion: Sendable {
     }
 
     /// The version of the running app, or nil when it runs outside an app bundle (for example via `swift run`).
-    static var current: AppVersion? {
-        (Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String).flatMap(AppVersion.init)
+    static var current: Self? {
+        (Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String).flatMap(Self.init)
     }
 
-    private func padded(to other: AppVersion) -> [Int] {
+    private func padded(to other: Self) -> [Int] {
         components + Array(repeating: 0, count: max(0, other.components.count - components.count))
     }
 }

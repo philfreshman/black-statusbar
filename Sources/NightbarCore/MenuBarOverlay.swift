@@ -126,9 +126,9 @@ private struct ScreenLayout: Equatable {
     let reservesSpaceForMenuBar: Bool
 
     @MainActor
-    static var current: [ScreenLayout] {
+    static var current: [Self] {
         NSScreen.screens.map {
-            ScreenLayout(
+            Self(
                 displayID: $0.displayID, frame: $0.frame,
                 menuBarFrame: $0.menuBarFrame, reservesSpaceForMenuBar: $0.reservesSpaceForMenuBar
             )

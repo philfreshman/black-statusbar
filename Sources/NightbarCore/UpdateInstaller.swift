@@ -13,7 +13,7 @@ struct UpdateInstaller {
     init(
         appURL: URL = Bundle.main.bundleURL,
         bundleIdentifier: String? = Bundle.main.bundleIdentifier,
-        download: @escaping Download = UpdateInstaller.downloadFromNetwork
+        download: @escaping Download = Self.downloadFromNetwork
     ) {
         self.appURL = appURL
         self.bundleIdentifier = bundleIdentifier
