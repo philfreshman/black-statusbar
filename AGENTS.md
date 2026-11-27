@@ -11,8 +11,9 @@ Swift Package (tools 6.0, Swift 6 language mode, so the compiler checks data-rac
 - `Tests/NightbarCoreTests/` — tests (swift-testing).
 - `Resources/` — `Info.plist` and the `AppIcon.icon` Icon Composer source.
 - `scripts/build-app.sh` — builds `build/Nightbar.app` and compiles the icon.
+- `scripts/find-dead-code.sh` — finds unused code with `swiftlint analyze`.
 - `website/` — the nightbar.app landing page: Vite+ with Bun, TypeScript and plain CSS. Sections are TypeScript modules in `website/src/sections/`, rendered into `index.html` at build time; one CSS file per section in `website/src/styles/`. Run `bun run check`, `bun run fallow` (dead code, duplication and complexity), `bun run test` and `bun run build` there (formatting: 4-space indents, single quotes, no semicolons, via `vp fmt`).
-- `.github/workflows/` — release, branch-name checks, the website checks, and `swift.yml`, which runs every Swift check (build with warnings as errors, tests, `swift format`, SwiftLint, Periphery, jscpd) on every pull request and on pushes to `development`. `.github/actions/select-xcode` switches the macOS runner to its newest stable Xcode.
+- `.github/workflows/` — release, branch-name checks, the website checks, and `swift.yml`, which runs every Swift check (build with warnings as errors, tests, `swift format`, SwiftLint, dead code via `swiftlint analyze`, jscpd) on every pull request and on pushes to `development`. `.github/actions/select-xcode` switches the macOS runner to its newest stable Xcode.
 
 ## Build and test
 
@@ -24,7 +25,7 @@ swift test
 swift format format --in-place --recursive Sources Tests Package.swift   # format (config: .swift-format)
 swift format lint --strict --recursive Sources Tests Package.swift       # check formatting
 swiftlint lint --strict   # lint (config: .swiftlint.yml, Tests/.swiftlint.yml; install: brew install swiftlint)
-swift build --build-tests && periphery scan   # dead code (config: .periphery.yml; install: brew install periphery)
+./scripts/find-dead-code.sh   # dead code: clean verbose build, then swiftlint analyze (analyzer_rules in .swiftlint.yml)
 bunx jscpd@5.4.3   # duplication (config: .jscpd.json; runs with Bun)
 ```
 
@@ -32,6 +33,6 @@ Keep the build free of warnings. Package.swift stays free of unsafe flags, so `-
 
 SwiftLint leaves layout to swift-format, so its layout rules stay off. Fix findings in the code; use `// swiftlint:disable:next <rule>` only with a short reason.
 
-Periphery reads the index at `.build/out`, where SwiftPM's swift-build writes it, so build the tests before scanning. Remove dead code it finds; for code that is in fact used, prefer a setting in `.periphery.yml` over `// periphery:ignore`, and give the comment a short reason. jscpd fails on any copied block; extract the shared code instead of raising its limits.
+`swiftlint analyze` reads compiler arguments from a verbose build log and skips files missing from it, so `scripts/find-dead-code.sh` always builds from scratch in a temporary folder. Remove dead code it finds; name parameters a protocol or override fixes but you don't read `_`; for code that is in fact used, use `// swiftlint:disable:next unused_declaration` with a short reason. jscpd fails on any copied block; extract the shared code instead of raising its limits.
 
 Branching, commit, code style and pull request rules are in [CONTRIBUTING.md](CONTRIBUTING.md).
