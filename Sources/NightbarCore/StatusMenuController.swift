@@ -134,7 +134,7 @@ final class StatusMenuController: NSObject {
 }
 
 extension StatusMenuController: NSMenuDelegate {
-    func menuWillOpen(_ menu: NSMenu) {
+    func menuWillOpen(_: NSMenu) {
         toggleItem.state = overlay.isEnabled ? .on : .off
         launchAtLoginItem.state = LaunchAtLogin.isEnabled ? .on : .off
         for item in cornerRadiusItem.submenu?.items ?? [] {

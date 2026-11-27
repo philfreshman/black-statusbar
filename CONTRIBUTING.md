@@ -117,13 +117,13 @@ Follow the [Swift API Design Guidelines](https://www.swift.org/documentation/api
 
 ## Dead code
 
-[Periphery](https://github.com/peripheryapp/periphery) finds unused code: declarations, parameters, properties that are set but never read, and imports. Install it with `brew install periphery`. Its settings are in `.periphery.yml` at the repo root. Periphery reads the index that `swift build` writes while it compiles, so build the tests first; the tests count as users of the code.
+SwiftLint's analyzer rules find unused code: `unused_declaration` reports declarations nothing uses, public ones included, and `unused_import` reports imports a file does not need. They are set in `.swiftlint.yml`. `unused_parameter`, a plain lint rule, reports parameters a function never reads. The analyzer needs each file's compiler arguments, so the script builds the app and the tests from scratch in a temporary folder and runs `swiftlint analyze` on the build log. The tests count as users of the code.
 
 ```bash
-swift build --build-tests && periphery scan
+./scripts/find-dead-code.sh
 ```
 
-When Periphery reports code that is in fact used, for example a method only AppKit calls, prefer a setting in `.periphery.yml` over a `// periphery:ignore` comment, and give the comment a short reason when you need one.
+Remove the dead code it finds. When a protocol or an override fixes a parameter you don't read, name it `_`. For code that is in fact used, use `// swiftlint:disable:next unused_declaration` with a short reason.
 
 ## Duplication
 
