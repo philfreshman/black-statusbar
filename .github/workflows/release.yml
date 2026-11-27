@@ -17,7 +17,7 @@ jobs:
     # Xcode 26 is needed to compile the Icon Composer app icon.
     runs-on: macos-26
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Set the app version from the tag
         run: |
