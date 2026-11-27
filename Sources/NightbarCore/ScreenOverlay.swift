@@ -1,6 +1,6 @@
 import AppKit
 
-/// The windows that black out the menu bar of one screen: a black strip behind the
+/// The windows that black out the menu bar of one screen on one Space: a black strip behind the
 /// menu bar, a contrast layer over it, and black rounded corners below it.
 ///
 /// The strip sits just above the wallpaper, below desktop icons and windows, so the menu bar
@@ -11,6 +11,10 @@ import AppKit
 ///
 /// The corners sit above windows, so the screen area below the menu bar looks like a rounded
 /// rectangle even when a window fills it. They stay below menus, so menus are never cut off.
+///
+/// The windows belong to the Space that is active when they are made, so they slide in and out
+/// with it when the user swipes between Spaces. Windows that join all Spaces only move to the
+/// new Space once the swipe ends, so during it the menu bar would show its own colours.
 @MainActor
 final class ScreenOverlay {
     /// The window level of the strip: just above the wallpaper.
@@ -25,11 +29,18 @@ final class ScreenOverlay {
     /// Above the menu bar and its icons, below menus.
     static let contrastLevel = NSWindow.Level(NSWindow.Level.statusBar.rawValue + 1)
 
+    let displayID: CGDirectDisplayID?
     private let strip: NSWindow
     private let contrastLayer: NSWindow?
     private let corners: [NSWindow]
 
+    /// Whether the windows are on the Space their screen shows now.
+    var isOnActiveSpace: Bool {
+        strip.isOnActiveSpace
+    }
+
     init(screen: NSScreen, cornerRadius: CornerRadius, remap: ColorRemap) {
+        displayID = screen.displayID
         strip = Self.makeStrip(for: screen)
         contrastLayer = Self.makeContrastLayer(for: screen, remap: remap)
         corners = Self.makeCorners(for: screen, radius: cornerRadius.points)
@@ -93,14 +104,15 @@ final class ScreenOverlay {
         }
     }
 
-    /// A borderless window that clicks pass through and that shows on every Space.
+    /// A borderless window that clicks pass through. It stays on the Space where it appears and
+    /// keeps out of Mission Control and window cycling.
     private static func makeOverlayWindow(frame: CGRect, level: NSWindow.Level) -> NSWindow {
         let window = NSWindow(contentRect: frame, styleMask: .borderless, backing: .buffered, defer: false)
         window.isReleasedWhenClosed = false
         window.level = level
         window.hasShadow = false
         window.ignoresMouseEvents = true
-        window.collectionBehavior = [.canJoinAllSpaces, .stationary, .ignoresCycle]
+        window.collectionBehavior = [.stationary, .ignoresCycle]
         return window
     }
 }

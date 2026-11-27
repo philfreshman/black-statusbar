@@ -1,6 +1,10 @@
 import AppKit
 
-/// Blacks out the menu bar of every screen, with one `ScreenOverlay` per screen.
+/// Blacks out the menu bar of every screen, on every Space the user visits.
+///
+/// Each screen gets one `ScreenOverlay` per Space. AppKit can only put a window on the Space
+/// that is active, so a Space gets its overlay the first time it becomes active. Full-screen
+/// apps are left alone.
 @MainActor
 final class MenuBarOverlay: NSObject {
     private static let enabledKey = "nightbarEnabled"
@@ -8,6 +12,7 @@ final class MenuBarOverlay: NSObject {
 
     private let defaults: UserDefaults
     private var screenOverlays: [ScreenOverlay] = []
+    private var screenLayouts: [ScreenLayout] = []
 
     /// Whether macOS currently draws the menu bar dark, with white text.
     var isMenuBarDark = true {
@@ -20,7 +25,7 @@ final class MenuBarOverlay: NSObject {
         get { defaults.object(forKey: Self.enabledKey) as? Bool ?? true }
         set {
             defaults.set(newValue, forKey: Self.enabledKey)
-            updateWindows()
+            rebuild()
         }
     }
 
@@ -28,7 +33,7 @@ final class MenuBarOverlay: NSObject {
         get { defaults.string(forKey: Self.cornerRadiusKey).flatMap(CornerRadius.init(rawValue:)) ?? .standard }
         set {
             defaults.set(newValue.rawValue, forKey: Self.cornerRadiusKey)
-            updateWindows()
+            rebuild()
         }
     }
 
@@ -46,18 +51,74 @@ final class MenuBarOverlay: NSObject {
             self, selector: #selector(screensDidChange),
             name: NSApplication.didChangeScreenParametersNotification, object: nil
         )
-        updateWindows()
+        NSWorkspace.shared.notificationCenter.addObserver(
+            self, selector: #selector(activeSpaceDidChange),
+            name: NSWorkspace.activeSpaceDidChangeNotification, object: nil
+        )
+        screenLayouts = ScreenLayout.current
+        rebuild()
     }
 
-    /// Rebuilds the overlays, so they match the current screens and settings.
-    private func updateWindows() {
+    /// Drops the overlays of every Space and covers the active ones again, so they match the
+    /// current screens and settings. Other Spaces get theirs when the user next visits them.
+    private func rebuild() {
         screenOverlays.forEach { $0.close() }
-        screenOverlays = isEnabled
-            ? NSScreen.screens.map { ScreenOverlay(screen: $0, cornerRadius: cornerRadius, remap: remap) }
-            : []
+        screenOverlays = []
+        coverActiveSpaces()
     }
 
+    /// Gives the active Space of every screen exactly one overlay.
+    private func coverActiveSpaces() {
+        guard isEnabled else { return }
+        NSScreen.screens.forEach(coverActiveSpace)
+    }
+
+    private func coverActiveSpace(of screen: NSScreen) {
+        let overlays = screenOverlays.filter { $0.displayID == screen.displayID && $0.isOnActiveSpace }
+        guard overlays.isEmpty else {
+            removeOverlays(overlays.dropFirst())
+            return
+        }
+        guard !FullScreenDetection.showsFullScreenWindow(on: screen.displayID) else { return }
+
+        screenOverlays.append(ScreenOverlay(screen: screen, cornerRadius: cornerRadius, remap: remap))
+    }
+
+    /// When the user removes a Space, macOS moves its windows to another one, which then has
+    /// two overlays. Two contrast layers would remap the menu bar twice.
+    private func removeOverlays(_ duplicates: ArraySlice<ScreenOverlay>) {
+        duplicates.forEach { $0.close() }
+        screenOverlays.removeAll { overlay in duplicates.contains { $0 === overlay } }
+    }
+
+    @objc private func activeSpaceDidChange(_ notification: Notification) {
+        coverActiveSpaces()
+    }
+
+    /// macOS posts this for many reasons. Rebuilding drops the overlays of the other Spaces, so
+    /// it only happens when a screen or its menu bar really changed.
     @objc private func screensDidChange(_ notification: Notification) {
-        updateWindows()
+        let layouts = ScreenLayout.current
+        guard layouts != screenLayouts else { return }
+        screenLayouts = layouts
+        rebuild()
+    }
+}
+
+/// The parts of a screen that decide where its overlay windows go.
+private struct ScreenLayout: Equatable {
+    let displayID: CGDirectDisplayID?
+    let frame: CGRect
+    let menuBarFrame: CGRect
+    let reservesSpaceForMenuBar: Bool
+
+    @MainActor
+    static var current: [ScreenLayout] {
+        NSScreen.screens.map {
+            ScreenLayout(
+                displayID: $0.displayID, frame: $0.frame,
+                menuBarFrame: $0.menuBarFrame, reservesSpaceForMenuBar: $0.reservesSpaceForMenuBar
+            )
+        }
     }
 }
