@@ -69,7 +69,9 @@ export function renderDesktop(): string {
             aria-label="${description}"
         >
             ${renderWallpaper()} ${renderMenubar()} ${renderStatusMenu()}
-            ${icon('cursor', { className: 'cursor', id: ids.cursor })}
+            <div class="cursor-track" id="${ids.cursorTrack}">
+                ${icon('cursor', { className: 'cursor', id: ids.cursor })}
+            </div>
         </div>
     `
 }

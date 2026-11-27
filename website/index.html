@@ -65,7 +65,7 @@
         <link rel="icon" type="image/svg+xml" href="/icon.svg" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/site.webmanifest" />
-        <!-- The page stays hidden until these load, so fetch them before the stylesheet asks. -->
+        <!-- Fetch the fonts before the stylesheet asks, so they are ready for the first paint. -->
         <link
             rel="preload"
             href="/node_modules/@fontsource-variable/geist/files/geist-latin-wght-normal.woff2"
@@ -88,12 +88,6 @@
             crossorigin
         />
         <link rel="stylesheet" href="/src/styles/index.css" />
-        <script>
-            // Hide the page until its fonts are ready, so no text swaps font after it shows.
-            // src/fonts.ts reveals it; the timeout makes sure a failed load never keeps it hidden.
-            document.documentElement.classList.add('is-loading')
-            setTimeout(() => document.documentElement.classList.remove('is-loading'), 3000)
-        </script>
         <script type="module" src="/src/main.ts"></script>
     </head>
     <body>

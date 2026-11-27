@@ -183,11 +183,18 @@
     top: 100%;
 }
 
-/* L2: Nightbar's strip. Only its top band is painted; the rest is drawn as a dashed outline. */
-.layer-strip .plane,
-.layer-menubar .plane {
-    outline: 1px dashed rgb(243 243 239 / 0.32);
-    outline-offset: -1px;
+/*
+ * L2: Nightbar's strip. Only its top band is painted; the rest is drawn as a dashed outline.
+ * The outline is a separate layer, so it can fade by opacity alone.
+ */
+.layer-strip .plane::after,
+.layer-menubar .plane::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1px dashed var(--outline-color, rgb(243 243 239 / 0.32));
+    border-radius: inherit;
+    pointer-events: none;
 }
 
 /* Hatched, so the black strip reads as a material even against the black page. */
@@ -200,7 +207,7 @@
 }
 
 .layer-strip .plane {
-    outline-color: rgb(var(--accent-rgb) / 0.45);
+    --outline-color: rgb(var(--accent-rgb) / 0.45);
     background: rgb(var(--accent-rgb) / 0.05);
 }
 
@@ -208,8 +215,13 @@
     background: rgb(243 243 239 / 0.03);
 }
 
-/* L3: the menu bar, before (glass, dark icons) and after (black, white icons). */
+/*
+ * L3: the menu bar, before (glass, dark icons) and after (black, white icons). The black is a
+ * layer over the glass, so the bar changes by opacity and a filter, never by repainting colours.
+ */
 .mini-bar {
+    position: relative;
+    isolation: isolate;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -218,6 +230,14 @@
     font-size: calc(var(--plane-w) * 0.026);
     white-space: nowrap;
     color: #fff;
+    background: rgb(255 255 255 / 0.4);
+}
+
+.mini-bar::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
     background: #000;
 }
 
@@ -300,8 +320,14 @@
             animation-name: how-strip;
         }
 
-        .mini-bar {
-            animation: how-react linear both;
+        .mini-bar::before {
+            animation: how-react-bar linear both;
+            animation-timeline: --section;
+            animation-range: contain 0% contain 100%;
+        }
+
+        :is(.mini-left, .mini-right) {
+            animation: how-react-icons linear both;
             animation-timeline: --section;
             animation-range: contain 0% contain 100%;
         }
@@ -312,15 +338,17 @@
             animation-range: contain 0% contain 100%;
         }
 
-        .layer-strip .plane,
-        .layer-menubar .plane {
+        .layer-strip .plane::after,
+        .layer-menubar .plane::after {
             animation: how-outline linear both;
             animation-timeline: --section;
             animation-range: contain 0% contain 100%;
         }
 
         .layer-strip .plane {
-            animation-name: how-outline, how-strip-fade;
+            animation: how-strip-fade linear both;
+            animation-timeline: --section;
+            animation-range: contain 0% contain 100%;
         }
 
         .stage-result {
@@ -338,8 +366,12 @@
 
         /* A step lights up when the story reaches it: grey until then, never faded out. */
         .how-steps :is(.label, h3) {
-            animation: how-step-on linear both;
+            animation: how-title-on linear both;
             animation-timeline: --section;
+        }
+
+        .how-steps .label {
+            animation-name: how-label-on;
         }
 
         .how-steps li:nth-child(1) :is(.label, h3) {
@@ -420,16 +452,26 @@
 }
 
 /* macOS reacts: glass with dark icons, then black with white icons. */
-@keyframes how-react {
+@keyframes how-react-bar {
     0%,
     36% {
-        color: #1b1b1f;
-        background: rgb(255 255 255 / 0.4);
+        opacity: 0;
     }
     46%,
     100% {
-        color: #fff;
-        background: #000;
+        opacity: 1;
+    }
+}
+
+@keyframes how-react-icons {
+    0%,
+    36% {
+        /* Turns the white icons and text into the near-black #1b1b1b. */
+        filter: invert(0.894);
+    }
+    46%,
+    100% {
+        filter: none;
     }
 }
 
@@ -448,11 +490,11 @@
 @keyframes how-outline {
     0%,
     76% {
-        outline-color: rgb(243 243 239 / 0.32);
+        opacity: 1;
     }
     88%,
     100% {
-        outline-color: transparent;
+        opacity: 0;
     }
 }
 
@@ -480,11 +522,20 @@
 
 /*
  * Steps waiting their turn are grey rather than see-through, so their text keeps enough
- * contrast to read. The end state is each element's own colour.
+ * contrast to read. The end state is each element's own colour. Filters, not colour, turn
+ * them grey, so the browser can play the animation on the GPU without repainting.
  */
-@keyframes how-step-on {
+@keyframes how-title-on {
     from {
-        color: var(--fog);
+        /* Dims the chalk title to about the grey of --fog. */
+        filter: brightness(0.58);
+    }
+}
+
+@keyframes how-label-on {
+    from {
+        /* The accent blue without its colour is about the grey of --fog. */
+        filter: grayscale(1);
     }
 }
 

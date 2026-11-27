@@ -9,7 +9,7 @@ interface Position {
     y: number
 }
 
-/** Matches the cursor's left/top transition in desktop.css. */
+/** Matches the cursor track's translate transition in desktop.css. */
 const CURSOR_MOVE_MS = 900
 const CLICK_MS = 120
 const REST_POSITION: Position = { x: 62, y: 58 }
@@ -70,6 +70,7 @@ function controlPlayback(clock: PausableClock, desktop: HTMLElement): void {
 export function startDemo(): void {
     const desktop = requireElement(ids.desktop)
     const cursor = requireElement<SVGSVGElement>(ids.cursor)
+    const cursorTrack = requireElement(ids.cursorTrack)
     const statusItem = requireElement(ids.statusItem)
     const statusMenu = requireElement(ids.statusMenu)
     const nightbarItem = requireElement(ids.nightbarMenuItem)
@@ -85,8 +86,7 @@ export function startDemo(): void {
     }
 
     function placeCursor({ x, y }: Position): void {
-        cursor.style.left = `${x}%`
-        cursor.style.top = `${y}%`
+        cursorTrack.style.translate = `${x}% ${y}%`
     }
 
     async function moveCursorTo(position: Position): Promise<void> {
@@ -144,8 +144,7 @@ export function startDemo(): void {
     }
 
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        // SVG elements have no `hidden` property, so hide the cursor with CSS.
-        cursor.style.display = 'none'
+        cursorTrack.hidden = true
         setNightbar(true)
         return
     }

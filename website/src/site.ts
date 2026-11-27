@@ -15,16 +15,11 @@ export const installCommand = 'curl -fsSL https://nightbar.app/install.sh | bash
  */
 export const copyCommand = '--copy'
 
-/**
- * The class on <html> that keeps the page hidden while its fonts load.
- * The inline script in index.html adds it; fonts.ts removes it.
- */
-export const loadingClass = 'is-loading'
-
 /** Ids the page renders and the scripts in main.ts look up. */
 export const ids = {
     desktop: 'desktop',
     cursor: 'cursor',
+    cursorTrack: 'cursor-track',
     statusItem: 'status-item',
     statusMenu: 'status-menu',
     nightbarMenuItem: 'menu-nightbar',
