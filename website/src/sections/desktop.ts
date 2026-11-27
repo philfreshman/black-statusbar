@@ -1,6 +1,6 @@
 import { icon } from '../icons.ts'
 import { ids } from '../site.ts'
-import { renderMenuEntries } from './app-menu.ts'
+import { renderStatusMenuEntries } from './app-menu.ts'
 import { renderWallpaperScene } from './wallpaper.ts'
 
 const appMenus = ['File', 'Edit', 'View']
@@ -43,13 +43,7 @@ function renderMenubar(): string {
 }
 
 function renderStatusMenu(): string {
-    const entries = renderMenuEntries([
-        { label: 'Nightbar', checked: false, id: ids.nightbarMenuItem },
-        'separator',
-        { label: 'Launch at Login', checked: true },
-        'separator',
-        { label: 'Quit', shortcut: '⌘Q' },
-    ])
+    const entries = renderStatusMenuEntries(false, ids.nightbarMenuItem)
 
     return /* HTML */ `
         <ul class="status-menu" id="${ids.statusMenu}" aria-hidden="true">

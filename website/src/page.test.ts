@@ -79,7 +79,9 @@ describe('renderPage', () => {
         expect(desktop?.dataset.nightbar).toBe('off')
         expect(menuItems.map((item) => item.classList.contains('checked'))).toEqual([
             false,
+            false,
             true,
+            false,
             false,
         ])
     })

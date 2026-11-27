@@ -1,5 +1,5 @@
 import { icon, type IconName } from '../icons.ts'
-import { renderMenuEntries } from './app-menu.ts'
+import { renderStatusMenuEntries } from './app-menu.ts'
 
 interface Fact {
     icon: IconName
@@ -13,13 +13,7 @@ const facts: Fact[] = [
 ]
 
 function renderMenuMock(): string {
-    const entries = renderMenuEntries([
-        { label: 'Nightbar', checked: true },
-        'separator',
-        { label: 'Launch at Login', checked: true },
-        'separator',
-        { label: 'Quit', shortcut: '⌘Q' },
-    ])
+    const entries = renderStatusMenuEntries(true)
 
     return /* HTML */ `
         <div class="menu-mock" aria-hidden="true">

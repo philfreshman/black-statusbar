@@ -203,7 +203,8 @@
     padding: 0;
     background: rgb(255 255 255 / 0.12);
 }
-.status-menu kbd {
+.status-menu kbd,
+.status-menu .chevron {
     margin-left: auto;
     font: inherit;
     color: #8d8b97;
