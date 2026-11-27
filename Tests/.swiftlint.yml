@@ -1,0 +1,4 @@
+# Tests build fixed sample values, such as URLs and versions from string literals, that cannot fail.
+# Force unwrapping keeps them short, and a wrong sample fails the test run straight away.
+disabled_rules:
+  - force_unwrapping

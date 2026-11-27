@@ -1,0 +1,97 @@
+name: Swift
+
+# Builds, tests and checks the app on every pull request, whatever its base
+# branch (so stacked pull requests and release pull requests into main are
+# checked too), and on every push to development. A pull request can't bring
+# back warnings, formatting or lint problems, dead code or copied code.
+# See CONTRIBUTING.md.
+on:
+  pull_request:
+    # The landing page has its own checks (website.yml) and no Swift code.
+    paths-ignore:
+      - "website/**"
+  push:
+    branches: [development]
+    paths-ignore:
+      - "website/**"
+
+permissions:
+  contents: read
+
+# Pull request runs are grouped by pull request number, not github.ref: a run
+# for an already merged pull request gets the base branch as its ref, so it
+# would share a group with the push run on development and cancel it. A new
+# commit on a pull request cancels its older run; every push to development
+# runs to the end.
+concurrency:
+  group: swift-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+# .build is not cached: a clean build takes about a minute.
+jobs:
+  build:
+    name: Build, test and find dead code
+    runs-on: macos-26
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: ./.github/actions/select-xcode
+
+      - name: Build with warnings as errors
+        run: swift build -Xswiftc -warnings-as-errors
+
+      - name: Build the tests with warnings as errors
+        run: swift build --build-tests -Xswiftc -warnings-as-errors
+
+      - name: Test
+        run: swift test
+
+      # Homebrew has no versioned formula for SwiftLint, so this installs the
+      # latest release, or keeps the runner's copy if it is already up to date.
+      - name: Install SwiftLint
+        run: |
+          brew install swiftlint
+          swiftlint version
+
+      # SwiftLint's analyzer rules need a full verbose build, which the script
+      # makes in a temporary folder.
+      - name: Find dead code (SwiftLint analyze)
+        run: ./scripts/find-dead-code.sh
+
+  lint:
+    name: Format and lint
+    runs-on: macos-26
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: ./.github/actions/select-xcode
+
+      - name: Check formatting (swift format)
+        run: swift format lint --strict --recursive Sources Tests Package.swift
+
+      # Homebrew has no versioned formula for SwiftLint, so this installs the
+      # latest release, or keeps the runner's copy if it is already up to date.
+      - name: Install SwiftLint
+        if: ${{ !cancelled() }}
+        run: |
+          brew install swiftlint
+          swiftlint version
+
+      # Runs even when the formatting check fails, so one run reports both.
+      - name: Lint (SwiftLint)
+        if: ${{ !cancelled() }}
+        run: swiftlint lint --strict
+
+  duplication:
+    name: Find duplicated code
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Find duplicated code (jscpd)
+        run: bunx jscpd@5.4.3

@@ -17,10 +17,13 @@ final class MenuBarOverlay: NSObject {
     /// Whether macOS currently draws the menu bar dark, with white text.
     var isMenuBarDark = true {
         didSet {
-            screenOverlays.forEach { $0.setRemap(remap) }
+            for overlay in screenOverlays {
+                overlay.setRemap(remap)
+            }
         }
     }
 
+    /// Whether Nightbar blacks out the menu bar. Saved in user defaults; changing it rebuilds the overlays.
     var isEnabled: Bool {
         get { defaults.object(forKey: Self.enabledKey) as? Bool ?? true }
         set {
@@ -29,6 +32,7 @@ final class MenuBarOverlay: NSObject {
         }
     }
 
+    /// How round the screen corners are. Saved in user defaults; changing it rebuilds the overlays.
     var cornerRadius: CornerRadius {
         get { defaults.string(forKey: Self.cornerRadiusKey).flatMap(CornerRadius.init(rawValue:)) ?? .standard }
         set {
@@ -46,6 +50,7 @@ final class MenuBarOverlay: NSObject {
         super.init()
     }
 
+    /// Covers the screens' active Spaces and starts following changes to screens and Spaces.
     func start() {
         NotificationCenter.default.addObserver(
             self, selector: #selector(screensDidChange),
@@ -59,10 +64,14 @@ final class MenuBarOverlay: NSObject {
         rebuild()
     }
 
+    // MARK: - Overlays
+
     /// Drops the overlays of every Space and covers the active ones again, so they match the
     /// current screens and settings. Other Spaces get theirs when the user next visits them.
     private func rebuild() {
-        screenOverlays.forEach { $0.close() }
+        for overlay in screenOverlays {
+            overlay.close()
+        }
         screenOverlays = []
         coverActiveSpaces()
     }
@@ -87,17 +96,21 @@ final class MenuBarOverlay: NSObject {
     /// When the user removes a Space, macOS moves its windows to another one, which then has
     /// two overlays. Two contrast layers would remap the menu bar twice.
     private func removeOverlays(_ duplicates: ArraySlice<ScreenOverlay>) {
-        duplicates.forEach { $0.close() }
+        for duplicate in duplicates {
+            duplicate.close()
+        }
         screenOverlays.removeAll { overlay in duplicates.contains { $0 === overlay } }
     }
 
-    @objc private func activeSpaceDidChange(_ notification: Notification) {
+    // MARK: - Notifications
+
+    @objc private func activeSpaceDidChange(_: Notification) {
         coverActiveSpaces()
     }
 
     /// macOS posts this for many reasons. Rebuilding drops the overlays of the other Spaces, so
     /// it only happens when a screen or its menu bar really changed.
-    @objc private func screensDidChange(_ notification: Notification) {
+    @objc private func screensDidChange(_: Notification) {
         let layouts = ScreenLayout.current
         guard layouts != screenLayouts else { return }
         screenLayouts = layouts
@@ -113,9 +126,9 @@ private struct ScreenLayout: Equatable {
     let reservesSpaceForMenuBar: Bool
 
     @MainActor
-    static var current: [ScreenLayout] {
+    static var current: [Self] {
         NSScreen.screens.map {
-            ScreenLayout(
+            Self(
                 displayID: $0.displayID, frame: $0.frame,
                 menuBarFrame: $0.menuBarFrame, reservesSpaceForMenuBar: $0.reservesSpaceForMenuBar
             )

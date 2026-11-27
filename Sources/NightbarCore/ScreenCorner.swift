@@ -4,7 +4,7 @@ import CoreGraphics
 enum CornerRadius: String, CaseIterable {
     case off, low, mid, high
 
-    static let standard = CornerRadius.off
+    static let standard = Self.off
 
     /// The radius of the corner's curve in points.
     var points: CGFloat {
@@ -16,6 +16,7 @@ enum CornerRadius: String, CaseIterable {
         }
     }
 
+    /// The name shown in the Rounded Corners menu.
     var title: String {
         switch self {
         case .off: "Off"

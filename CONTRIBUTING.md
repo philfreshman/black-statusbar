@@ -60,9 +60,16 @@ Nightbar uses AppKit, so it builds and tests only on a Mac.
 
 ## Build
 
+Nightbar compiles in Swift 6 language mode, so the compiler checks data-race safety: code that could touch the same state from two threads at once does not build. Keep the build free of warnings too. Build with warnings treated as errors, for the app and for the tests:
+
 ```bash
-swift build
+swift build -Xswiftc -warnings-as-errors
+swift build --build-tests -Xswiftc -warnings-as-errors
 ```
+
+The flag is passed on the command line rather than set in `Package.swift`, which stays free of unsafe flags.
+
+Mark AppKit and other UI code `@MainActor`, and make values that cross actors `Sendable`. Use `MainActor.assumeIsolated` only where AppKit guarantees the main thread. Avoid `nonisolated(unsafe)` and `@unchecked Sendable`; if one is truly needed, add a comment that says why it is safe.
 
 To build the full app bundle with its icon:
 
@@ -77,7 +84,58 @@ open "build/Nightbar.app"
 swift test
 ```
 
-Please make sure `swift build` and `swift test` both pass before you open a pull request.
+## Format
+
+The Swift code is formatted with `swift format`, which ships with the Swift toolchain. Its settings are in `.swift-format` at the repo root.
+
+```bash
+swift format format --in-place --recursive Sources Tests Package.swift   # format the code
+swift format lint --strict --recursive Sources Tests Package.swift       # check formatting and style
+```
+
+## Lint
+
+The Swift code is linted with [SwiftLint](https://github.com/realm/SwiftLint), which looks for risky patterns such as force unwrapping and keeps functions, types and files small. Install it with `brew install swiftlint`. Its settings are in `.swiftlint.yml` at the repo root; `Tests/.swiftlint.yml` relaxes a rule for the tests. SwiftLint leaves layout to `swift format`, so the two never disagree.
+
+```bash
+swiftlint lint --strict
+```
+
+## Code style
+
+Follow the [Swift API Design Guidelines](https://www.swift.org/documentation/api-design-guidelines/) and these conventions. SwiftLint checks the ones it can.
+
+- Use `let` unless the value changes.
+- Prefer a `struct` or `enum`. Use a `class` only when the type needs identity, AppKit subclassing, `@objc` or shared mutable state, and mark it `final`. Use a case-less `enum` for a namespace of static members.
+- Give everything the narrowest access that works: `private` for helpers and stored properties, `internal` when another file or a test needs it, `public` only for what `Sources/Nightbar/main.swift` uses.
+- No force unwrapping, `try!` or `as!` in app code. The one exception, which SwiftLint also allows, is `URL(string:)!` on a fixed URL literal.
+- Model a state or an error as an `enum` with associated values rather than several flags and optionals.
+- Inject a dependency through a protocol or a closure when a test needs to replace it, as the update checker and installer do. Don't add one otherwise.
+- Write Bool properties as assertions (`isEnabled`, `hasBeenShown`), and write `Self` inside a type rather than its name.
+- Give each type in `Sources` a short `///` doc comment, and each member whose name does not tell the whole story.
+- Put each protocol conformance in its own `extension Type: Protocol`, except ones the compiler synthesizes (`Equatable`, `Sendable`, `CaseIterable`) and SwiftUI's `View`. Split long types into `// MARK: -` sections.
+
+## Dead code
+
+SwiftLint's analyzer rules find unused code: `unused_declaration` reports declarations nothing uses, public ones included, and `unused_import` reports imports a file does not need. They are set in `.swiftlint.yml`. `unused_parameter`, a plain lint rule, reports parameters a function never reads. The analyzer needs each file's compiler arguments, so the script builds the app and the tests from scratch in a temporary folder and runs `swiftlint analyze` on the build log. The tests count as users of the code.
+
+```bash
+./scripts/find-dead-code.sh
+```
+
+Remove the dead code it finds. When a protocol or an override fixes a parameter you don't read, name it `_`. For code that is in fact used, use `// swiftlint:disable:next unused_declaration` with a short reason.
+
+## Duplication
+
+[jscpd](https://github.com/kucherenko/jscpd) finds copied blocks of code in `Sources` and `Tests`. It runs with [Bun](https://bun.sh), so there is nothing to install besides Bun. Its settings are in `.jscpd.json` at the repo root, and it fails on any copied block of 50 tokens and 5 lines or more.
+
+```bash
+bunx jscpd@5.4.3
+```
+
+Please make sure the build with warnings as errors, `swift test`, both lint checks and the dead code and duplication checks pass before you open a pull request.
+
+GitHub Actions runs all of these checks on every pull request and on every push to `development` (`.github/workflows/swift.yml`) and shows a failing check on the pull request. It uses the newest stable Xcode on the runner, which may be older than yours, so `swift format` can now and then disagree with your local result. Pull requests that change only `website/` skip it.
 
 ## Website
 

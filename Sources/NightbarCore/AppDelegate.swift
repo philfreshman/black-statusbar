@@ -1,21 +1,24 @@
 import AppKit
 
+/// Starts the menu bar overlay and Nightbar's own menu bar icon once the app has launched.
 @MainActor
-public final class AppDelegate: NSObject, NSApplicationDelegate {
+public final class AppDelegate: NSObject {
     private let overlay = MenuBarOverlay()
     private var statusMenu: StatusMenuController?
 
     override public init() {
         super.init()
     }
+}
 
-    public func applicationDidFinishLaunching(_ notification: Notification) {
+extension AppDelegate: NSApplicationDelegate {
+    public func applicationDidFinishLaunching(_: Notification) {
         statusMenu = StatusMenuController(overlay: overlay)
         overlay.start()
     }
 
     /// Opening Nightbar while it already runs shows its icon again, in case it was hidden.
-    public func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+    public func applicationShouldHandleReopen(_: NSApplication, hasVisibleWindows _: Bool) -> Bool {
         statusMenu?.showIcon()
         return false
     }

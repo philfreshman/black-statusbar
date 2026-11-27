@@ -1,7 +1,7 @@
 import Foundation
 
 /// Checks for updates by asking the GitHub API for Nightbar's latest release.
-struct GitHubUpdateChecker: UpdateChecking {
+struct GitHubUpdateChecker {
     typealias Fetch = @Sendable (URLRequest) async throws -> (Data, URLResponse)
 
     /// The release asset that holds the zipped app.
@@ -12,12 +12,6 @@ struct GitHubUpdateChecker: UpdateChecking {
     /// `fetch` sends the request; tests pass a fake one instead of the network.
     init(fetch: @escaping Fetch = { try await URLSession.shared.data(for: $0) }) {
         self.fetch = fetch
-    }
-
-    func checkForUpdate(current: AppVersion?) async throws -> UpdateCheckResult {
-        let latest = try await latestRelease()
-        guard let current, current >= latest.version else { return .updateAvailable(latest) }
-        return .upToDate(latest: latest)
     }
 
     /// The request for the latest release, with the headers GitHub asks API clients to send.
@@ -52,6 +46,14 @@ struct GitHubUpdateChecker: UpdateChecking {
             throw UpdateError.missingDownload
         }
         return Release(version: version, pageURL: payload.htmlURL, downloadURL: asset.downloadURL)
+    }
+}
+
+extension GitHubUpdateChecker: UpdateChecking {
+    func checkForUpdate(current: AppVersion?) async throws -> UpdateCheckResult {
+        let latest = try await latestRelease()
+        guard let current, current >= latest.version else { return .updateAvailable(latest) }
+        return .upToDate(latest: latest)
     }
 }
 

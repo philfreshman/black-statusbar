@@ -5,7 +5,7 @@ import AppKit
 /// The icon can be hidden from its menu. Opening Nightbar again while it runs shows it again.
 /// The icon also tells the overlay whether macOS draws the menu bar light or dark.
 @MainActor
-final class StatusMenuController: NSObject, NSMenuDelegate {
+final class StatusMenuController: NSObject {
     private static let iconHiddenKey = "iconHidden"
     private static let hideIconAlertSuppressedKey = "hideIconAlertSuppressed"
 
@@ -42,20 +42,13 @@ final class StatusMenuController: NSObject, NSMenuDelegate {
         isIconHidden = false
     }
 
-    func menuWillOpen(_ menu: NSMenu) {
-        toggleItem.state = overlay.isEnabled ? .on : .off
-        launchAtLoginItem.state = LaunchAtLogin.isEnabled ? .on : .off
-        for item in cornerRadiusItem.submenu?.items ?? [] {
-            item.state = item.representedObject as? CornerRadius == overlay.cornerRadius ? .on : .off
-        }
-    }
-
     private func watchMenuBarAppearance() {
-        let watcher = MenuBarAppearanceWatcher()
-        watcher.onChange = { [weak overlay] isDark in overlay?.isMenuBarDark = isDark }
+        let watcher = MenuBarAppearanceWatcher { [weak overlay] isDark in overlay?.isMenuBarDark = isDark }
         statusItem.button?.addSubview(watcher)
         overlay.isMenuBarDark = watcher.isDark
     }
+
+    // MARK: - Building the menu
 
     private func makeMenu() -> NSMenu {
         let menu = NSMenu()
@@ -90,6 +83,8 @@ final class StatusMenuController: NSObject, NSMenuDelegate {
         return item
     }
 
+    // MARK: - Menu actions
+
     @objc private func toggleBlackBar() {
         overlay.isEnabled.toggle()
     }
@@ -110,7 +105,8 @@ final class StatusMenuController: NSObject, NSMenuDelegate {
 
         let alert = NSAlert()
         alert.messageText = "Hide the Nightbar icon?"
-        alert.informativeText = "Nightbar keeps running. To show the icon again, open Nightbar from your Applications folder."
+        alert.informativeText =
+            "Nightbar keeps running. To show the icon again, open Nightbar from your Applications folder."
         alert.addButton(withTitle: "Hide Icon")
         alert.addButton(withTitle: "Cancel")
         alert.showsSuppressionButton = true
@@ -133,6 +129,16 @@ final class StatusMenuController: NSObject, NSMenuDelegate {
         } catch {
             NSApp.activate()
             NSAlert(error: error).runModal()
+        }
+    }
+}
+
+extension StatusMenuController: NSMenuDelegate {
+    func menuWillOpen(_: NSMenu) {
+        toggleItem.state = overlay.isEnabled ? .on : .off
+        launchAtLoginItem.state = LaunchAtLogin.isEnabled ? .on : .off
+        for item in cornerRadiusItem.submenu?.items ?? [] {
+            item.state = item.representedObject as? CornerRadius == overlay.cornerRadius ? .on : .off
         }
     }
 }

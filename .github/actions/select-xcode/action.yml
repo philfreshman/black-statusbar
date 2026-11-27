@@ -1,0 +1,19 @@
+name: Select the newest Xcode
+description: Switches to the newest stable Xcode on the runner and prints the Swift and swift-format versions.
+
+# The runner's default Xcode is often older than the one contributors use, and
+# swift-format ships with the toolchain, so an older Xcode can format or lint
+# differently. The newest stable Xcode keeps CI as close to local results as
+# the runner allows. Betas and release candidates are skipped.
+runs:
+  using: composite
+  steps:
+    - name: Select the newest stable Xcode
+      shell: bash
+      run: |
+        xcode=$(ls -d /Applications/Xcode_*.app | grep -Eiv 'beta|release_candidate' | sort -V | tail -n 1)
+        echo "Selecting $xcode"
+        sudo xcode-select --switch "$xcode"
+        xcodebuild -version
+        swift --version
+        swift format --version

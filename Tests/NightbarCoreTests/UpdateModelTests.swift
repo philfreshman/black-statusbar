@@ -1,5 +1,6 @@
 import Foundation
 import Testing
+
 @testable import NightbarCore
 
 @MainActor
@@ -142,6 +143,7 @@ struct UpdateModelTests {
     }
 }
 
+/// A failure with a fixed message, so a test can look for it in the model's state.
 private struct FakeError: LocalizedError {
     static let message = "The network is offline."
     var errorDescription: String? { Self.message }
@@ -151,7 +153,7 @@ private struct FakeError: LocalizedError {
 private struct FakeChecker: UpdateChecking {
     let result: Result<UpdateCheckResult, Error>
 
-    func checkForUpdate(current: AppVersion?) async throws -> UpdateCheckResult {
+    func checkForUpdate(current _: AppVersion?) async throws -> UpdateCheckResult {
         try result.get()
     }
 }
@@ -164,11 +166,17 @@ private final class RelaunchCounter {
 
 /// Installs nothing. Fails with `error` when given one, and waits for `gate` to finish when given one.
 private struct FakeInstaller: UpdateInstalling {
-    var error: Error?
-    var gate: AsyncStream<Void>?
-    var relaunches: RelaunchCounter?
+    let error: Error?
+    let gate: AsyncStream<Void>?
+    let relaunches: RelaunchCounter?
 
-    func install(_ release: Release) async throws {
+    init(error: Error? = nil, gate: AsyncStream<Void>? = nil, relaunches: RelaunchCounter? = nil) {
+        self.error = error
+        self.gate = gate
+        self.relaunches = relaunches
+    }
+
+    func install(_: Release) async throws {
         if let gate {
             for await _ in gate {}
         }

@@ -9,13 +9,13 @@ import AppKit
 /// The mark fills the image but for a point on each side, so it is about as tall as the icons
 /// next to it. All sizes are in points.
 enum MenuBarIcon {
-    static let size = NSSize(width: 16, height: 16)
+    private static let size = NSSize(width: 16, height: 16)
 
     /// The square the mark fills.
-    static let markFrame = CGRect(x: 1, y: 1, width: 14, height: 14)
+    private static let markFrame = CGRect(x: 1, y: 1, width: 14, height: 14)
 
     /// The side of the square grid the outline is drawn on.
-    static let gridSize: CGFloat = 24
+    private static let gridSize: CGFloat = 24
 
     /// The mark's outline on the grid, from the top left. It is `markPath` in
     /// website/src/icons.ts, moved to the grid's origin (there it sits 4 units into a 32 unit box).
@@ -29,6 +29,7 @@ enum MenuBarIcon {
         CGPoint(x: 5, y: 24), CGPoint(x: 0, y: 24),
     ]
 
+    /// A new template image of the mark, for the status item's button.
     static func make() -> NSImage {
         let image = NSImage(size: size, flipped: true) { _ in
             guard let context = NSGraphicsContext.current?.cgContext else { return false }

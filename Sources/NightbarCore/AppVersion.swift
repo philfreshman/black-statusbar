@@ -1,7 +1,7 @@
 import Foundation
 
 /// A version number such as `0.2.0`, as used in Nightbar's release tags (`v0.2.0`) and its Info.plist.
-struct AppVersion: Comparable, Sendable, CustomStringConvertible {
+struct AppVersion: Sendable {
     let components: [Int]
 
     /// Reads `1.2.3` or `v1.2.3`. Returns nil when the text is not a dotted list of numbers.
@@ -14,14 +14,16 @@ struct AppVersion: Comparable, Sendable, CustomStringConvertible {
     }
 
     /// The version of the running app, or nil when it runs outside an app bundle (for example via `swift run`).
-    static var current: AppVersion? {
-        (Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String).flatMap(AppVersion.init)
+    static var current: Self? {
+        (Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String).flatMap(Self.init)
     }
 
-    var description: String {
-        components.map(String.init).joined(separator: ".")
+    private func padded(to other: Self) -> [Int] {
+        components + Array(repeating: 0, count: max(0, other.components.count - components.count))
     }
+}
 
+extension AppVersion: Comparable {
     /// Missing trailing parts count as zero, so `1.2` equals `1.2.0`.
     static func == (lhs: AppVersion, rhs: AppVersion) -> Bool {
         lhs.padded(to: rhs) == rhs.padded(to: lhs)
@@ -30,8 +32,10 @@ struct AppVersion: Comparable, Sendable, CustomStringConvertible {
     static func < (lhs: AppVersion, rhs: AppVersion) -> Bool {
         lhs.padded(to: rhs).lexicographicallyPrecedes(rhs.padded(to: lhs))
     }
+}
 
-    private func padded(to other: AppVersion) -> [Int] {
-        components + Array(repeating: 0, count: max(0, other.components.count - components.count))
+extension AppVersion: CustomStringConvertible {
+    var description: String {
+        components.map(String.init).joined(separator: ".")
     }
 }

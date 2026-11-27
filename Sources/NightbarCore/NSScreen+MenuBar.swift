@@ -1,5 +1,6 @@
 import AppKit
 
+/// Where the menu bar sits on a screen, worked out from the screen's frames so it can be tested without one.
 enum MenuBarGeometry {
     /// Used when the menu bar is set to hide automatically and takes no space on screen.
     static let standardHeight: CGFloat = 24
@@ -28,6 +29,7 @@ enum MenuBarGeometry {
 }
 
 extension NSScreen {
+    /// The band along the top of the screen where the menu bar sits, notch included.
     var menuBarFrame: CGRect {
         let height = MenuBarGeometry.height(
             screenFrame: frame, visibleFrame: visibleFrame, safeAreaTop: safeAreaInsets.top
@@ -35,10 +37,12 @@ extension NSScreen {
         return MenuBarGeometry.frame(screenFrame: frame, menuBarHeight: height)
     }
 
+    /// The Core Graphics ID of the display this screen shows, or nil when macOS does not report one.
     var displayID: CGDirectDisplayID? {
         deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? CGDirectDisplayID
     }
 
+    /// Whether the menu bar takes space at the top of the screen. It takes none when it hides automatically.
     var reservesSpaceForMenuBar: Bool {
         MenuBarGeometry.reservesSpace(screenFrame: frame, visibleFrame: visibleFrame)
     }
