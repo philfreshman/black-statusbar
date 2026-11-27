@@ -130,10 +130,12 @@ final class MenuBarOverlay: NSObject {
         }
     }
 
-    /// A borderless window that clicks pass through and that shows on every Space.
+    /// A borderless window that clicks pass through and that shows on every Space. It appears and
+    /// disappears at once, without the fade macOS may give new windows.
     private func makeOverlayWindow(frame: CGRect, level: NSWindow.Level) -> NSWindow {
         let window = NSWindow(contentRect: frame, styleMask: .borderless, backing: .buffered, defer: false)
         window.isReleasedWhenClosed = false
+        window.animationBehavior = .none
         window.level = level
         window.hasShadow = false
         window.ignoresMouseEvents = true
