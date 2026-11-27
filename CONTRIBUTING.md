@@ -77,7 +77,16 @@ open "build/Nightbar.app"
 swift test
 ```
 
-Please make sure `swift build` and `swift test` both pass before you open a pull request.
+## Format
+
+The Swift code is formatted with `swift format`, which ships with the Swift toolchain. Its settings are in `.swift-format` at the repo root.
+
+```bash
+swift format format --in-place --recursive Sources Tests Package.swift   # format the code
+swift format lint --strict --recursive Sources Tests Package.swift       # check formatting and style
+```
+
+Please make sure `swift build`, `swift test` and the lint check all pass before you open a pull request.
 
 ## Website
 
