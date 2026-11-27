@@ -51,8 +51,7 @@ final class StatusMenuController: NSObject, NSMenuDelegate {
     }
 
     private func watchMenuBarAppearance() {
-        let watcher = MenuBarAppearanceWatcher()
-        watcher.onChange = { [weak overlay] isDark in overlay?.isMenuBarDark = isDark }
+        let watcher = MenuBarAppearanceWatcher { [weak overlay] isDark in overlay?.isMenuBarDark = isDark }
         statusItem.button?.addSubview(watcher)
         overlay.isMenuBarDark = watcher.isDark
     }
