@@ -3,9 +3,9 @@ import AppKit
 /// Puts a black strip behind the menu bar of every screen, and black rounded corners below it.
 ///
 /// macOS picks the menu bar icon colour from what is behind the menu bar. With a black strip
-/// there, the menu bar looks black and macOS draws white icons. The strip sits just above the
-/// wallpaper, below desktop icons and windows, so it works with every wallpaper, including
-/// live ones, and leaves the wallpaper itself untouched.
+/// there, the menu bar looks black and macOS draws white icons. The strip sits above the
+/// wallpaper and below all app windows, so it works with every wallpaper, including live
+/// ones, and leaves the wallpaper itself untouched.
 ///
 /// The corners sit above windows, so the screen area below the menu bar looks like a rounded
 /// rectangle even when a window fills it. They stay below menus, so menus are never cut off.
@@ -13,7 +13,15 @@ import AppKit
 final class MenuBarOverlay: NSObject {
     private static let enabledKey = "nightbarEnabled"
     private static let cornerRadiusKey = "cornerRadius"
-    private static let stripLevel = NSWindow.Level(Int(CGWindowLevelForKey(.desktopWindow)) + 1)
+
+    /// The window level of the strips.
+    ///
+    /// macOS keeps a window called "underbelly" one level above the desktop icons. It looks at
+    /// what is below it, and on a light wallpaper it lays a light gradient over the menu bar,
+    /// which turns a black strip grey. So the strip must sit above the underbelly. It must also
+    /// stay below level 0, because macOS ignores app windows when it picks the menu bar colour.
+    /// The backstop menu level sits between the two.
+    static let stripLevel = NSWindow.Level(Int(CGWindowLevelForKey(.backstopMenu)))
     private static let cornerLevel = NSWindow.Level.statusBar
 
     private let defaults: UserDefaults
