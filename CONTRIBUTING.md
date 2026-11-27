@@ -60,9 +60,16 @@ Nightbar uses AppKit, so it builds and tests only on a Mac.
 
 ## Build
 
+Nightbar compiles in Swift 6 language mode, so the compiler checks data-race safety: code that could touch the same state from two threads at once does not build. Keep the build free of warnings too. Build with warnings treated as errors, for the app and for the tests:
+
 ```bash
-swift build
+swift build -Xswiftc -warnings-as-errors
+swift build --build-tests -Xswiftc -warnings-as-errors
 ```
+
+The flag is passed on the command line rather than set in `Package.swift`, which stays free of unsafe flags.
+
+Mark AppKit and other UI code `@MainActor`, and make values that cross actors `Sendable`. Use `MainActor.assumeIsolated` only where AppKit guarantees the main thread. Avoid `nonisolated(unsafe)` and `@unchecked Sendable`; if one is truly needed, add a comment that says why it is safe.
 
 To build the full app bundle with its icon:
 
@@ -112,7 +119,7 @@ When Periphery reports code that is in fact used, for example a method only AppK
 bunx jscpd@5.4.3
 ```
 
-Please make sure `swift build`, `swift test`, both lint checks and the dead code and duplication checks pass before you open a pull request.
+Please make sure the build with warnings as errors, `swift test`, both lint checks and the dead code and duplication checks pass before you open a pull request.
 
 ## Website
 
