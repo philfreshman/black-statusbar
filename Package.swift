@@ -9,5 +9,5 @@ let package = Package(
         .executableTarget(name: "Nightbar", dependencies: ["NightbarCore"]),
         .testTarget(name: "NightbarCoreTests", dependencies: ["NightbarCore"]),
     ],
-    swiftLanguageModes: [.v5]
+    swiftLanguageModes: [.v6]
 )
