@@ -103,7 +103,7 @@ struct UpdateInstaller: UpdateInstalling {
     private struct CommandFailed: Error {}
 
     /// Downloads with URLSession and moves the file to `destination` straight away, before URLSession can delete it.
-    static let downloadFromNetwork: Download = { source, destination in
+    private static let downloadFromNetwork: Download = { source, destination in
         let (file, response) = try await URLSession.shared.download(from: source)
         if let http = response as? HTTPURLResponse, !(200...299).contains(http.statusCode) {
             try? FileManager.default.removeItem(at: file)

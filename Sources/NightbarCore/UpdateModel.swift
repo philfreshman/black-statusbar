@@ -35,7 +35,7 @@ final class UpdateModel {
 
     /// True while an update is being installed or once it is installed, when checking again would only confuse:
     /// the running copy is still the old version.
-    var isInstallStarted: Bool {
+    private var isInstallStarted: Bool {
         switch state {
         case .installing, .installed: true
         default: false
