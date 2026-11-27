@@ -19,7 +19,7 @@ enum UpdateError: LocalizedError, Equatable {
     /// The unpacked download is not the expected Nightbar release.
     case unexpectedDownload
 
-    static let installScript = "curl -fsSL https://nightbar.app/install.sh | bash"
+    private static let installScript = "curl -fsSL https://nightbar.app/install.sh | bash"
 
     var errorDescription: String? {
         switch self {
