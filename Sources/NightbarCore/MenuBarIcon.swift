@@ -29,6 +29,7 @@ enum MenuBarIcon {
         CGPoint(x: 5, y: 24), CGPoint(x: 0, y: 24),
     ]
 
+    /// A new template image of the mark, for the status item's button.
     static func make() -> NSImage {
         let image = NSImage(size: size, flipped: true) { _ in
             guard let context = NSGraphicsContext.current?.cgContext else { return false }

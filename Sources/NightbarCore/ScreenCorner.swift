@@ -16,6 +16,7 @@ enum CornerRadius: String, CaseIterable {
         }
     }
 
+    /// The name shown in the Rounded Corners menu.
     var title: String {
         switch self {
         case .off: "Off"

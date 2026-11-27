@@ -1,5 +1,6 @@
 import ServiceManagement
 
+/// Whether macOS opens Nightbar when the user logs in, as listed under Login Items in System Settings.
 enum LaunchAtLogin {
     static var isEnabled: Bool {
         SMAppService.mainApp.status == .enabled

@@ -46,6 +46,7 @@ final class ScreenOverlay {
         corners = Self.makeCorners(for: screen, radius: cornerRadius.points)
     }
 
+    /// Changes the colours of the contrast layer. Does nothing when the screen has none.
     func setRemap(_ remap: ColorRemap) {
         (contrastLayer?.contentView as? ColorRemapView)?.remap = remap
     }
