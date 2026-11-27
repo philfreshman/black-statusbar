@@ -5,6 +5,7 @@ import Testing
 
 struct UpdateInstallerTests {
     private static let bundleIdentifier = "app.nightbar.tests"
+    private static let installedVersion = "0.1.0"
     private static let release = Release(
         version: AppVersion("0.2.0")!,
         pageURL: URL(string: "https://example.com/release")!,
@@ -27,7 +28,9 @@ struct UpdateInstallerTests {
     @Test func refusesWhenTheAppFolderIsNotWritable() async throws {
         let folder = try TemporaryFolder()
         let applications = folder.url.appendingPathComponent("Applications")
-        let app = try FakeApp.make(in: applications, bundleIdentifier: Self.bundleIdentifier, version: "0.1.0")
+        let app = try FakeApp.make(
+            in: applications, bundleIdentifier: Self.bundleIdentifier, version: Self.installedVersion
+        )
         try FileManager.default.setAttributes([.posixPermissions: 0o555], ofItemAtPath: applications.path)
         defer { try? FileManager.default.setAttributes([.posixPermissions: 0o755], ofItemAtPath: applications.path) }
         let installer = UpdateInstaller(
@@ -48,10 +51,7 @@ struct UpdateInstallerTests {
 
     @Test func replacesTheAppWithTheDownloadedRelease() async throws {
         let folder = try TemporaryFolder()
-        let app = try FakeApp.make(
-            in: folder.url.appendingPathComponent("Applications"), bundleIdentifier: Self.bundleIdentifier,
-            version: "0.1.0"
-        )
+        let app = try makeInstalledApp(in: folder)
         let zip = try FakeApp.zip(in: folder.url, bundleIdentifier: Self.bundleIdentifier, version: "0.2.0")
         let installer = UpdateInstaller(appURL: app, bundleIdentifier: Self.bundleIdentifier, download: copying(zip))
 
@@ -63,25 +63,19 @@ struct UpdateInstallerTests {
     @Test(arguments: [("app.someone.else", "0.2.0"), (bundleIdentifier, "0.1.5")])
     func keepsTheAppWhenTheDownloadIsNotTheRelease(identifier: String, version: String) async throws {
         let folder = try TemporaryFolder()
-        let app = try FakeApp.make(
-            in: folder.url.appendingPathComponent("Applications"), bundleIdentifier: Self.bundleIdentifier,
-            version: "0.1.0"
-        )
+        let app = try makeInstalledApp(in: folder)
         let zip = try FakeApp.zip(in: folder.url, bundleIdentifier: identifier, version: version)
         let installer = UpdateInstaller(appURL: app, bundleIdentifier: Self.bundleIdentifier, download: copying(zip))
 
         await #expect(throws: UpdateError.unexpectedDownload) {
             try await installer.install(Self.release)
         }
-        #expect(try FakeApp.version(of: app) == "0.1.0")
+        #expect(try FakeApp.version(of: app) == Self.installedVersion)
     }
 
     @Test func failsWhenTheDownloadIsNotAZip() async throws {
         let folder = try TemporaryFolder()
-        let app = try FakeApp.make(
-            in: folder.url.appendingPathComponent("Applications"), bundleIdentifier: Self.bundleIdentifier,
-            version: "0.1.0"
-        )
+        let app = try makeInstalledApp(in: folder)
         let installer = UpdateInstaller(appURL: app, bundleIdentifier: Self.bundleIdentifier) { _, destination in
             try Data("not a zip".utf8).write(to: destination)
         }
@@ -89,7 +83,15 @@ struct UpdateInstallerTests {
         await #expect(throws: UpdateError.unpackFailed) {
             try await installer.install(Self.release)
         }
-        #expect(try FakeApp.version(of: app) == "0.1.0")
+        #expect(try FakeApp.version(of: app) == Self.installedVersion)
+    }
+
+    /// The running app, at `installedVersion`, in an Applications folder of its own.
+    private func makeInstalledApp(in folder: TemporaryFolder) throws -> URL {
+        try FakeApp.make(
+            in: folder.url.appendingPathComponent("Applications"), bundleIdentifier: Self.bundleIdentifier,
+            version: Self.installedVersion
+        )
     }
 
     /// A fake download that copies a local zip instead of fetching one.

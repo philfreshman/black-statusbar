@@ -23,8 +23,12 @@ swift test
 swift format format --in-place --recursive Sources Tests Package.swift   # format (config: .swift-format)
 swift format lint --strict --recursive Sources Tests Package.swift       # check formatting
 swiftlint lint --strict   # lint (config: .swiftlint.yml, Tests/.swiftlint.yml; install: brew install swiftlint)
+swift build --build-tests && periphery scan   # dead code (config: .periphery.yml; install: brew install periphery)
+bunx jscpd@5.4.3   # duplication (config: .jscpd.json; runs with Bun)
 ```
 
 SwiftLint leaves layout to swift-format, so its layout rules stay off. Fix findings in the code; use `// swiftlint:disable:next <rule>` only with a short reason.
+
+Periphery reads the index at `.build/out`, where SwiftPM's swift-build writes it, so build the tests before scanning. Remove dead code it finds; for code that is in fact used, prefer a setting in `.periphery.yml` over `// periphery:ignore`, and give the comment a short reason. jscpd fails on any copied block; extract the shared code instead of raising its limits.
 
 Branching, commit and pull request rules are in [CONTRIBUTING.md](CONTRIBUTING.md).
