@@ -307,8 +307,9 @@
 .cursor {
     position: absolute;
     width: 2.2cqi;
-    translate: -22% -10%;
-    filter: drop-shadow(0 0.2cqi 0.3cqi rgb(0 0 0 / 0.4));
+    /* Puts the arrow's tip, at 5,3 in its 24 by 24 box, on the cursor's position. */
+    translate: -20.8% -12.5%;
+    filter: drop-shadow(0 0.15cqi 0.35cqi rgb(0 0 0 / 0.45));
     transition: scale 0.1s;
 }
 

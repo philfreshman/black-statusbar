@@ -102,12 +102,14 @@ const shapes = {
     cursor: {
         viewBox: '0 0 24 24',
         content: /* HTML */ `
+            <!-- The macOS arrow: black, with a white outline painted under the fill, so its tip stays sharp. -->
             <path
-                d="M5 2.5v17.2l4.3-4.1 2.8 6.4 3-1.3-2.8-6.3h6z"
+                d="M5 3v15.5l3.6-3.3 2.3 5.4 2.3-1-2.3-5.3h4.9z"
                 fill="#000"
                 stroke="#fff"
-                stroke-width="1.4"
+                stroke-width="2.6"
                 stroke-linejoin="round"
+                paint-order="stroke"
             />
         `,
     },
