@@ -14,11 +14,12 @@ final class UpdateWindowController {
 
     /// A window that checks GitHub for updates to the running app and installs them.
     static func make() -> UpdateWindowController {
-        UpdateWindowController(model: UpdateModel(
-            currentVersion: .current,
-            checker: GitHubUpdateChecker(),
-            installer: UpdateInstaller()
-        ))
+        UpdateWindowController(
+            model: UpdateModel(
+                currentVersion: .current,
+                checker: GitHubUpdateChecker(),
+                installer: UpdateInstaller()
+            ))
     }
 
     /// Brings the window to the front and checks for updates, unless an update is being or has been installed.

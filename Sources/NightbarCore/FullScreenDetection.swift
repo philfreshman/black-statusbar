@@ -13,14 +13,16 @@ enum FullScreenDetection {
 
     static func showsFullScreenWindow(on displayID: CGDirectDisplayID?) -> Bool {
         guard let displayID else { return false }
-        return showsFullScreenWindow(displayBounds: CGDisplayBounds(displayID), appWindowBounds: onScreenAppWindowBounds())
+        return showsFullScreenWindow(
+            displayBounds: CGDisplayBounds(displayID), appWindowBounds: onScreenAppWindowBounds())
     }
 
     /// The bounds of the app windows on screen, at the normal window level, in display coordinates.
     private static func onScreenAppWindowBounds() -> [CGRect] {
         let options: CGWindowListOption = [.optionOnScreenOnly, .excludeDesktopElements]
         let windows = CGWindowListCopyWindowInfo(options, kCGNullWindowID) as? [[String: Any]] ?? []
-        return windows
+        return
+            windows
             .filter { $0[kCGWindowLayer as String] as? Int == Int(CGWindowLevelForKey(.normalWindow)) }
             .compactMap { $0[kCGWindowBounds as String] as? NSDictionary }
             .compactMap { CGRect(dictionaryRepresentation: $0 as CFDictionary) }
