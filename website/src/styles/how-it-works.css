@@ -102,7 +102,8 @@
 .camera {
     --plane-w: clamp(240px, 30vw, 420px);
     --gap: calc(var(--plane-w) * 0.24);
-    --bar: calc(var(--plane-w) * 0.052);
+    /* Same proportions as the menu bar in the hero, whose screen is also 16:10. */
+    --bar: calc(var(--plane-w) * 0.034);
     position: relative;
     width: var(--plane-w);
     aspect-ratio: 16 / 10;
@@ -226,8 +227,8 @@
     align-items: center;
     justify-content: space-between;
     height: var(--bar);
-    padding: 0 calc(var(--plane-w) * 0.025);
-    font-size: calc(var(--plane-w) * 0.026);
+    padding: 0 calc(var(--plane-w) * 0.016);
+    font-size: calc(var(--plane-w) * 0.013);
     white-space: nowrap;
     color: #fff;
     background: rgb(255 255 255 / 0.4);
@@ -245,19 +246,27 @@
 .mini-right {
     display: flex;
     align-items: center;
-    gap: calc(var(--plane-w) * 0.022);
+    gap: calc(var(--plane-w) * 0.017);
+}
+
+.mini-left b {
+    font-weight: 700;
+}
+
+.mini-right {
+    gap: calc(var(--plane-w) * 0.013);
 }
 
 .mini-apple {
-    width: calc(var(--plane-w) * 0.022);
+    width: calc(var(--plane-w) * 0.0135);
 }
 
 .mini-glyph {
-    width: calc(var(--plane-w) * 0.026);
+    width: calc(var(--plane-w) * 0.017);
 }
 
 .mini-battery {
-    width: calc(var(--plane-w) * 0.038);
+    width: calc(var(--plane-w) * 0.024);
 }
 
 .tag {
