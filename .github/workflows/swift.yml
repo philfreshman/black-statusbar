@@ -1,8 +1,10 @@
 name: Swift
 
 # Builds, tests and checks the app on every pull request, whatever its base
-# branch (so stacked pull requests and release pull requests into main are
-# checked too), and on every push to development. A pull request can't bring
+# branch (so stacked pull requests are checked too), and on every push to
+# development. A release pull request from development into main skips its
+# own run: the push run on development already checked the same commit, and
+# its result shows on the pull request. A pull request can't bring
 # back warnings, formatting or lint problems, dead code or copied code.
 # See CONTRIBUTING.md.
 on:
@@ -31,6 +33,7 @@ concurrency:
 jobs:
   build:
     name: Build, test and find dead code
+    if: github.head_ref != 'development'
     runs-on: macos-26
     timeout-minutes: 30
     steps:
@@ -61,6 +64,7 @@ jobs:
 
   lint:
     name: Format and lint
+    if: github.head_ref != 'development'
     runs-on: macos-26
     timeout-minutes: 15
     steps:
@@ -86,6 +90,7 @@ jobs:
 
   duplication:
     name: Find duplicated code
+    if: github.head_ref != 'development'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:

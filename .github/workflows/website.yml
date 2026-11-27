@@ -1,6 +1,8 @@
 name: Website
 
 # Checks the nightbar.app landing page in website/. Vercel deploys it on its own.
+# A release pull request from development into main skips its own run: the
+# push run on development already checked the same commit.
 on:
   pull_request:
     paths:
@@ -17,9 +19,11 @@ on:
 permissions:
   contents: read
 
+# Grouped by pull request number, as in swift.yml: a run for an already merged
+# pull request gets the base branch as its ref and would cancel the push run.
 concurrency:
-  group: website-${{ github.ref }}
-  cancel-in-progress: true
+  group: website-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 defaults:
   run:
@@ -28,6 +32,7 @@ defaults:
 jobs:
   check:
     name: Check, test and build
+    if: github.head_ref != 'development'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
