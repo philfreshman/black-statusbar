@@ -61,6 +61,8 @@ final class MenuBarOverlay: NSObject {
         rebuild()
     }
 
+    // MARK: - Overlays
+
     /// Drops the overlays of every Space and covers the active ones again, so they match the
     /// current screens and settings. Other Spaces get theirs when the user next visits them.
     private func rebuild() {
@@ -96,6 +98,8 @@ final class MenuBarOverlay: NSObject {
         }
         screenOverlays.removeAll { overlay in duplicates.contains { $0 === overlay } }
     }
+
+    // MARK: - Notifications
 
     @objc private func activeSpaceDidChange(_: Notification) {
         coverActiveSpaces()

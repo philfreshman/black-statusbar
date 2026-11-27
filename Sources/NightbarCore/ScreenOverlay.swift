@@ -59,6 +59,8 @@ final class ScreenOverlay {
         }
     }
 
+    // MARK: - Making the windows
+
     private static func makeStrip(for screen: NSScreen) -> NSWindow {
         let strip = makeOverlayWindow(frame: screen.menuBarFrame, level: stripLevel)
         strip.backgroundColor = .black
