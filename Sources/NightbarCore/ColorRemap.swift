@@ -10,8 +10,13 @@ struct ColorRemap: Equatable {
     /// For a light menu bar: black text over grey. Turns the text white and the grey black.
     static let lightMenuBar = Self(gain: -3.5, offset: 1)
 
-    /// For a dark menu bar: white text over black or grey. Keeps the text white, turns the grey black.
-    static let darkMenuBar = Self(gain: 2, offset: -1)
+    /// For a dark menu bar: white text over black. Turns faint grey up to 0.2 black and keeps the
+    /// rest close to how macOS draws it.
+    ///
+    /// macOS lays no grey gradient over the strip under a dark menu bar, but its icons have grey
+    /// parts, such as the empty part of the battery (about 0.45). A steeper remap would turn them
+    /// black too and leave only the white parts.
+    static let darkMenuBar = Self(gain: 1.25, offset: -0.25)
 
     static func forMenuBar(isDark: Bool) -> Self {
         isDark ? .darkMenuBar : .lightMenuBar
