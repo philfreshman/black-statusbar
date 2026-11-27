@@ -34,4 +34,16 @@ struct MenuBarGeometryTests {
 
         #expect(frame == CGRect(x: 1728, y: 1216, width: 2560, height: 24))
     }
+
+    @Test func menuBarReservesSpaceWhenItStaysVisible() {
+        let visible = CGRect(x: 0, y: 0, width: 1728, height: 1084)
+
+        #expect(MenuBarGeometry.reservesSpace(screenFrame: screen, visibleFrame: visible))
+    }
+
+    @Test func menuBarReservesNoSpaceWhenItHides() {
+        let visible = CGRect(x: 0, y: 80, width: 1728, height: 1037)
+
+        #expect(!MenuBarGeometry.reservesSpace(screenFrame: screen, visibleFrame: visible))
+    }
 }
