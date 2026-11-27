@@ -12,9 +12,10 @@ import AppKit
 /// The corners sit above windows, so the screen area below the menu bar looks like a rounded
 /// rectangle even when a window fills it. They stay below menus, so menus are never cut off.
 ///
-/// The windows belong to the Space that is active when they are made, so they slide in and out
-/// with it when the user swipes between Spaces. Windows that join all Spaces only move to the
-/// new Space once the swipe ends, so during it the menu bar would show its own colours.
+/// The windows belong to one Space, the active one or one given when they are made, so they
+/// slide in and out with it when the user swipes between Spaces. Windows that join all Spaces
+/// only move to the new Space once the swipe ends, so during it the menu bar would show its own
+/// colours.
 @MainActor
 final class ScreenOverlay {
     /// The window level of the strip: just above the wallpaper.
@@ -39,19 +40,25 @@ final class ScreenOverlay {
         strip.isOnActiveSpace
     }
 
+    /// The Space the windows are on, or nil when the window server does not tell (see `Spaces`).
+    var spaceID: SpaceID? {
+        Spaces.spaceIDs(of: strip).first
+    }
+
     /// The windows from bottom to top: the strip first, so the contrast layer never sits over a
     /// menu bar without its strip. That would flash for a frame.
     private var windowsInShowingOrder: [NSWindow] {
         [strip] + [contrastLayer].compactMap { $0 } + corners
     }
 
-    /// Shows the windows on the active Space.
-    init(screen: NSScreen, cornerRadius: CornerRadius, remap: ColorRemap) {
+    /// Shows the windows on the active Space, or on `space` when given. That Space may be one the
+    /// user has not visited yet.
+    init(screen: NSScreen, cornerRadius: CornerRadius, remap: ColorRemap, space: SpaceID? = nil) {
         displayID = screen.displayID
         strip = Self.makeStrip(for: screen)
         contrastLayer = Self.makeContrastLayer(for: screen, remap: remap)
         corners = Self.makeCorners(for: screen, radius: cornerRadius.points)
-        show()
+        show(on: space)
     }
 
     /// Changes the colours of the contrast layer. Does nothing when the screen has none.
@@ -66,7 +73,11 @@ final class ScreenOverlay {
         }
     }
 
-    private func show() {
+    /// Puts the windows on their Space before showing them, so they never appear on the active one.
+    private func show(on space: SpaceID?) {
+        if let space {
+            Spaces.move(windowsInShowingOrder, to: space)
+        }
         for window in windowsInShowingOrder {
             window.orderFrontRegardless()
         }
