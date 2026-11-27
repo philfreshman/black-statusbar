@@ -194,6 +194,10 @@
 .status-menu li.checked .check {
     visibility: visible;
 }
+/* Rows without a check mark slot line up with the ones that have it. */
+.status-menu li:not(:has(.check)):not(.sep) {
+    padding-left: 2.6cqi;
+}
 .status-menu li.is-hover {
     background: #3d6fe0;
 }
