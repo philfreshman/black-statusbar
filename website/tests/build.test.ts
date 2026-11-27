@@ -1,8 +1,8 @@
 import { Window } from 'happy-dom'
+import { createHash } from 'node:crypto'
 import { fileURLToPath } from 'node:url'
 import { build } from 'vite-plus'
 import { beforeAll, describe, expect, it } from 'vite-plus/test'
-import { loadingClass } from '../src/site.ts'
 
 const projectRoot = fileURLToPath(new URL('..', import.meta.url))
 
@@ -89,11 +89,31 @@ describe('production build', () => {
         }
     })
 
-    it('loads the hashed script as a module', () => {
-        const script = document.querySelector('script[type="module"]')?.getAttribute('src')
+    it('inlines the script and allows only it, by its hash, in the Content Security Policy', () => {
+        const scripts = [...document.querySelectorAll('script[type="module"]')]
+        const policy =
+            document
+                .querySelector('meta[http-equiv="Content-Security-Policy"]')
+                ?.getAttribute('content') ?? ''
 
-        expect(script).toMatch(/^\/assets\/index-[\w-]+\.js$/)
-        expect(output.fileNames).toContain(script?.slice(1))
+        expect(scripts).toHaveLength(1)
+        expect(scripts[0].hasAttribute('src')).toBe(false)
+        expect(output.fileNames.filter((fileName) => fileName.endsWith('.js'))).toEqual([])
+
+        const hash = createHash('sha256')
+            .update(scripts[0].textContent ?? '')
+            .digest('base64')
+        expect(policy).toContain(`script-src 'sha256-${hash}' 'strict-dynamic'`)
+        expect(policy).toContain("object-src 'none'")
+        expect(policy).toContain("base-uri 'none'")
+        expect(policy).toContain("require-trusted-types-for 'script'")
+    })
+
+    it('sets the Content Security Policy before any script', () => {
+        const policyAt = output.html.indexOf('<meta http-equiv="Content-Security-Policy"')
+
+        expect(policyAt).toBeGreaterThan(-1)
+        expect(policyAt).toBeLessThan(output.html.indexOf('<script'))
     })
 
     it('preloads the Latin font files the stylesheet uses', () => {
@@ -109,14 +129,14 @@ describe('production build', () => {
         }
     })
 
-    it('hides the page until the fonts are ready, with a timeout as a safety net', () => {
-        const inlineScript = [...document.querySelectorAll('head script:not([src])')]
-            .map((script) => script.textContent)
-            .join('')
+    it('never hides text while a font loads, and never swaps fonts after the first paint', () => {
+        const css = inlineStylesheet(document)
+        const fontDisplays = css.match(/(?<![\w-])font-display:\s*\w+/g) ?? []
 
-        expect(inlineScript).toContain(`classList.add('${loadingClass}')`)
-        expect(inlineScript).toContain(`classList.remove('${loadingClass}')`)
-        expect(inlineScript).toContain('setTimeout')
+        expect(fontDisplays.length).toBeGreaterThan(0)
+        for (const fontDisplay of fontDisplays) {
+            expect(fontDisplay).toMatch(/optional$/)
+        }
     })
 
     it('ships install.sh next to the page', () => {

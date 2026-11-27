@@ -19,12 +19,9 @@
     filter: drop-shadow(0 0 18px rgb(var(--violet-rgb) / 0.55));
 }
 
-/*
- * One strike on load, then calm. A single flash stays far below the three-per-second limit.
- * It waits until the page is shown, so it does not play out while the fonts load.
- */
+/* One strike on load, then calm. A single flash stays far below the three-per-second limit. */
 @media (prefers-reduced-motion: no-preference) {
-    :root:not(.is-loading) .hero-mark {
+    .hero-mark {
         animation: strike 1.4s 0.3s var(--ease-out) both;
     }
 }
