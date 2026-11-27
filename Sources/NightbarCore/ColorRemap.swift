@@ -8,12 +8,12 @@ struct ColorRemap: Equatable {
     let offset: Float
 
     /// For a light menu bar: black text over grey. Turns the text white and the grey black.
-    static let lightMenuBar = ColorRemap(gain: -3.5, offset: 1)
+    static let lightMenuBar = Self(gain: -3.5, offset: 1)
 
     /// For a dark menu bar: white text over black or grey. Keeps the text white, turns the grey black.
-    static let darkMenuBar = ColorRemap(gain: 2, offset: -1)
+    static let darkMenuBar = Self(gain: 2, offset: -1)
 
-    static func forMenuBar(isDark: Bool) -> ColorRemap {
+    static func forMenuBar(isDark: Bool) -> Self {
         isDark ? .darkMenuBar : .lightMenuBar
     }
 
