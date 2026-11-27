@@ -96,13 +96,11 @@ struct UpdateInstaller: UpdateInstalling {
                 continuation.resume(throwing: error)
             }
         }
-        guard status == 0 else { throw CommandFailed(executable: executable, status: status) }
+        guard status == 0 else { throw CommandFailed() }
     }
 
-    private struct CommandFailed: Error {
-        let executable: String
-        let status: Int32
-    }
+    /// Callers only need to know that the command failed, not how.
+    private struct CommandFailed: Error {}
 
     /// Downloads with URLSession and moves the file to `destination` straight away, before URLSession can delete it.
     static let downloadFromNetwork: Download = { source, destination in
