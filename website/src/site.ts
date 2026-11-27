@@ -19,6 +19,7 @@ export const copyCommand = '--copy'
 export const ids = {
     desktop: 'desktop',
     cursor: 'cursor',
+    cursorTrack: 'cursor-track',
     statusItem: 'status-item',
     statusMenu: 'status-menu',
     nightbarMenuItem: 'menu-nightbar',
