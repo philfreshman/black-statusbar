@@ -83,6 +83,7 @@ describe('renderPage', () => {
             true,
             false,
             false,
+            false,
         ])
     })
 
