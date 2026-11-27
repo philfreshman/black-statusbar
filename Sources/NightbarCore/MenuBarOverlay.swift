@@ -97,13 +97,13 @@ final class MenuBarOverlay: NSObject {
         screenOverlays.removeAll { overlay in duplicates.contains { $0 === overlay } }
     }
 
-    @objc private func activeSpaceDidChange(_ notification: Notification) {
+    @objc private func activeSpaceDidChange(_: Notification) {
         coverActiveSpaces()
     }
 
     /// macOS posts this for many reasons. Rebuilding drops the overlays of the other Spaces, so
     /// it only happens when a screen or its menu bar really changed.
-    @objc private func screensDidChange(_ notification: Notification) {
+    @objc private func screensDidChange(_: Notification) {
         let layouts = ScreenLayout.current
         guard layouts != screenLayouts else { return }
         screenLayouts = layouts
