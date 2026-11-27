@@ -27,8 +27,7 @@ concurrency:
   group: swift-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
-# .build is not cached: a clean build takes about a minute, and a restored
-# index store could hold stale entries for deleted files that mislead Periphery.
+# .build is not cached: a clean build takes about a minute.
 jobs:
   build:
     name: Build, test and find dead code
@@ -48,40 +47,17 @@ jobs:
       - name: Test
         run: swift test
 
-      # Periphery's repository is archived and Homebrew disables its formula on
-      # 2027-08-12, so this installs the final release (3.8.0) from GitHub and
-      # checks the download against its published SHA-256.
-      - name: Install Periphery
-        env:
-          PERIPHERY_VERSION: 3.8.0
-          PERIPHERY_SHA256: 07d4e286e31dd79164df39097e0b59f533c94badbe18158464a455ea88a166d7
+      # Homebrew has no versioned formula for SwiftLint, so this installs the
+      # latest release, or keeps the runner's copy if it is already up to date.
+      - name: Install SwiftLint
         run: |
-          dir="$RUNNER_TEMP/periphery"
-          mkdir -p "$dir"
-          curl -fsSL -o "$dir/periphery.zip" \
-            "https://github.com/peripheryapp/periphery/releases/download/$PERIPHERY_VERSION/periphery-$PERIPHERY_VERSION.zip"
-          echo "$PERIPHERY_SHA256  $dir/periphery.zip" | shasum -a 256 -c -
-          unzip -q "$dir/periphery.zip" -d "$dir"
-          binary="$(find "$dir" -type f -name periphery -perm -u+x | head -n 1)"
-          dirname "$binary" >> "$GITHUB_PATH"
-          "$binary" version
+          brew install swiftlint
+          swiftlint version
 
-      # Periphery reads the index store the builds above wrote. SwiftPM's newer
-      # default build system (swift-build) writes it to .build/out, as
-      # .periphery.yml says; the older native build system writes it to
-      # .build/debug/index/store. Pass whichever exists, so this works on an
-      # older Xcode on the runner as well as on a newer one.
-      - name: Find dead code
-        run: |
-          for store in .build/out .build/debug/index/store; do
-            if [ -d "$store/v5" ]; then
-              echo "Index store: $store"
-              periphery scan --index-store-path "$store"
-              exit
-            fi
-          done
-          echo "::error::No index store found in .build/out or .build/debug/index/store."
-          exit 1
+      # SwiftLint's analyzer rules need a full verbose build, which the script
+      # makes in a temporary folder.
+      - name: Find dead code (SwiftLint analyze)
+        run: ./scripts/find-dead-code.sh
 
   lint:
     name: Format and lint
