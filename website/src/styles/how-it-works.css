@@ -4,8 +4,8 @@
  *
  * Without scroll-driven animations, or with reduced motion, it is a still exploded view with
  * the strip in place. With them, scrolling plays the story: the strip slides into its slot,
- * the menu bar turns black with white icons, then the camera swings to the front and the
- * layers collapse into the finished bar.
+ * then the camera swings to the front and the layers collapse. Only as they merge does the
+ * menu bar turn black with white icons.
  */
 .how {
     padding: 0;
@@ -391,7 +391,7 @@
             animation-range: contain 10% contain 24%;
         }
         .how-steps li:nth-child(3) :is(.label, h3) {
-            animation-range: contain 34% contain 44%;
+            animation-range: contain 76% contain 86%;
         }
     }
 }
@@ -461,13 +461,13 @@
     }
 }
 
-/* macOS reacts: glass with dark icons, then black with white icons. */
+/* macOS reacts only as the layers merge: glass with dark icons, then black with white icons. */
 @keyframes how-react-bar {
     0%,
-    36% {
+    76% {
         opacity: 0;
     }
-    46%,
+    86%,
     100% {
         opacity: 1;
     }
@@ -475,11 +475,11 @@
 
 @keyframes how-react-icons {
     0%,
-    36% {
+    76% {
         /* Turns the white icons and text into the near-black #1b1b1b. */
         filter: invert(0.894);
     }
-    46%,
+    86%,
     100% {
         filter: none;
     }
