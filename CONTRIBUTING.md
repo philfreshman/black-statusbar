@@ -135,7 +135,7 @@ bunx jscpd@5.4.3
 
 Please make sure the build with warnings as errors, `swift test`, both lint checks and the dead code and duplication checks pass before you open a pull request.
 
-GitHub Actions runs all of these checks on every pull request and on every push to `development` (`.github/workflows/swift.yml`) and shows a failing check on the pull request. It uses the newest stable Xcode on the runner, which may be older than yours, so `swift format` can now and then disagree with your local result. Pull requests that change only `website/` skip it.
+GitHub Actions runs all of these checks on every pull request and on every push to `development` (`.github/workflows/swift.yml`) and shows a failing check on the pull request. It uses the newest stable Xcode on the runner, which may be older than yours, so `swift format` can now and then disagree with your local result. Pull requests that change only `website/` skip it, and so does the release pull request from `development` into `main`, which shows the result of the push run on `development` for the same commit.
 
 ## Website
 
