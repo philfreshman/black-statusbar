@@ -48,6 +48,8 @@ final class StatusMenuController: NSObject {
         overlay.isMenuBarDark = watcher.isDark
     }
 
+    // MARK: - Building the menu
+
     private func makeMenu() -> NSMenu {
         let menu = NSMenu()
         menu.delegate = self
@@ -80,6 +82,8 @@ final class StatusMenuController: NSObject {
         item.submenu = submenu
         return item
     }
+
+    // MARK: - Menu actions
 
     @objc private func toggleBlackBar() {
         overlay.isEnabled.toggle()
