@@ -1,11 +1,13 @@
 import AppKit
 
-/// Puts a black strip behind the menu bar of every screen, and black rounded corners below it.
+/// Puts a black strip behind the menu bar of every screen, a contrast layer over it, and black
+/// rounded corners below it.
 ///
-/// macOS picks the menu bar icon colour from what is behind the menu bar. With a black strip
-/// there, the menu bar looks black and macOS draws white icons. The strip sits just above the
-/// wallpaper, below desktop icons and windows, so it works with every wallpaper, including
-/// live ones, and leaves the wallpaper itself untouched.
+/// The strip sits just above the wallpaper, below desktop icons and windows, so the menu bar
+/// looks black and the wallpaper itself stays untouched. On a light wallpaper that is not
+/// enough: macOS lays a grey gradient over the strip, and it may draw black text, because it
+/// picks the menu bar colours from the wallpaper and ignores windows. So a contrast layer sits
+/// over the menu bar and remaps its colours to black with white text (see `ColorRemap`).
 ///
 /// The corners sit above windows, so the screen area below the menu bar looks like a rounded
 /// rectangle even when a window fills it. They stay below menus, so menus are never cut off.
@@ -15,9 +17,19 @@ final class MenuBarOverlay: NSObject {
     private static let cornerRadiusKey = "cornerRadius"
     private static let stripLevel = NSWindow.Level(Int(CGWindowLevelForKey(.desktopWindow)) + 1)
     private static let cornerLevel = NSWindow.Level.statusBar
+    /// Above the menu bar and its icons, below menus.
+    private static let contrastLevel = NSWindow.Level(NSWindow.Level.statusBar.rawValue + 1)
 
     private let defaults: UserDefaults
     private var windows: [NSWindow] = []
+    private var contrastViews: [ColorRemapView] = []
+
+    /// Whether macOS currently draws the menu bar dark, with white text.
+    var isMenuBarDark = true {
+        didSet {
+            contrastViews.forEach { $0.remap = .forMenuBar(isDark: isMenuBarDark) }
+        }
+    }
 
     var isEnabled: Bool {
         get { defaults.object(forKey: Self.enabledKey) as? Bool ?? true }
@@ -48,14 +60,15 @@ final class MenuBarOverlay: NSObject {
         updateWindows()
     }
 
-    /// Rebuilds the strips and corners, so they match the current screens and settings.
+    /// Rebuilds the strips, contrast layers and corners, so they match the current screens and settings.
     private func updateWindows() {
         windows.forEach { $0.orderOut(nil) }
         windows = isEnabled ? NSScreen.screens.flatMap(makeWindows) : []
+        contrastViews = windows.compactMap { $0.contentView as? ColorRemapView }
     }
 
     private func makeWindows(for screen: NSScreen) -> [NSWindow] {
-        [makeStrip(for: screen)] + makeCorners(for: screen)
+        [makeStrip(for: screen)] + makeContrastLayer(for: screen) + makeCorners(for: screen)
     }
 
     private func makeStrip(for screen: NSScreen) -> NSWindow {
@@ -64,6 +77,32 @@ final class MenuBarOverlay: NSObject {
         strip.isOpaque = true
         strip.orderFrontRegardless()
         return strip
+    }
+
+    /// Left out when the menu bar hides automatically: app windows then reach the top of the
+    /// screen, and the remap would change their colours.
+    private func makeContrastLayer(for screen: NSScreen) -> [NSWindow] {
+        guard screen.reservesSpaceForMenuBar else { return [] }
+
+        let window = makeOverlayWindow(frame: screen.menuBarFrame, level: Self.contrastLevel)
+        window.backgroundColor = .clear
+        window.isOpaque = false
+        let remapView = ColorRemapView(remap: .forMenuBar(isDark: isMenuBarDark))
+        remapView.addSubview(makeBottomEdgeCover(width: window.frame.width))
+        window.contentView = remapView
+        window.orderFrontRegardless()
+        return [window]
+    }
+
+    /// A window right below the menu bar draws its dark border into the menu bar's last pixel
+    /// row. The remap for a light menu bar would turn that border into a white line, so this
+    /// black edge covers it.
+    private func makeBottomEdgeCover(width: CGFloat) -> NSView {
+        let cover = NSView(frame: CGRect(x: 0, y: 0, width: width, height: 1))
+        cover.autoresizingMask = [.width]
+        cover.wantsLayer = true
+        cover.layer?.backgroundColor = NSColor.black.cgColor
+        return cover
     }
 
     private func makeCorners(for screen: NSScreen) -> [NSWindow] {
