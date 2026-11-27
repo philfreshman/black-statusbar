@@ -1,10 +1,8 @@
 import AppKit
 import NightbarCore
 
-MainActor.assumeIsolated {
-    let application = NSApplication.shared
-    let appDelegate = AppDelegate()
-    application.delegate = appDelegate
-    application.setActivationPolicy(.accessory)
-    application.run()
-}
+let application = NSApplication.shared
+let appDelegate = AppDelegate()
+application.delegate = appDelegate
+application.setActivationPolicy(.accessory)
+application.run()
