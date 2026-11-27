@@ -1,20 +1,41 @@
 import AppKit
 
 /// The app's own icon in the menu bar, with its menu.
+///
+/// The icon can be hidden from its menu. Opening Nightbar again while it runs shows it again.
 @MainActor
 final class StatusMenuController: NSObject, NSMenuDelegate {
+    private static let iconHiddenKey = "iconHidden"
+    private static let hideIconAlertSuppressedKey = "hideIconAlertSuppressed"
+
     private let overlay: MenuBarOverlay
+    private let defaults: UserDefaults
     private let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
 
     private lazy var toggleItem = makeItem("Nightbar", action: #selector(toggleBlackBar))
     private lazy var cornerRadiusItem = makeCornerRadiusItem()
     private lazy var launchAtLoginItem = makeItem("Launch at Login", action: #selector(toggleLaunchAtLogin))
+    private lazy var hideIconItem = makeItem("Hide Icon", action: #selector(hideIcon))
 
-    init(overlay: MenuBarOverlay) {
+    private var isIconHidden: Bool {
+        get { defaults.bool(forKey: Self.iconHiddenKey) }
+        set {
+            defaults.set(newValue, forKey: Self.iconHiddenKey)
+            statusItem.isVisible = !newValue
+        }
+    }
+
+    init(overlay: MenuBarOverlay, defaults: UserDefaults = .standard) {
         self.overlay = overlay
+        self.defaults = defaults
         super.init()
         statusItem.button?.image = MenuBarIcon.make()
         statusItem.menu = makeMenu()
+        statusItem.isVisible = !isIconHidden
+    }
+
+    func showIcon() {
+        isIconHidden = false
     }
 
     func menuWillOpen(_ menu: NSMenu) {
@@ -33,6 +54,7 @@ final class StatusMenuController: NSObject, NSMenuDelegate {
         menu.addItem(cornerRadiusItem)
         menu.addItem(.separator())
         menu.addItem(launchAtLoginItem)
+        menu.addItem(hideIconItem)
         menu.addItem(.separator())
         menu.addItem(NSMenuItem(title: "Quit", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
         return menu
@@ -63,6 +85,30 @@ final class StatusMenuController: NSObject, NSMenuDelegate {
     @objc private func chooseCornerRadius(_ sender: NSMenuItem) {
         guard let radius = sender.representedObject as? CornerRadius else { return }
         overlay.cornerRadius = radius
+    }
+
+    @objc private func hideIcon() {
+        guard confirmHidingIcon() else { return }
+        isIconHidden = true
+    }
+
+    /// Tells the user how to get the icon back, unless they asked not to be told again.
+    private func confirmHidingIcon() -> Bool {
+        guard !defaults.bool(forKey: Self.hideIconAlertSuppressedKey) else { return true }
+
+        let alert = NSAlert()
+        alert.messageText = "Hide the Nightbar icon?"
+        alert.informativeText = "Nightbar keeps running. To show the icon again, open Nightbar from your Applications folder."
+        alert.addButton(withTitle: "Hide Icon")
+        alert.addButton(withTitle: "Cancel")
+        alert.showsSuppressionButton = true
+
+        NSApp.activate()
+        let confirmed = alert.runModal() == .alertFirstButtonReturn
+        if confirmed, alert.suppressionButton?.state == .on {
+            defaults.set(true, forKey: Self.hideIconAlertSuppressedKey)
+        }
+        return confirmed
     }
 
     @objc private func toggleLaunchAtLogin() {
