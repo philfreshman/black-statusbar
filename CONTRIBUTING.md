@@ -94,7 +94,25 @@ The Swift code is linted with [SwiftLint](https://github.com/realm/SwiftLint), w
 swiftlint lint --strict
 ```
 
-Please make sure `swift build`, `swift test` and both lint checks pass before you open a pull request.
+## Dead code
+
+[Periphery](https://github.com/peripheryapp/periphery) finds unused code: declarations, parameters, properties that are set but never read, and imports. Install it with `brew install periphery`. Its settings are in `.periphery.yml` at the repo root. Periphery reads the index that `swift build` writes while it compiles, so build the tests first; the tests count as users of the code.
+
+```bash
+swift build --build-tests && periphery scan
+```
+
+When Periphery reports code that is in fact used, for example a method only AppKit calls, prefer a setting in `.periphery.yml` over a `// periphery:ignore` comment, and give the comment a short reason when you need one.
+
+## Duplication
+
+[jscpd](https://github.com/kucherenko/jscpd) finds copied blocks of code in `Sources` and `Tests`. It runs with [Bun](https://bun.sh), so there is nothing to install besides Bun. Its settings are in `.jscpd.json` at the repo root, and it fails on any copied block of 50 tokens and 5 lines or more.
+
+```bash
+bunx jscpd@5.4.3
+```
+
+Please make sure `swift build`, `swift test`, both lint checks and the dead code and duplication checks pass before you open a pull request.
 
 ## Website
 
