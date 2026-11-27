@@ -5,15 +5,26 @@ import AppKit
 ///
 /// It keeps working while the icon is hidden.
 final class MenuBarAppearanceWatcher: NSView {
-    var onChange: ((_ isDark: Bool) -> Void)?
+    private let onChange: (_ isDark: Bool) -> Void
 
     var isDark: Bool {
         let match = effectiveAppearance.bestMatch(from: [.vibrantLight, .vibrantDark, .aqua, .darkAqua])
         return match == .vibrantDark || match == .darkAqua
     }
 
+    /// `onChange` is called each time the menu bar switches between light and dark.
+    init(onChange: @escaping (_ isDark: Bool) -> Void) {
+        self.onChange = onChange
+        super.init(frame: .zero)
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) is not supported")
+    }
+
     override func viewDidChangeEffectiveAppearance() {
         super.viewDidChangeEffectiveAppearance()
-        onChange?(isDark)
+        onChange(isDark)
     }
 }
