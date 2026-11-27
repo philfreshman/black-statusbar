@@ -7,11 +7,11 @@ struct MenuBarOverlayTests {
     @Test func stripSitsBelowMenuBarUnderbelly() {
         let underbellyLevel = Int(CGWindowLevelForKey(.desktopIconWindow)) + 1
 
-        #expect(MenuBarOverlay.stripLevel.rawValue < underbellyLevel)
+        #expect(ScreenOverlay.stripLevel.rawValue < underbellyLevel)
     }
 
     @Test func contrastLayerSitsAboveMenuBarIconsAndBelowMenus() {
-        #expect(MenuBarOverlay.contrastLevel > .statusBar)
-        #expect(MenuBarOverlay.contrastLevel < .popUpMenu)
+        #expect(ScreenOverlay.contrastLevel > .statusBar)
+        #expect(ScreenOverlay.contrastLevel < .popUpMenu)
     }
 }
