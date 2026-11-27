@@ -12,7 +12,7 @@ Swift Package (tools 6.0, Swift 6 language mode, so the compiler checks data-rac
 - `Resources/` — `Info.plist` and the `AppIcon.icon` Icon Composer source.
 - `scripts/build-app.sh` — builds `build/Nightbar.app` and compiles the icon.
 - `website/` — the nightbar.app landing page: Vite+ with Bun, TypeScript and plain CSS. Sections are TypeScript modules in `website/src/sections/`, rendered into `index.html` at build time; one CSS file per section in `website/src/styles/`. Run `bun run check`, `bun run fallow` (dead code, duplication and complexity), `bun run test` and `bun run build` there (formatting: 4-space indents, single quotes, no semicolons, via `vp fmt`).
-- `.github/workflows/` — release and branch-name checks.
+- `.github/workflows/` — release, branch-name checks, the website checks, and `swift.yml`, which runs every Swift check (build with warnings as errors, tests, `swift format`, SwiftLint, Periphery, jscpd) on every pull request and on pushes to `development`. `.github/actions/select-xcode` switches the macOS runner to its newest stable Xcode.
 
 ## Build and test
 

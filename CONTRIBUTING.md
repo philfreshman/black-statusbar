@@ -135,6 +135,8 @@ bunx jscpd@5.4.3
 
 Please make sure the build with warnings as errors, `swift test`, both lint checks and the dead code and duplication checks pass before you open a pull request.
 
+GitHub Actions runs all of these checks on every pull request and on every push to `development` (`.github/workflows/swift.yml`) and shows a failing check on the pull request. It uses the newest stable Xcode on the runner, which may be older than yours, so `swift format` can now and then disagree with your local result. Pull requests that change only `website/` skip it.
+
 ## Website
 
 The landing page at [nightbar.app](https://nightbar.app) lives in `website/`: a [Vite+](https://viteplus.dev) project using [Bun](https://bun.sh), TypeScript and plain CSS. The page is written as small TypeScript modules in `website/src/sections/` and rendered into `index.html` at build time, so it ships as static HTML. Vercel deploys it with `website` as the project's root directory.
