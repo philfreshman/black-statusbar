@@ -4,10 +4,12 @@
   "workspaces": {
     "": {
       "name": "nightbar-website",
-      "devDependencies": {
+      "dependencies": {
         "@fontsource-variable/geist": "^5.3.0",
         "@fontsource-variable/geist-mono": "^5.3.0",
         "@fontsource-variable/space-grotesk": "^5.3.0",
+      },
+      "devDependencies": {
         "fallow": "^3.49.0",
         "happy-dom": "^21.0.4",
         "typescript": "~7.0.2",
