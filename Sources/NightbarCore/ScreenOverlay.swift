@@ -133,8 +133,9 @@ final class ScreenOverlay {
     }
 
     /// A borderless window that clicks pass through. It stays on the Space where it appears and
-    /// keeps out of Mission Control and window cycling. It appears and disappears at once, without
-    /// the fade macOS may give new windows.
+    /// keeps out of window cycling. Mission Control hides it, so it never colours or rounds the
+    /// Mission Control view. It appears and disappears at once, without the fade macOS may give
+    /// new windows.
     private static func makeOverlayWindow(frame: CGRect, level: NSWindow.Level) -> NSWindow {
         let window = NSWindow(contentRect: frame, styleMask: .borderless, backing: .buffered, defer: false)
         window.isReleasedWhenClosed = false
@@ -142,7 +143,7 @@ final class ScreenOverlay {
         window.level = level
         window.hasShadow = false
         window.ignoresMouseEvents = true
-        window.collectionBehavior = [.stationary, .ignoresCycle]
+        window.collectionBehavior = [.transient, .ignoresCycle]
         return window
     }
 }
