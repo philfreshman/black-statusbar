@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto'
 import { readFileSync } from 'node:fs'
-import { defineConfig, lazyPlugins, type Plugin } from 'vite-plus'
+import { defineConfig, lazyPlugins, type Plugin, type Rolldown } from 'vite-plus'
 import { renderPage } from './src/page.ts'
 
 const PAGE_PLACEHOLDER = '<!--page-->'
@@ -23,6 +23,34 @@ function prerenderPage(): Plugin {
     }
 }
 
+type BundleOutput = Rolldown.OutputAsset | Rolldown.OutputChunk
+
+function isStylesheet(output: BundleOutput): output is Rolldown.OutputAsset {
+    return output.type === 'asset' && output.fileName.endsWith('.css')
+}
+
+function isEntryChunk(output: BundleOutput): output is Rolldown.OutputChunk {
+    return output.type === 'chunk' && output.isEntry
+}
+
+/** Removes the matching outputs from the bundle, so they are not also written as files. */
+function takeFromBundle<T extends BundleOutput>(
+    bundle: Rolldown.OutputBundle | undefined,
+    matches: (output: BundleOutput) => output is T,
+): T[] {
+    if (!bundle) return []
+
+    const taken = Object.values(bundle).filter(matches)
+    for (const output of taken) delete bundle[output.fileName]
+    return taken
+}
+
+/** The URL path of a built file, escaped for use in a regular expression. */
+function urlPathPattern(fileName: string): string {
+    // Hashed asset names hold only letters, digits, '-', '_', '/' and dots.
+    return `/${fileName}`.replaceAll('.', '\\.')
+}
+
 /**
  * Puts the built stylesheet straight into index.html, so the first paint does not wait for a
  * second request. The page is a single page, so nothing else would reuse the file from cache.
@@ -34,20 +62,38 @@ function inlineStylesheet(): Plugin {
         transformIndexHtml: {
             order: 'post',
             handler: (html, { bundle }) => {
-                for (const [fileName, output] of Object.entries(bundle ?? {})) {
-                    if (output.type !== 'asset' || !fileName.endsWith('.css')) continue
-
-                    // Hashed asset names hold only letters, digits, '-', '_', '/' and dots.
-                    const href = `/${fileName}`.replaceAll('.', '\\.')
+                for (const stylesheet of takeFromBundle(bundle, isStylesheet)) {
+                    const href = urlPathPattern(stylesheet.fileName)
                     const link = new RegExp(`<link rel="stylesheet"[^>]*href="${href}"[^>]*>`)
-                    const css = String(output.source)
+                    const css = String(stylesheet.source)
                     html = html.replace(link, () => `<style>${css}</style>`)
-                    delete bundle?.[fileName]
                 }
                 return html
             },
         },
     }
+}
+
+/** Replaces the page's <script src> tag for an entry chunk with the chunk's code. */
+function inlineEntryChunk(html: string, chunk: Rolldown.OutputChunk): string {
+    if (chunk.code.includes('</script')) {
+        throw new Error(`${chunk.fileName} contains </script, so it cannot be inlined`)
+    }
+    const src = urlPathPattern(chunk.fileName)
+    const tag = new RegExp(`<script type="module"[^>]*src="${src}"[^>]*></script>`)
+    return html.replace(tag, () => `<script type="module">${chunk.code}</script>`)
+}
+
+function contentSecurityPolicy(scripts: Rolldown.OutputChunk[]): string {
+    const scriptHashes = scripts.map((script) =>
+        createHash('sha256').update(script.code).digest('base64'),
+    )
+    return [
+        `script-src ${scriptHashes.map((hash) => `'sha256-${hash}'`).join(' ')} 'strict-dynamic' https: 'unsafe-inline'`,
+        "object-src 'none'",
+        "base-uri 'none'",
+        "require-trusted-types-for 'script'",
+    ].join('; ')
 }
 
 /**
@@ -66,27 +112,12 @@ function inlineScriptWithContentSecurityPolicy(): Plugin {
         transformIndexHtml: {
             order: 'post',
             handler: (html, { bundle }) => {
-                const scriptHashes: string[] = []
-
-                for (const [fileName, output] of Object.entries(bundle ?? {})) {
-                    if (output.type !== 'chunk' || !output.isEntry) continue
-                    if (output.code.includes('</script')) {
-                        throw new Error(`${fileName} contains </script, so it cannot be inlined`)
-                    }
-
-                    const src = `/${fileName}`.replaceAll('.', '\\.')
-                    const tag = new RegExp(`<script type="module"[^>]*src="${src}"[^>]*></script>`)
-                    html = html.replace(tag, () => `<script type="module">${output.code}</script>`)
-                    scriptHashes.push(createHash('sha256').update(output.code).digest('base64'))
-                    delete bundle?.[fileName]
+                const scripts = takeFromBundle(bundle, isEntryChunk)
+                for (const script of scripts) {
+                    html = inlineEntryChunk(html, script)
                 }
 
-                const policy = [
-                    `script-src ${scriptHashes.map((hash) => `'sha256-${hash}'`).join(' ')} 'strict-dynamic' https: 'unsafe-inline'`,
-                    "object-src 'none'",
-                    "base-uri 'none'",
-                    "require-trusted-types-for 'script'",
-                ].join('; ')
+                const policy = contentSecurityPolicy(scripts)
                 const meta = `<meta http-equiv="Content-Security-Policy" content="${policy}" />`
                 return html.replace(
                     /<meta charset="utf-8" \/>/,

@@ -10,6 +10,12 @@ enum MenuBarGeometry {
         return max(heightReservedByMenuBar, safeAreaTop, standardHeight)
     }
 
+    /// Whether the menu bar takes space at the top of the screen, so app windows stay below it.
+    /// It takes none when it hides automatically.
+    static func reservesSpace(screenFrame: CGRect, visibleFrame: CGRect) -> Bool {
+        screenFrame.maxY > visibleFrame.maxY
+    }
+
     /// The band along the top edge of the screen where the menu bar sits.
     static func frame(screenFrame: CGRect, menuBarHeight: CGFloat) -> CGRect {
         CGRect(
@@ -27,5 +33,13 @@ extension NSScreen {
             screenFrame: frame, visibleFrame: visibleFrame, safeAreaTop: safeAreaInsets.top
         )
         return MenuBarGeometry.frame(screenFrame: frame, menuBarHeight: height)
+    }
+
+    var displayID: CGDirectDisplayID? {
+        deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? CGDirectDisplayID
+    }
+
+    var reservesSpaceForMenuBar: Bool {
+        MenuBarGeometry.reservesSpace(screenFrame: frame, visibleFrame: visibleFrame)
     }
 }

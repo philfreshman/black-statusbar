@@ -80,14 +80,24 @@ function handleCopyCommands(): void {
     )
 }
 
+/** The copy button a click landed on, unless the click was already handled. */
+function clickedCopyButton(event: MouseEvent): HTMLButtonElement | null {
+    if (event.defaultPrevented || !(event.target instanceof Element)) {
+        return null
+    }
+    return event.target.closest<HTMLButtonElement>(`button[command="${copyCommand}"]`)
+}
+
+/** The element a button's `commandfor` attribute names, if it exists. */
+function commandTarget(button: HTMLButtonElement): HTMLElement | null {
+    return document.getElementById(button.getAttribute('commandfor') ?? '')
+}
+
 /** For browsers without Invoker Commands: resolves `commandfor` on click, as the browser would. */
 function handleCopyClicks(): void {
     document.addEventListener('click', (event) => {
-        if (event.defaultPrevented || !(event.target instanceof Element)) {
-            return
-        }
-        const button = event.target.closest<HTMLButtonElement>(`button[command="${copyCommand}"]`)
-        const target = document.getElementById(button?.getAttribute('commandfor') ?? '')
+        const button = clickedCopyButton(event)
+        const target = button && commandTarget(button)
         if (button && target) {
             void copy(button, target)
         }

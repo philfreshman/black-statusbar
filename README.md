@@ -14,7 +14,13 @@ Or [download Nightbar.zip](https://github.com/philfreshman/nightbar/releases/lat
 
 ## How it works
 
-macOS picks the menu bar colour from what is behind it. Nightbar puts a black strip behind the menu bar, just above the wallpaper, so macOS draws a black bar with white icons. Your wallpaper is never changed.
+Nightbar puts a black strip behind the menu bar, just above the wallpaper. On a dark wallpaper that is enough: macOS draws a black bar with white icons.
+
+On a light wallpaper, macOS lays a grey tint over the strip and may draw black text, because it picks the menu bar colours from the wallpaper itself. So Nightbar also puts a see-through layer over the menu bar that turns the grey black and the text white. Clicks pass straight through it. Your wallpaper is never changed.
+
+Each Space gets its own set of these windows, so the bar stays black while you swipe between Spaces. A Space gets its set the first time you visit it after Nightbar starts. Full-screen apps are left alone.
+
+This layer uses private Core Animation parts, so a future macOS may break it; the strip keeps working either way. It also shifts the colours of coloured menu bar icons, and it is off while the menu bar hides automatically.
 
 ## Development
 

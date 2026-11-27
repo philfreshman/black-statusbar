@@ -18,8 +18,15 @@ function line(paths: string): string {
     `
 }
 
+/**
+ * The macOS arrow, traced from a macOS 27 screenshot. The path is the arrow's core; a black
+ * stroke rounds its corners and a wider white stroke under it draws the outline.
+ */
+const cursorPath =
+    'M2.5 2.59L23.79 25.8H13.22L18.61 38.68A2.06 2.06 0 0 1 14.79 40.22L9.64 27.6L2.5 34.28Z'
+
 /** The thunder N: two stems joined by a diagonal that breaks like a lightning bolt. */
-export const markPath = 'M4 4H9L18 13V16.5L23 21.5V4H28V28H23L14 19V15.5L9 10.5V28H4Z'
+const markPath = 'M4 4H9L18 13V16.5L23 21.5V4H28V28H23L14 19V15.5L9 10.5V28H4Z'
 
 const shapes = {
     mark: {
@@ -55,60 +62,41 @@ const shapes = {
         `,
     },
     battery: {
-        viewBox: '0 0 28 14',
+        viewBox: '0 0 26 12',
         content: /* HTML */ `
-            <rect
-                x="1"
-                y="1.5"
-                width="23"
-                height="11"
-                rx="3.4"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.2"
-                opacity=".6"
-            />
-            <rect x="2.9" y="3.4" width="17.5" height="7.2" rx="1.9" fill="currentColor" />
-            <path d="M25.3 5v4a2 2 0 0 0 0-4z" fill="currentColor" opacity=".45" />
+            <path d="M6 0H9V12H6A6 6 0 0 1 6 0Z" fill="currentColor" />
+            <path d="M9 0H17A6 6 0 0 1 17 12H9Z" fill="currentColor" opacity=".45" />
+            <path d="M24 4A2 2 0 0 1 24 8Z" fill="currentColor" opacity=".5" />
         `,
     },
     controlCenter: {
         viewBox: '0 0 20 16',
         content: /* HTML */ `
             <rect
-                x="1.6"
-                y="1.4"
-                width="16.8"
-                height="6"
-                rx="3"
+                x="2.64"
+                y="0.64"
+                width="14.72"
+                height="5.76"
+                rx="2.88"
                 fill="none"
                 stroke="currentColor"
-                stroke-width="1.6"
+                stroke-width="1.28"
             />
-            <circle cx="15.2" cy="4.4" r="1.9" fill="currentColor" />
-            <rect
-                x="1.6"
-                y="8.6"
-                width="16.8"
-                height="6"
-                rx="3"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.6"
+            <rect x="4.6" y="1.76" width="5.8" height="3.52" rx="1.76" fill="currentColor" />
+            <path
+                d="M5.52 8.96H14.48A3.52 3.52 0 0 1 14.48 16H5.52A3.52 3.52 0 0 1 5.52 8.96ZM11.94 10.24H14.46A2.24 2.24 0 0 1 14.46 14.72H11.94A2.24 2.24 0 0 1 11.94 10.24Z"
+                fill="currentColor"
+                fill-rule="evenodd"
             />
-            <circle cx="4.8" cy="11.6" r="1.9" fill="currentColor" />
         `,
     },
     cursor: {
-        viewBox: '0 0 24 24',
+        viewBox: '0 0 26 44.1',
         content: /* HTML */ `
-            <path
-                d="M5 2.5v17.2l4.3-4.1 2.8 6.4 3-1.3-2.8-6.3h6z"
-                fill="#000"
-                stroke="#fff"
-                stroke-width="1.4"
-                stroke-linejoin="round"
-            />
+            <g stroke-linejoin="round">
+                <path d="${cursorPath}" fill="#fff" stroke="#fff" stroke-width="5" />
+                <path d="${cursorPath}" fill="#000" stroke="#000" stroke-width="0.6" />
+            </g>
         `,
     },
     contrast: {

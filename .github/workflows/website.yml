@@ -41,5 +41,6 @@ jobs:
             args: ["--frozen-lockfile"]
 
       - run: vp check
+      - run: vp run fallow
       - run: vp test
       - run: vp run build

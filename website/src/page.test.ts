@@ -74,12 +74,14 @@ describe('renderPage', () => {
 
     it('starts the demo with Nightbar off and Launch at Login on', () => {
         const desktop = page.getElementById(ids.desktop)
-        const menuItems = [...page.querySelectorAll('.status-menu li:not(.sep)')]
+        const menuItems = [...page.querySelectorAll('.status-menu > li:not(.sep)')]
 
         expect(desktop?.dataset.nightbar).toBe('off')
         expect(menuItems.map((item) => item.classList.contains('checked'))).toEqual([
             false,
+            false,
             true,
+            false,
             false,
         ])
     })

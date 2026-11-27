@@ -88,6 +88,7 @@ cd website
 bun install
 bun run dev     # http://localhost:8040
 bun run check   # format, lint and type check
+bun run fallow  # unused code, duplication and complexity
 bun run test
 bun run build   # writes website/dist/
 ```

@@ -3,6 +3,7 @@ import AppKit
 /// The app's own icon in the menu bar, with its menu.
 ///
 /// The icon can be hidden from its menu. Opening Nightbar again while it runs shows it again.
+/// The icon also tells the overlay whether macOS draws the menu bar light or dark.
 @MainActor
 final class StatusMenuController: NSObject, NSMenuDelegate {
     private static let iconHiddenKey = "iconHidden"
@@ -32,6 +33,7 @@ final class StatusMenuController: NSObject, NSMenuDelegate {
         statusItem.button?.image = MenuBarIcon.make()
         statusItem.menu = makeMenu()
         statusItem.isVisible = !isIconHidden
+        watchMenuBarAppearance()
     }
 
     func showIcon() {
@@ -44,6 +46,13 @@ final class StatusMenuController: NSObject, NSMenuDelegate {
         for item in cornerRadiusItem.submenu?.items ?? [] {
             item.state = item.representedObject as? CornerRadius == overlay.cornerRadius ? .on : .off
         }
+    }
+
+    private func watchMenuBarAppearance() {
+        let watcher = MenuBarAppearanceWatcher()
+        watcher.onChange = { [weak overlay] isDark in overlay?.isMenuBarDark = isDark }
+        statusItem.button?.addSubview(watcher)
+        overlay.isMenuBarDark = watcher.isDark
     }
 
     private func makeMenu() -> NSMenu {
