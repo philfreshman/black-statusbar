@@ -134,26 +134,17 @@
     overflow: hidden;
 }
 
-/* L1: the wallpaper, a small copy of the violet satin in the hero. */
+/* L1: the wallpaper, a small copy of the one in the hero. */
 .layer-wallpaper .plane {
     box-shadow:
         0 0 0 1px rgb(255 255 255 / 0.18),
         0 0 60px -10px rgb(124 92 255 / 0.5);
 }
 
-/* Grainy like the hero wallpaper, with a finer grain to suit the smaller picture. */
 .mini-wallpaper {
     position: absolute;
     inset: 0;
-}
-
-.mini-wallpaper::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: var(--film-grain) 0 0 / 90px;
-    mix-blend-mode: overlay;
-    opacity: 0.8;
+    background: var(--wallpaper);
 }
 
 /* Guide posts at the corners, like the lines in an exploded drawing. */

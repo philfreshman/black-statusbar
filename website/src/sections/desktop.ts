@@ -1,20 +1,17 @@
 import { icon } from '../icons.ts'
 import { ids } from '../site.ts'
 import { renderStatusMenuEntries } from './app-menu.ts'
-import { renderWallpaperScene } from './wallpaper.ts'
 
 const appMenus = ['File', 'Edit', 'View']
 /** Hidden on narrow screens, where the menu bar runs out of room. */
 const wideAppMenus = ['Go', 'Window', 'Help']
 
 const description =
-    'A Mac desktop with a violet satin wallpaper. The Nightbar menu opens, Nightbar is switched on and the menu bar turns black with white icons. Then the rounded corners are switched on or off, rounding the screen below the bar, and Nightbar is switched off again.'
+    'A Mac desktop with a dark wallpaper of violet waves. The Nightbar menu opens, Nightbar is switched on and the menu bar turns black with white icons. Then the rounded corners are switched on or off, rounding the screen below the bar, and Nightbar is switched off again.'
 
-/** The wallpaper behind the mock menu bar. Film grain on top comes from the CSS. */
+/** The wallpaper behind the mock menu bar. The picture comes from the CSS. */
 function renderWallpaper(): string {
-    return /* HTML */ `<div class="wallpaper" aria-hidden="true">
-        ${renderWallpaperScene('scene')}
-    </div>`
+    return /* HTML */ `<div class="wallpaper" aria-hidden="true"></div>`
 }
 
 function renderMenubar(): string {
