@@ -31,9 +31,13 @@ final class ColorRemapView: NSView {
         fatalError("init(coder:) is not supported")
     }
 
+    /// Swaps the filter at once. Core Animation would otherwise fade from the old colours to the new ones.
     private func applyRemap() {
         guard let backdrop, let filter = Self.makeColorMatrixFilter(remap.matrix) else { return }
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
         backdrop.filters = [filter]
+        CATransaction.commit()
     }
 
     /// A layer that shows what lies behind its window, including other apps' windows.
