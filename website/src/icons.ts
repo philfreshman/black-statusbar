@@ -19,7 +19,7 @@ function line(paths: string): string {
 }
 
 /** The thunder N: two stems joined by a diagonal that breaks like a lightning bolt. */
-export const markPath = 'M4 4H9L18 13V16.5L23 21.5V4H28V28H23L14 19V15.5L9 10.5V28H4Z'
+const markPath = 'M4 4H9L18 13V16.5L23 21.5V4H28V28H23L14 19V15.5L9 10.5V28H4Z'
 
 const shapes = {
     mark: {

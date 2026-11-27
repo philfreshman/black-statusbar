@@ -1,0 +1,16 @@
+{
+    "$schema": "./node_modules/fallow/schema.json",
+    // The fallow version in package.json; older releases may not know health.changeCoupling.
+    "minimumVersion": "3.49.0",
+    "health": {
+        // Hidden change coupling flags files that change together in the same commits without
+        // importing each other. Here that is by design: each section module in src/sections/
+        // has its own stylesheet in src/styles/, linked by class names rather than imports, and
+        // the stylesheets share tokens from base.css. Fallow has no way to ignore single pairs,
+        // so a degree of 1 keeps only pairs that always change together and drops the
+        // "make the dependency explicit" refactoring targets that come from these pairs.
+        "changeCoupling": {
+            "minDegree": 1,
+        },
+    },
+}

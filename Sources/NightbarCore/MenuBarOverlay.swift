@@ -15,10 +15,18 @@ import AppKit
 final class MenuBarOverlay: NSObject {
     private static let enabledKey = "nightbarEnabled"
     private static let cornerRadiusKey = "cornerRadius"
-    private static let stripLevel = NSWindow.Level(Int(CGWindowLevelForKey(.desktopWindow)) + 1)
+
+    /// The window level of the strips: just above the wallpaper.
+    ///
+    /// macOS keeps a window called "underbelly" one level above the desktop icons. On a light
+    /// wallpaper it lays a grey gradient over the menu bar. The strip must stay below it: above
+    /// it, the bar would be black under black text, and the contrast layer would turn it all
+    /// white. With the strip below, the contrast layer gets black text on grey, which it can
+    /// remap to white text on black.
+    static let stripLevel = NSWindow.Level(Int(CGWindowLevelForKey(.desktopWindow)) + 1)
     private static let cornerLevel = NSWindow.Level.statusBar
     /// Above the menu bar and its icons, below menus.
-    private static let contrastLevel = NSWindow.Level(NSWindow.Level.statusBar.rawValue + 1)
+    static let contrastLevel = NSWindow.Level(NSWindow.Level.statusBar.rawValue + 1)
 
     private let defaults: UserDefaults
     private var windows: [NSWindow] = []

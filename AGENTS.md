@@ -11,7 +11,7 @@ Swift Package (tools 6.0, Swift 5 language mode), AppKit, no dependencies. It bu
 - `Tests/NightbarCoreTests/` — tests (swift-testing).
 - `Resources/` — `Info.plist` and the `AppIcon.icon` Icon Composer source.
 - `scripts/build-app.sh` — builds `build/Nightbar.app` and compiles the icon.
-- `website/` — the nightbar.app landing page: Vite+ with Bun, TypeScript and plain CSS. Sections are TypeScript modules in `website/src/sections/`, rendered into `index.html` at build time; one CSS file per section in `website/src/styles/`. Run `bun run check`, `bun run test` and `bun run build` there (formatting: 4-space indents, single quotes, no semicolons, via `vp fmt`).
+- `website/` — the nightbar.app landing page: Vite+ with Bun, TypeScript and plain CSS. Sections are TypeScript modules in `website/src/sections/`, rendered into `index.html` at build time; one CSS file per section in `website/src/styles/`. Run `bun run check`, `bun run fallow` (dead code, duplication and complexity), `bun run test` and `bun run build` there (formatting: 4-space indents, single quotes, no semicolons, via `vp fmt`).
 - `.github/workflows/` — release and branch-name checks.
 
 ## Build and test
