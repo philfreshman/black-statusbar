@@ -58,8 +58,8 @@
     height: var(--corner-radius);
     overflow: hidden;
     transition:
-        scale 0.35s ease,
-        opacity 0.45s ease;
+        scale 0.3s ease,
+        opacity 0.39s ease;
 }
 
 /* The cut-out: a circle centred on the corner of the square that faces into the screen. */
@@ -134,7 +134,7 @@
     inset: 0;
     z-index: -1;
     background: #000;
-    transition: opacity 0.45s ease;
+    transition: opacity 0.39s ease;
 }
 
 .screen[data-nightbar='off'] .menubar::after {
@@ -179,7 +179,7 @@
     padding: 0.35cqi 0.5cqi;
     margin: 0 -0.5cqi;
     border-radius: 0.5cqi;
-    transition: background 0.15s;
+    transition: background 0.13s;
 }
 
 .status-item.is-open {
@@ -244,8 +244,8 @@
     transform-origin: top right;
     scale: 0.97;
     transition:
-        opacity 0.15s ease,
-        scale 0.15s ease;
+        opacity 0.13s ease,
+        scale 0.13s ease;
     pointer-events: none;
 }
 
@@ -309,7 +309,7 @@
     left: calc(100% + 0.15cqi);
     width: 8cqi;
     opacity: 0;
-    transition: opacity 0.15s ease;
+    transition: opacity 0.13s ease;
 }
 .status-menu li.is-open > .submenu {
     opacity: 1;
@@ -326,7 +326,7 @@
     z-index: 4;
     /* Where the demo rests the cursor (REST_POSITION in demo.ts), so it does not slide there on load. */
     translate: 62% 58%;
-    transition: translate 0.9s cubic-bezier(0.45, 0, 0.2, 1);
+    transition: translate 0.78s cubic-bezier(0.45, 0, 0.2, 1);
     pointer-events: none;
 }
 
@@ -336,7 +336,7 @@
     /* Puts the arrow's black tip on the cursor's position. */
     translate: -8.7% -4.6%;
     filter: drop-shadow(0 0.15cqi 0.35cqi rgb(0 0 0 / 0.45));
-    transition: scale 0.1s;
+    transition: scale 0.09s;
 }
 
 .cursor.is-pressed {

@@ -10,8 +10,8 @@ interface Position {
 }
 
 /** Matches the cursor track's translate transition in desktop.css. */
-const CURSOR_MOVE_MS = 900
-const CLICK_MS = 120
+const CURSOR_MOVE_MS = 780
+const CLICK_MS = 105
 const REST_POSITION: Position = { x: 62, y: 58 }
 
 /** Why the demo is paused. It plays only while none of these apply. */
@@ -147,13 +147,13 @@ export function startDemo(): void {
         await moveCursorTo(centreOf(statusItem))
         await click()
         setMenuOpen(true)
-        await clock.wait(500)
+        await clock.wait(435)
     }
 
     async function chooseItem(row: Element): Promise<void> {
         await moveCursorTo(centreOf(row))
         hover(row)
-        await clock.wait(350)
+        await clock.wait(305)
         await click()
         setMenuOpen(false)
     }
@@ -187,7 +187,7 @@ export function startDemo(): void {
         await moveCursorTo(centreOf(roundedCornersItem))
         hover(roundedCornersItem)
         roundedCornersItem.classList.add('is-open')
-        await clock.wait(400)
+        await clock.wait(350)
         const radius: CornerRadius = desktop.dataset.corners === 'high' ? 'off' : 'high'
         await chooseItem(cornerItems[radius])
         setCorners(radius)
@@ -195,14 +195,14 @@ export function startDemo(): void {
 
     async function playLoop(): Promise<never> {
         placeCursor(REST_POSITION)
-        await clock.wait(1400)
+        await clock.wait(1220)
         for (;;) {
             await toggleNightbarFromMenu()
-            await rest(1800)
+            await rest(1565)
             await toggleCornersFromMenu()
-            await rest(2600)
+            await rest(2260)
             await toggleNightbarFromMenu()
-            await rest(1400)
+            await rest(1220)
         }
     }
 
