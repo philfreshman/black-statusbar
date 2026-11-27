@@ -98,6 +98,8 @@ struct GitHubUpdateCheckerTests {
 }
 
 /// Keeps the requests a fake fetch received, so a test can look at them afterwards.
+/// `@unchecked Sendable` is safe because the lock guards every read and write of `requests`;
+/// `Mutex` would check this for us but needs macOS 15.
 private final class SentRequests: @unchecked Sendable {
     private let lock = NSLock()
     private var requests: [URLRequest] = []
