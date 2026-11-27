@@ -2,7 +2,6 @@ import { Window } from 'happy-dom'
 import { fileURLToPath } from 'node:url'
 import { build } from 'vite-plus'
 import { beforeAll, describe, expect, it } from 'vite-plus/test'
-import { loadingClass } from '../src/site.ts'
 
 const projectRoot = fileURLToPath(new URL('..', import.meta.url))
 
@@ -109,14 +108,14 @@ describe('production build', () => {
         }
     })
 
-    it('hides the page until the fonts are ready, with a timeout as a safety net', () => {
-        const inlineScript = [...document.querySelectorAll('head script:not([src])')]
-            .map((script) => script.textContent)
-            .join('')
+    it('never hides text while a font loads, and never swaps fonts after the first paint', () => {
+        const css = inlineStylesheet(document)
+        const fontDisplays = css.match(/(?<![\w-])font-display:\s*\w+/g) ?? []
 
-        expect(inlineScript).toContain(`classList.add('${loadingClass}')`)
-        expect(inlineScript).toContain(`classList.remove('${loadingClass}')`)
-        expect(inlineScript).toContain('setTimeout')
+        expect(fontDisplays.length).toBeGreaterThan(0)
+        for (const fontDisplay of fontDisplays) {
+            expect(fontDisplay).toMatch(/optional$/)
+        }
     })
 
     it('ships install.sh next to the page', () => {

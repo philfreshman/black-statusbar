@@ -49,6 +49,20 @@ function inlineStylesheet(): Plugin {
     }
 }
 
+/**
+ * Gives every font face `font-display: optional` in place of Fontsource's `swap`. The fonts are
+ * preloaded, so they are almost always ready for the first paint; if one is not, the page keeps
+ * the fallback font instead of swapping fonts under the reader. The text never waits hidden.
+ */
+const fontDisplayOptional = {
+    postcssPlugin: 'nightbar-font-display-optional',
+    Declaration: {
+        'font-display': (declaration: { value: string }) => {
+            declaration.value = 'optional'
+        },
+    },
+}
+
 function serveInstallScript(): Plugin {
     return {
         name: 'nightbar-install-script',
@@ -70,6 +84,7 @@ function serveInstallScript(): Plugin {
 
 export default defineConfig({
     plugins: lazyPlugins(() => [prerenderPage(), inlineStylesheet(), serveInstallScript()]),
+    css: { postcss: { plugins: [fontDisplayOptional] } },
     fmt: {
         singleQuote: true,
         semi: false,
