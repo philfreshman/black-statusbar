@@ -22,6 +22,9 @@ swift test
 ./scripts/build-app.sh   # full app bundle at build/Nightbar.app
 swift format format --in-place --recursive Sources Tests Package.swift   # format (config: .swift-format)
 swift format lint --strict --recursive Sources Tests Package.swift       # check formatting
+swiftlint lint --strict   # lint (config: .swiftlint.yml, Tests/.swiftlint.yml; install: brew install swiftlint)
 ```
+
+SwiftLint leaves layout to swift-format, so its layout rules stay off. Fix findings in the code; use `// swiftlint:disable:next <rule>` only with a short reason.
 
 Branching, commit and pull request rules are in [CONTRIBUTING.md](CONTRIBUTING.md).
