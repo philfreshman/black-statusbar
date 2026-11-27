@@ -12,7 +12,7 @@ interface Position {
 /** Matches the cursor track's translate transition in desktop.css. */
 const CURSOR_MOVE_MS = 780
 const CLICK_MS = 105
-const REST_POSITION: Position = { x: 62, y: 58 }
+const REST_POSITION: Position = { x: 72, y: 44 }
 
 /** Why the demo is paused. It plays only while none of these apply. */
 const pauseReasons = {
@@ -196,6 +196,8 @@ export function startDemo(): void {
     async function playLoop(): Promise<never> {
         placeCursor(REST_POSITION)
         await clock.wait(1220)
+        // Only now, with the cursor drawn at rest, can a move glide instead of jump.
+        cursorTrack.classList.add('can-glide')
         for (;;) {
             await toggleNightbarFromMenu()
             await rest(1565)

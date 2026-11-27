@@ -325,9 +325,13 @@
     inset: 0;
     z-index: 4;
     /* Where the demo rests the cursor (REST_POSITION in demo.ts), so it does not slide there on load. */
-    translate: 62% 58%;
-    transition: translate 0.78s cubic-bezier(0.45, 0, 0.2, 1);
+    translate: 72% 44%;
     pointer-events: none;
+}
+
+/* The demo turns the glide on only once the cursor sits at rest, so it never glides in on load. */
+.cursor-track.can-glide {
+    transition: translate 0.78s cubic-bezier(0.45, 0, 0.2, 1);
 }
 
 .cursor {
