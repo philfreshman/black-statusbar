@@ -50,8 +50,10 @@ final class ScreenOverlay {
         (contrastLayer?.contentView as? ColorRemapView)?.remap = remap
     }
 
+    /// Hides the windows in the opposite order of showing them, so the contrast layer never sits
+    /// over a menu bar that has already lost its strip. That would flash for a frame.
     func close() {
-        ([strip] + [contrastLayer].compactMap { $0 } + corners).forEach { $0.orderOut(nil) }
+        (corners + [contrastLayer].compactMap { $0 } + [strip]).forEach { $0.orderOut(nil) }
     }
 
     private static func makeStrip(for screen: NSScreen) -> NSWindow {
@@ -105,10 +107,12 @@ final class ScreenOverlay {
     }
 
     /// A borderless window that clicks pass through. It stays on the Space where it appears and
-    /// keeps out of Mission Control and window cycling.
+    /// keeps out of Mission Control and window cycling. It appears and disappears at once, without
+    /// the fade macOS may give new windows.
     private static func makeOverlayWindow(frame: CGRect, level: NSWindow.Level) -> NSWindow {
         let window = NSWindow(contentRect: frame, styleMask: .borderless, backing: .buffered, defer: false)
         window.isReleasedWhenClosed = false
+        window.animationBehavior = .none
         window.level = level
         window.hasShadow = false
         window.ignoresMouseEvents = true
