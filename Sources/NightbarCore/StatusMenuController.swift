@@ -17,6 +17,8 @@ final class StatusMenuController: NSObject, NSMenuDelegate {
     private lazy var cornerRadiusItem = makeCornerRadiusItem()
     private lazy var launchAtLoginItem = makeItem("Launch at Login", action: #selector(toggleLaunchAtLogin))
     private lazy var hideIconItem = makeItem("Hide Icon", action: #selector(hideIcon))
+    private lazy var checkForUpdatesItem = makeItem("Check for Updates…", action: #selector(checkForUpdates))
+    private lazy var updateWindowController = UpdateWindowController.make()
 
     private var isIconHidden: Bool {
         get { defaults.bool(forKey: Self.iconHiddenKey) }
@@ -65,6 +67,7 @@ final class StatusMenuController: NSObject, NSMenuDelegate {
         menu.addItem(launchAtLoginItem)
         menu.addItem(hideIconItem)
         menu.addItem(.separator())
+        menu.addItem(checkForUpdatesItem)
         menu.addItem(NSMenuItem(title: "Quit", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
         return menu
     }
@@ -118,6 +121,10 @@ final class StatusMenuController: NSObject, NSMenuDelegate {
             defaults.set(true, forKey: Self.hideIconAlertSuppressedKey)
         }
         return confirmed
+    }
+
+    @objc private func checkForUpdates() {
+        updateWindowController.show()
     }
 
     @objc private func toggleLaunchAtLogin() {
