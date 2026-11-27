@@ -81,7 +81,8 @@ final class MenuBarOverlay: NSObject {
         coverSpaces()
     }
 
-    /// Gives the active Space and the other desktops of every screen exactly one overlay.
+    /// Gives the active Space and the other desktops of every screen exactly one overlay, and
+    /// gives each overlay the behaviour of its Space.
     private func coverSpaces() {
         guard isEnabled else { return }
         let displaySpaces = Spaces.displaySpaces
@@ -90,6 +91,9 @@ final class MenuBarOverlay: NSObject {
             if let displaySpaces, let spaces = Spaces.spaces(of: screen, in: displaySpaces) {
                 coverOtherDesktops(of: screen, spaces)
             }
+        }
+        for overlay in screenOverlays {
+            overlay.updateBehavior()
         }
     }
 
