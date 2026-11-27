@@ -64,45 +64,60 @@
 /*
  * Nightbar's rounded corners: each a black square with a quarter circle cut out of it, grown from
  * the screen's corner by scale, so the curve grows with it. They show only while Nightbar is on.
+ * The black is the shadow around a circle with border-radius, which browsers anti-alias, so the
+ * curve stays smooth; a gradient's hard edge would come out stair-stepped.
  */
 .corner {
     --corner-radius: 1.6cqi;
+    --far: calc(-1 * var(--corner-radius));
     position: absolute;
     z-index: 1;
     width: var(--corner-radius);
     height: var(--corner-radius);
-    background: radial-gradient(
-        circle var(--corner-radius) at var(--curve-centre),
-        transparent calc(100% - 0.5px),
-        #000 100%
-    );
+    overflow: hidden;
     transition:
         scale 0.35s ease,
         opacity 0.45s ease;
 }
 
+/* The cut-out: a circle centred on the corner of the square that faces into the screen. */
+.corner::before {
+    content: '';
+    position: absolute;
+    left: var(--circle-left);
+    top: var(--circle-top);
+    width: calc(2 * var(--corner-radius));
+    height: calc(2 * var(--corner-radius));
+    border-radius: 50%;
+    box-shadow: 0 0 0 var(--corner-radius) #000;
+}
+
 .corner.top-left {
     top: var(--bar-h);
     left: 0;
-    --curve-centre: 100% 100%;
+    --circle-left: 0;
+    --circle-top: 0;
     transform-origin: 0 0;
 }
 .corner.top-right {
     top: var(--bar-h);
     right: 0;
-    --curve-centre: 0 100%;
+    --circle-left: var(--far);
+    --circle-top: 0;
     transform-origin: 100% 0;
 }
 .corner.bottom-left {
     bottom: 0;
     left: 0;
-    --curve-centre: 100% 0;
+    --circle-left: 0;
+    --circle-top: var(--far);
     transform-origin: 0 100%;
 }
 .corner.bottom-right {
     bottom: 0;
     right: 0;
-    --curve-centre: 0 0;
+    --circle-left: var(--far);
+    --circle-top: var(--far);
     transform-origin: 100% 100%;
 }
 
