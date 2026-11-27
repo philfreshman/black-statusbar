@@ -1,5 +1,6 @@
 import AppKit
 
+/// Starts the menu bar overlay and Nightbar's own menu bar icon once the app has launched.
 @MainActor
 public final class AppDelegate: NSObject {
     private let overlay = MenuBarOverlay()

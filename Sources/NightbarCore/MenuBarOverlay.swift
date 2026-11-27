@@ -23,6 +23,7 @@ final class MenuBarOverlay: NSObject {
         }
     }
 
+    /// Whether Nightbar blacks out the menu bar. Saved in user defaults; changing it rebuilds the overlays.
     var isEnabled: Bool {
         get { defaults.object(forKey: Self.enabledKey) as? Bool ?? true }
         set {
@@ -31,6 +32,7 @@ final class MenuBarOverlay: NSObject {
         }
     }
 
+    /// How round the screen corners are. Saved in user defaults; changing it rebuilds the overlays.
     var cornerRadius: CornerRadius {
         get { defaults.string(forKey: Self.cornerRadiusKey).flatMap(CornerRadius.init(rawValue:)) ?? .standard }
         set {
@@ -48,6 +50,7 @@ final class MenuBarOverlay: NSObject {
         super.init()
     }
 
+    /// Covers the screens' active Spaces and starts following changes to screens and Spaces.
     func start() {
         NotificationCenter.default.addObserver(
             self, selector: #selector(screensDidChange),

@@ -11,6 +11,7 @@ enum FullScreenDetection {
         appWindowBounds.contains { $0.contains(displayBounds) }
     }
 
+    /// Looks at the windows on screen right now. An unknown display counts as not full screen.
     static func showsFullScreenWindow(on displayID: CGDirectDisplayID?) -> Bool {
         guard let displayID else { return false }
         return showsFullScreenWindow(

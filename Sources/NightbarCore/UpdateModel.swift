@@ -8,6 +8,7 @@ import Observation
 @MainActor
 @Observable
 final class UpdateModel {
+    /// The step the window is at, with the release it is about where there is one.
     enum State: Equatable {
         case checking
         case upToDate(latest: Release)
@@ -22,6 +23,7 @@ final class UpdateModel {
     /// The newest release the last successful check found, kept after a failure for its release notes.
     private(set) var latestRelease: Release?
 
+    /// The running app's version, or nil when it runs outside an app bundle.
     let currentVersion: AppVersion?
 
     private let checker: UpdateChecking

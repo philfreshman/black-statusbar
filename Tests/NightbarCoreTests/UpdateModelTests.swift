@@ -143,6 +143,7 @@ struct UpdateModelTests {
     }
 }
 
+/// A failure with a fixed message, so a test can look for it in the model's state.
 private struct FakeError: LocalizedError {
     static let message = "The network is offline."
     var errorDescription: String? { Self.message }
