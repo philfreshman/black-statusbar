@@ -1,4 +1,5 @@
 import Testing
+
 @testable import NightbarCore
 
 struct ColorRemapTests {
@@ -33,11 +34,12 @@ struct ColorRemapTests {
     @Test func matrixAppliesRemapToColourChannelsAndKeepsAlpha() {
         let remap = ColorRemap(gain: -2, offset: 1)
 
-        #expect(remap.matrix == [
-            -2, 0, 0, 0, 1,
-            0, -2, 0, 0, 1,
-            0, 0, -2, 0, 1,
-            0, 0, 0, 1, 0,
-        ])
+        #expect(
+            remap.matrix == [
+                -2, 0, 0, 0, 1,
+                0, -2, 0, 0, 1,
+                0, 0, -2, 0, 1,
+                0, 0, 0, 1, 0,
+            ])
     }
 }

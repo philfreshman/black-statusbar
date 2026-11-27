@@ -110,7 +110,8 @@ final class StatusMenuController: NSObject, NSMenuDelegate {
 
         let alert = NSAlert()
         alert.messageText = "Hide the Nightbar icon?"
-        alert.informativeText = "Nightbar keeps running. To show the icon again, open Nightbar from your Applications folder."
+        alert.informativeText =
+            "Nightbar keeps running. To show the icon again, open Nightbar from your Applications folder."
         alert.addButton(withTitle: "Hide Icon")
         alert.addButton(withTitle: "Cancel")
         alert.showsSuppressionButton = true

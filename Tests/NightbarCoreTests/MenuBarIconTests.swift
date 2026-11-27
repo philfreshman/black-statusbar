@@ -1,5 +1,6 @@
 import AppKit
 import Testing
+
 @testable import NightbarCore
 
 struct MenuBarIconTests {
@@ -17,14 +18,14 @@ struct MenuBarIconTests {
     @Test(arguments: [
         CGPoint(x: 2.5, y: 20),  // left stem
         CGPoint(x: 21.5, y: 4),  // right stem
-        CGPoint(x: 12, y: 10),   // the diagonal, where it breaks
+        CGPoint(x: 12, y: 10),  // the diagonal, where it breaks
     ])
     func fillsTheN(at point: CGPoint) throws {
         #expect(try alpha(atGrid: point) > 0.5)
     }
 
     @Test(arguments: [
-        CGPoint(x: 12, y: 3),   // above the diagonal
+        CGPoint(x: 12, y: 3),  // above the diagonal
         CGPoint(x: 12, y: 22),  // below the diagonal
     ])
     func leavesGapsBetweenTheStems(at point: CGPoint) throws {
@@ -38,12 +39,13 @@ struct MenuBarIconTests {
     }
 
     private func render(_ image: NSImage) throws -> NSBitmapImageRep {
-        let bitmap = try #require(NSBitmapImageRep(
-            bitmapDataPlanes: nil,
-            pixelsWide: Int(image.size.width * scale), pixelsHigh: Int(image.size.height * scale),
-            bitsPerSample: 8, samplesPerPixel: 4, hasAlpha: true, isPlanar: false,
-            colorSpaceName: .deviceRGB, bytesPerRow: 0, bitsPerPixel: 0
-        ))
+        let bitmap = try #require(
+            NSBitmapImageRep(
+                bitmapDataPlanes: nil,
+                pixelsWide: Int(image.size.width * scale), pixelsHigh: Int(image.size.height * scale),
+                bitsPerSample: 8, samplesPerPixel: 4, hasAlpha: true, isPlanar: false,
+                colorSpaceName: .deviceRGB, bytesPerRow: 0, bitsPerPixel: 0
+            ))
         NSGraphicsContext.saveGraphicsState()
         NSGraphicsContext.current = NSGraphicsContext(bitmapImageRep: bitmap)
         image.draw(in: NSRect(x: 0, y: 0, width: bitmap.pixelsWide, height: bitmap.pixelsHigh))

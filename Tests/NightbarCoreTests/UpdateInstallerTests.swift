@@ -1,5 +1,6 @@
 import Foundation
 import Testing
+
 @testable import NightbarCore
 
 struct UpdateInstallerTests {
@@ -48,7 +49,8 @@ struct UpdateInstallerTests {
     @Test func replacesTheAppWithTheDownloadedRelease() async throws {
         let folder = try TemporaryFolder()
         let app = try FakeApp.make(
-            in: folder.url.appendingPathComponent("Applications"), bundleIdentifier: Self.bundleIdentifier, version: "0.1.0"
+            in: folder.url.appendingPathComponent("Applications"), bundleIdentifier: Self.bundleIdentifier,
+            version: "0.1.0"
         )
         let zip = try FakeApp.zip(in: folder.url, bundleIdentifier: Self.bundleIdentifier, version: "0.2.0")
         let installer = UpdateInstaller(appURL: app, bundleIdentifier: Self.bundleIdentifier, download: copying(zip))
@@ -62,7 +64,8 @@ struct UpdateInstallerTests {
     func keepsTheAppWhenTheDownloadIsNotTheRelease(identifier: String, version: String) async throws {
         let folder = try TemporaryFolder()
         let app = try FakeApp.make(
-            in: folder.url.appendingPathComponent("Applications"), bundleIdentifier: Self.bundleIdentifier, version: "0.1.0"
+            in: folder.url.appendingPathComponent("Applications"), bundleIdentifier: Self.bundleIdentifier,
+            version: "0.1.0"
         )
         let zip = try FakeApp.zip(in: folder.url, bundleIdentifier: identifier, version: version)
         let installer = UpdateInstaller(appURL: app, bundleIdentifier: Self.bundleIdentifier, download: copying(zip))
@@ -76,7 +79,8 @@ struct UpdateInstallerTests {
     @Test func failsWhenTheDownloadIsNotAZip() async throws {
         let folder = try TemporaryFolder()
         let app = try FakeApp.make(
-            in: folder.url.appendingPathComponent("Applications"), bundleIdentifier: Self.bundleIdentifier, version: "0.1.0"
+            in: folder.url.appendingPathComponent("Applications"), bundleIdentifier: Self.bundleIdentifier,
+            version: "0.1.0"
         )
         let installer = UpdateInstaller(appURL: app, bundleIdentifier: Self.bundleIdentifier) { _, destination in
             try Data("not a zip".utf8).write(to: destination)
@@ -108,9 +112,11 @@ private enum FakeApp {
 
     /// Zips a fake app the way the release workflow does, with `Nightbar.app` at the top of the zip.
     static func zip(in folder: URL, bundleIdentifier: String, version: String) throws -> URL {
-        let app = try make(in: folder.appendingPathComponent("release"), bundleIdentifier: bundleIdentifier, version: version)
+        let app = try make(
+            in: folder.appendingPathComponent("release"), bundleIdentifier: bundleIdentifier, version: version)
         let zip = folder.appendingPathComponent("Nightbar.zip")
-        let ditto = try Process.run(URL(fileURLWithPath: "/usr/bin/ditto"), arguments: ["-c", "-k", "--keepParent", app.path, zip.path])
+        let ditto = try Process.run(
+            URL(fileURLWithPath: "/usr/bin/ditto"), arguments: ["-c", "-k", "--keepParent", app.path, zip.path])
         ditto.waitUntilExit()
         try #require(ditto.terminationStatus == 0)
         return zip
