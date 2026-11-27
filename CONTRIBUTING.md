@@ -101,6 +101,20 @@ The Swift code is linted with [SwiftLint](https://github.com/realm/SwiftLint), w
 swiftlint lint --strict
 ```
 
+## Code style
+
+Follow the [Swift API Design Guidelines](https://www.swift.org/documentation/api-design-guidelines/) and these conventions. SwiftLint checks the ones it can.
+
+- Use `let` unless the value changes.
+- Prefer a `struct` or `enum`. Use a `class` only when the type needs identity, AppKit subclassing, `@objc` or shared mutable state, and mark it `final`. Use a case-less `enum` for a namespace of static members.
+- Give everything the narrowest access that works: `private` for helpers and stored properties, `internal` when another file or a test needs it, `public` only for what `Sources/Nightbar/main.swift` uses.
+- No force unwrapping, `try!` or `as!` in app code. The one exception, which SwiftLint also allows, is `URL(string:)!` on a fixed URL literal.
+- Model a state or an error as an `enum` with associated values rather than several flags and optionals.
+- Inject a dependency through a protocol or a closure when a test needs to replace it, as the update checker and installer do. Don't add one otherwise.
+- Write Bool properties as assertions (`isEnabled`, `hasBeenShown`), and write `Self` inside a type rather than its name.
+- Give each type in `Sources` a short `///` doc comment, and each member whose name does not tell the whole story.
+- Put each protocol conformance in its own `extension Type: Protocol`, except ones the compiler synthesizes (`Equatable`, `Sendable`, `CaseIterable`) and SwiftUI's `View`. Split long types into `// MARK: -` sections.
+
 ## Dead code
 
 [Periphery](https://github.com/peripheryapp/periphery) finds unused code: declarations, parameters, properties that are set but never read, and imports. Install it with `brew install periphery`. Its settings are in `.periphery.yml` at the repo root. Periphery reads the index that `swift build` writes while it compiles, so build the tests first; the tests count as users of the code.
