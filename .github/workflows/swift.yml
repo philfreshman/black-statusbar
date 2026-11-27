@@ -18,9 +18,14 @@ on:
 permissions:
   contents: read
 
+# Pull request runs are grouped by pull request number, not github.ref: a run
+# for an already merged pull request gets the base branch as its ref, so it
+# would share a group with the push run on development and cancel it. A new
+# commit on a pull request cancels its older run; every push to development
+# runs to the end.
 concurrency:
-  group: swift-${{ github.ref }}
-  cancel-in-progress: true
+  group: swift-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 # .build is not cached: a clean build takes about a minute, and a restored
 # index store could hold stale entries for deleted files that mislead Periphery.
