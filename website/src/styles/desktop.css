@@ -8,7 +8,8 @@
     margin-inline: auto;
     aspect-ratio: 16 / 10;
     overflow: hidden;
-    border-radius: clamp(10px, 1.6vw, 18px);
+    /* Square at the bottom, so Nightbar's rounded corners have an edge to round. */
+    border-radius: clamp(10px, 1.6vw, 18px) clamp(10px, 1.6vw, 18px) 0 0;
     border: clamp(6px, 0.9vw, 11px) solid #020203;
     box-shadow:
         0 0 0 1px rgb(255 255 255 / 0.1),
@@ -40,6 +41,58 @@
     inset: 0;
     width: 100%;
     height: 100%;
+}
+
+/*
+ * Nightbar's rounded corners: each a black square with a quarter circle cut out of it, grown from
+ * the screen's corner by scale, so the curve grows with it. They show only while Nightbar is on.
+ */
+.corner {
+    --corner-radius: 1.6cqi;
+    position: absolute;
+    z-index: 1;
+    width: var(--corner-radius);
+    height: var(--corner-radius);
+    background: radial-gradient(
+        circle var(--corner-radius) at var(--curve-centre),
+        transparent calc(100% - 0.5px),
+        #000 100%
+    );
+    transition:
+        scale 0.35s ease,
+        opacity 0.45s ease;
+}
+
+.corner.top-left {
+    top: var(--bar-h);
+    left: 0;
+    --curve-centre: 100% 100%;
+    transform-origin: 0 0;
+}
+.corner.top-right {
+    top: var(--bar-h);
+    right: 0;
+    --curve-centre: 0 100%;
+    transform-origin: 100% 0;
+}
+.corner.bottom-left {
+    bottom: 0;
+    left: 0;
+    --curve-centre: 100% 0;
+    transform-origin: 0 100%;
+}
+.corner.bottom-right {
+    bottom: 0;
+    right: 0;
+    --curve-centre: 0 0;
+    transform-origin: 100% 100%;
+}
+
+.screen[data-corners='off'] .corner {
+    scale: 0;
+}
+.screen[data-nightbar='off'] .corner {
+    opacity: 0;
 }
 
 /*

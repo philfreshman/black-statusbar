@@ -23,6 +23,18 @@ const pauseReasons = {
 
 const toggleLabels = { pause: 'Pause demo', play: 'Play demo' } as const
 
+/** The two Rounded Corners radii the demo switches between. */
+type CornerRadius = 'off' | 'high'
+
+/** Looks up a row of the status menu by its data-item name. */
+function requireMenuItem(menu: Element, item: string): HTMLElement {
+    const row = menu.querySelector<HTMLElement>(`[data-item="${item}"]`)
+    if (!row) {
+        throw new Error(`The status menu has no "${item}" row`)
+    }
+    return row
+}
+
 /**
  * Lets the visitor pause the demo, and pauses it on their behalf while nobody can see it:
  * scrolled out of view or in a background tab, where it would only use battery.
@@ -64,8 +76,9 @@ function controlPlayback(clock: PausableClock, desktop: HTMLElement): void {
 }
 
 /**
- * Plays the hero animation: the cursor opens the Nightbar menu and switches Nightbar on,
- * waits, then switches it off again, until paused. With reduced motion it just shows Nightbar on.
+ * Plays the hero animation: the cursor opens the Nightbar menu and switches Nightbar on, then
+ * switches the rounded corners on or off, then switches Nightbar off again, until paused.
+ * With reduced motion it just shows Nightbar on.
  */
 export function startDemo(): void {
     const desktop = requireElement(ids.desktop)
@@ -74,6 +87,11 @@ export function startDemo(): void {
     const statusItem = requireElement(ids.statusItem)
     const statusMenu = requireElement(ids.statusMenu)
     const nightbarItem = requireElement(ids.nightbarMenuItem)
+    const roundedCornersItem = requireMenuItem(statusMenu, 'rounded-corners')
+    const cornerItems: Record<CornerRadius, HTMLElement> = {
+        off: requireMenuItem(statusMenu, 'corners-off'),
+        high: requireMenuItem(statusMenu, 'corners-high'),
+    }
     const clock = new PausableClock()
 
     function centreOf(element: Element): Position {
@@ -100,12 +118,41 @@ export function startDemo(): void {
         cursor.classList.remove('is-pressed')
     }
 
+    async function rest(ms: number): Promise<void> {
+        await moveCursorTo(REST_POSITION)
+        await clock.wait(ms)
+    }
+
     function setMenuOpen(isOpen: boolean): void {
         statusItem.classList.toggle('is-open', isOpen)
         statusMenu.classList.toggle('is-open', isOpen)
         if (!isOpen) {
-            nightbarItem.classList.remove('is-hover')
+            for (const row of statusMenu.querySelectorAll('.is-hover, .is-open')) {
+                row.classList.remove('is-hover', 'is-open')
+            }
         }
+    }
+
+    /** Highlights a row, and only that row in its menu or submenu. */
+    function hover(row: Element): void {
+        for (const sibling of row.parentElement?.children ?? []) {
+            sibling.classList.toggle('is-hover', sibling === row)
+        }
+    }
+
+    async function openMenu(): Promise<void> {
+        await moveCursorTo(centreOf(statusItem))
+        await click()
+        setMenuOpen(true)
+        await clock.wait(500)
+    }
+
+    async function chooseItem(row: Element): Promise<void> {
+        await moveCursorTo(centreOf(row))
+        hover(row)
+        await clock.wait(350)
+        await click()
+        setMenuOpen(false)
     }
 
     function isNightbarOn(): boolean {
@@ -117,29 +164,42 @@ export function startDemo(): void {
         nightbarItem.classList.toggle('checked', isOn)
     }
 
+    function setCorners(radius: CornerRadius): void {
+        desktop.dataset.corners = radius
+        for (const [name, row] of Object.entries(cornerItems)) {
+            row.classList.toggle('checked', name === radius)
+        }
+    }
+
     /** Opens the Nightbar menu and clicks its Nightbar item, which flips the black bar. */
     async function toggleNightbarFromMenu(): Promise<void> {
-        await moveCursorTo(centreOf(statusItem))
-        await click()
-        setMenuOpen(true)
-        await clock.wait(500)
-        await moveCursorTo(centreOf(nightbarItem))
-        nightbarItem.classList.add('is-hover')
-        await clock.wait(350)
-        await click()
-        setMenuOpen(false)
+        await openMenu()
+        await chooseItem(nightbarItem)
         setNightbar(!isNightbarOn())
+    }
+
+    /** Opens the Rounded Corners submenu and switches the corners between Off and High. */
+    async function toggleCornersFromMenu(): Promise<void> {
+        await openMenu()
+        await moveCursorTo(centreOf(roundedCornersItem))
+        hover(roundedCornersItem)
+        roundedCornersItem.classList.add('is-open')
+        await clock.wait(400)
+        const radius: CornerRadius = desktop.dataset.corners === 'high' ? 'off' : 'high'
+        await chooseItem(cornerItems[radius])
+        setCorners(radius)
     }
 
     async function playLoop(): Promise<never> {
         placeCursor(REST_POSITION)
+        await clock.wait(1400)
         for (;;) {
-            await clock.wait(1400)
             await toggleNightbarFromMenu()
-            await moveCursorTo(REST_POSITION)
-            await clock.wait(2600)
+            await rest(1800)
+            await toggleCornersFromMenu()
+            await rest(2600)
             await toggleNightbarFromMenu()
-            await moveCursorTo(REST_POSITION)
+            await rest(1400)
         }
     }
 

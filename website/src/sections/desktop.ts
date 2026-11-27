@@ -8,7 +8,7 @@ const appMenus = ['File', 'Edit', 'View']
 const wideAppMenus = ['Go', 'Window', 'Help']
 
 const description =
-    'A Mac desktop with a violet satin wallpaper. The Nightbar menu opens, Nightbar is switched on and the menu bar turns black with white icons, then it is switched off again.'
+    'A Mac desktop with a violet satin wallpaper. The Nightbar menu opens, Nightbar is switched on and the menu bar turns black with white icons. Then the rounded corners are switched on or off, rounding the screen below the bar, and Nightbar is switched off again.'
 
 /** The wallpaper behind the mock menu bar. Film grain on top comes from the CSS. */
 function renderWallpaper(): string {
@@ -52,6 +52,15 @@ function renderStatusMenu(): string {
     `
 }
 
+/**
+ * Nightbar's rounded corners: black fillets that make the area below the menu bar a rounded
+ * rectangle. The top two hang below the bar, the bottom two sit on the screen's bottom edge.
+ */
+function renderCorners(): string {
+    const corners = ['top-left', 'top-right', 'bottom-left', 'bottom-right']
+    return corners.map((corner) => `<i class="corner ${corner}" aria-hidden="true"></i>`).join('')
+}
+
 /** The mock Mac desktop the demo in demo.ts plays on. */
 export function renderDesktop(): string {
     return /* HTML */ `
@@ -59,10 +68,11 @@ export function renderDesktop(): string {
             class="screen"
             id="${ids.desktop}"
             data-nightbar="off"
+            data-corners="off"
             role="img"
             aria-label="${description}"
         >
-            ${renderWallpaper()} ${renderMenubar()} ${renderStatusMenu()}
+            ${renderWallpaper()} ${renderCorners()} ${renderMenubar()} ${renderStatusMenu()}
             <div class="cursor-track" id="${ids.cursorTrack}">
                 ${icon('cursor', { className: 'cursor', id: ids.cursor })}
             </div>
