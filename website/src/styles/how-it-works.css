@@ -4,8 +4,8 @@
  *
  * Without scroll-driven animations, or with reduced motion, it is a still exploded view with
  * the strip in place. With them, scrolling plays the story: the strip slides into its slot,
- * the menu bar turns black with white icons, then the camera swings to the front and the
- * layers collapse into the finished bar.
+ * then the camera swings to the front and the layers collapse. Only as they merge does the
+ * menu bar turn black with white icons.
  */
 .how {
     padding: 0;
@@ -102,7 +102,8 @@
 .camera {
     --plane-w: clamp(240px, 30vw, 420px);
     --gap: calc(var(--plane-w) * 0.24);
-    --bar: calc(var(--plane-w) * 0.052);
+    /* Same proportions as the menu bar in the hero, whose screen is also 16:10. */
+    --bar: calc(var(--plane-w) * 0.034);
     position: relative;
     width: var(--plane-w);
     aspect-ratio: 16 / 10;
@@ -134,26 +135,17 @@
     overflow: hidden;
 }
 
-/* L1: the wallpaper, a small copy of the violet satin in the hero. */
+/* L1: the wallpaper, a small copy of the one in the hero. */
 .layer-wallpaper .plane {
     box-shadow:
         0 0 0 1px rgb(255 255 255 / 0.18),
         0 0 60px -10px rgb(124 92 255 / 0.5);
 }
 
-/* Grainy like the hero wallpaper, with a finer grain to suit the smaller picture. */
 .mini-wallpaper {
     position: absolute;
     inset: 0;
-}
-
-.mini-wallpaper::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: var(--film-grain) 0 0 / 90px;
-    mix-blend-mode: overlay;
-    opacity: 0.8;
+    background: var(--wallpaper);
 }
 
 /* Guide posts at the corners, like the lines in an exploded drawing. */
@@ -199,8 +191,16 @@
 
 /* Hatched, so the black strip reads as a material even against the black page. */
 .strip {
+    position: relative;
     height: var(--bar);
     background: repeating-linear-gradient(135deg, #000 0 5px, rgb(var(--accent-rgb) / 0.4) 5px 6px);
+}
+
+/* The outline and glow, on their own layer so they can fade once the bar is finished. */
+.strip::after {
+    content: '';
+    position: absolute;
+    inset: 0;
     box-shadow:
         0 0 0 1px var(--accent),
         0 0 24px rgb(var(--violet-rgb) / 0.45);
@@ -221,13 +221,14 @@
  */
 .mini-bar {
     position: relative;
+    font-family: var(--font-system);
     isolation: isolate;
     display: flex;
     align-items: center;
     justify-content: space-between;
     height: var(--bar);
-    padding: 0 calc(var(--plane-w) * 0.025);
-    font-size: calc(var(--plane-w) * 0.026);
+    padding: 0 calc(var(--plane-w) * 0.016);
+    font-size: calc(var(--plane-w) * 0.013);
     white-space: nowrap;
     color: #fff;
     background: rgb(255 255 255 / 0.4);
@@ -245,19 +246,27 @@
 .mini-right {
     display: flex;
     align-items: center;
-    gap: calc(var(--plane-w) * 0.022);
+    gap: calc(var(--plane-w) * 0.017);
+}
+
+.mini-left b {
+    font-weight: 700;
+}
+
+.mini-right {
+    gap: calc(var(--plane-w) * 0.013);
 }
 
 .mini-apple {
-    width: calc(var(--plane-w) * 0.022);
+    width: calc(var(--plane-w) * 0.0135);
 }
 
 .mini-glyph {
-    width: calc(var(--plane-w) * 0.026);
+    width: calc(var(--plane-w) * 0.017);
 }
 
 .mini-battery {
-    width: calc(var(--plane-w) * 0.038);
+    width: calc(var(--plane-w) * 0.024);
 }
 
 .tag {
@@ -339,7 +348,8 @@
         }
 
         .layer-strip .plane::after,
-        .layer-menubar .plane::after {
+        .layer-menubar .plane::after,
+        .strip::after {
             animation: how-outline linear both;
             animation-timeline: --section;
             animation-range: contain 0% contain 100%;
@@ -381,7 +391,7 @@
             animation-range: contain 10% contain 24%;
         }
         .how-steps li:nth-child(3) :is(.label, h3) {
-            animation-range: contain 34% contain 44%;
+            animation-range: contain 76% contain 86%;
         }
     }
 }
@@ -451,13 +461,13 @@
     }
 }
 
-/* macOS reacts: glass with dark icons, then black with white icons. */
+/* macOS reacts only as the layers merge: glass with dark icons, then black with white icons. */
 @keyframes how-react-bar {
     0%,
-    36% {
+    76% {
         opacity: 0;
     }
-    46%,
+    86%,
     100% {
         opacity: 1;
     }
@@ -465,11 +475,11 @@
 
 @keyframes how-react-icons {
     0%,
-    36% {
+    76% {
         /* Turns the white icons and text into the near-black #1b1b1b. */
         filter: invert(0.894);
     }
-    46%,
+    86%,
     100% {
         filter: none;
     }
@@ -486,7 +496,7 @@
     }
 }
 
-/* The dashed construction lines fade once the layers are flat. */
+/* The dashed construction lines and the strip's outline fade once the layers are flat. */
 @keyframes how-outline {
     0%,
     76% {

@@ -23,6 +23,7 @@
 
 .menu-mock {
     width: 290px;
+    font-family: var(--font-system);
 }
 
 .menu-mock-bar {
@@ -58,11 +59,13 @@
     list-style: none;
     margin: 6px 0 0;
     padding: 6px;
-    border-radius: 12px;
-    background: rgb(36 36 42 / 0.88);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgb(255 255 255 / 0.12);
-    box-shadow: 0 24px 60px -10px rgb(0 0 0 / 0.85);
+    border-radius: 18px;
+    background: var(--menu-glass);
+    backdrop-filter: var(--menu-glass-filter);
+    border: var(--menu-glass-border);
+    box-shadow:
+        var(--menu-glass-rim),
+        0 24px 60px -10px rgb(0 0 0 / 0.75);
     font-size: 0.875rem;
 }
 
@@ -70,29 +73,40 @@
     display: flex;
     align-items: center;
     padding: 5px 10px;
-    border-radius: 6px;
+    border-radius: 9px;
 }
 
 .menu-mock-list li:first-child {
-    background: #3d6fe0;
+    background: var(--menu-highlight);
 }
 .menu-mock-list .check {
     width: 20px;
-    font-size: 0.75rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
 }
-.menu-mock-list li:not(:has(.check)):not(.sep) {
+.menu-mock-list li:not(:has(> .check)):not(.sep) {
     padding-left: 30px;
 }
+.menu-mock-list .submenu {
+    display: none;
+}
+/* Starts where the labels start, as in macOS 27, not at the check marks. */
 .menu-mock-list .sep {
     height: 1px;
-    margin: 5px 10px;
+    margin: 6px 14px 6px 30px;
     padding: 0;
-    background: rgb(255 255 255 / 0.12);
+    background: rgb(255 255 255 / 0.14);
 }
 .menu-mock-list kbd {
     margin-left: auto;
     font: inherit;
-    color: #8d8b97;
+    color: var(--menu-dim);
+}
+.menu-mock-list .chevron {
+    margin-left: auto;
+    font-weight: 700;
+    font-size: 1.2em;
+    line-height: 1;
 }
 
 /* Facts as a hairline table. */
