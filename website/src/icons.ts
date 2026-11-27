@@ -18,6 +18,13 @@ function line(paths: string): string {
     `
 }
 
+/**
+ * The macOS arrow, traced from a macOS 27 screenshot. The path is the arrow's core; a black
+ * stroke rounds its corners and a wider white stroke under it draws the outline.
+ */
+const cursorPath =
+    'M2.5 2.59L23.79 25.8H13.22L18.61 38.68A2.06 2.06 0 0 1 14.79 40.22L9.64 27.6L2.5 34.28Z'
+
 /** The thunder N: two stems joined by a diagonal that breaks like a lightning bolt. */
 const markPath = 'M4 4H9L18 13V16.5L23 21.5V4H28V28H23L14 19V15.5L9 10.5V28H4Z'
 
@@ -100,17 +107,12 @@ const shapes = {
         `,
     },
     cursor: {
-        viewBox: '0 0 24 24',
+        viewBox: '0 0 26 44.1',
         content: /* HTML */ `
-            <!-- The macOS arrow: black, with a white outline painted under the fill, so its tip stays sharp. -->
-            <path
-                d="M5 3v15.5l3.6-3.3 2.3 5.4 2.3-1-2.3-5.3h4.9z"
-                fill="#000"
-                stroke="#fff"
-                stroke-width="2.6"
-                stroke-linejoin="round"
-                paint-order="stroke"
-            />
+            <g stroke-linejoin="round">
+                <path d="${cursorPath}" fill="#fff" stroke="#fff" stroke-width="5" />
+                <path d="${cursorPath}" fill="#000" stroke="#000" stroke-width="0.6" />
+            </g>
         `,
     },
     contrast: {
