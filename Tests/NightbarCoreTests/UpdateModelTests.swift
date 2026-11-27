@@ -165,9 +165,15 @@ private final class RelaunchCounter {
 
 /// Installs nothing. Fails with `error` when given one, and waits for `gate` to finish when given one.
 private struct FakeInstaller: UpdateInstalling {
-    var error: Error?
-    var gate: AsyncStream<Void>?
-    var relaunches: RelaunchCounter?
+    let error: Error?
+    let gate: AsyncStream<Void>?
+    let relaunches: RelaunchCounter?
+
+    init(error: Error? = nil, gate: AsyncStream<Void>? = nil, relaunches: RelaunchCounter? = nil) {
+        self.error = error
+        self.gate = gate
+        self.relaunches = relaunches
+    }
 
     func install(_ release: Release) async throws {
         if let gate {
