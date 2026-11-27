@@ -53,6 +53,14 @@ opt_in_rules:
   - yoda_condition
   - discouraged_optional_boolean
   - weak_delegate
+  # Swift conventions (see Code style in CONTRIBUTING.md).
+  - private_over_fileprivate
+  - prefer_self_in_static_references
+  - prefer_self_type_over_type_of_self
+  - redundant_type_annotation
+  - unneeded_parentheses_in_closure_argument
+  - convenience_type
+  - unavailable_function
   # Complexity.
   - closure_body_length
 
