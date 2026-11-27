@@ -12,13 +12,13 @@ public final class AppDelegate: NSObject {
 }
 
 extension AppDelegate: NSApplicationDelegate {
-    public func applicationDidFinishLaunching(_ notification: Notification) {
+    public func applicationDidFinishLaunching(_: Notification) {
         statusMenu = StatusMenuController(overlay: overlay)
         overlay.start()
     }
 
     /// Opening Nightbar while it already runs shows its icon again, in case it was hidden.
-    public func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+    public func applicationShouldHandleReopen(_: NSApplication, hasVisibleWindows _: Bool) -> Bool {
         statusMenu?.showIcon()
         return false
     }

@@ -153,7 +153,7 @@ private struct FakeError: LocalizedError {
 private struct FakeChecker: UpdateChecking {
     let result: Result<UpdateCheckResult, Error>
 
-    func checkForUpdate(current: AppVersion?) async throws -> UpdateCheckResult {
+    func checkForUpdate(current _: AppVersion?) async throws -> UpdateCheckResult {
         try result.get()
     }
 }
@@ -176,7 +176,7 @@ private struct FakeInstaller: UpdateInstalling {
         self.relaunches = relaunches
     }
 
-    func install(_ release: Release) async throws {
+    func install(_: Release) async throws {
         if let gate {
             for await _ in gate {}
         }
