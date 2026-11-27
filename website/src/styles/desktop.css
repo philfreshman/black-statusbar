@@ -203,10 +203,31 @@
     margin: 0;
     padding: 0.5cqi;
     list-style: none;
-    border-radius: 1cqi;
-    background: rgb(38 38 44 / 0.9);
-    border: 1px solid rgb(255 255 255 / 0.14);
-    box-shadow: 0 2cqi 5cqi -1cqi rgb(0 0 0 / 0.7);
+    border-radius: 1.4cqi;
+}
+
+/*
+ * The glass. The menu draws it on a layer behind its rows instead of on itself: an element with a
+ * backdrop-filter hides the wallpaper from the backdrop-filter of anything inside it, so the
+ * submenu could not blur the wallpaper.
+ */
+.status-menu::before,
+.status-menu .submenu {
+    background: var(--menu-glass);
+    backdrop-filter: var(--menu-glass-filter);
+    border: var(--menu-glass-border);
+    box-shadow:
+        var(--menu-glass-rim),
+        0 2cqi 5cqi -1cqi rgb(0 0 0 / 0.6);
+}
+
+.status-menu::before {
+    content: '';
+    position: absolute;
+    /* Over the menu's transparent border, which keeps the rows where the glass border puts them. */
+    inset: -1px;
+    z-index: -1;
+    border-radius: inherit;
 }
 
 .status-menu {
@@ -216,8 +237,8 @@
     right: 17.5cqi;
     width: 21cqi;
     font-size: 1.3cqi;
-    color: #f2f2f5;
-    backdrop-filter: blur(20px);
+    color: #fff;
+    border: 1px solid transparent;
     /* Closed, it is fully transparent. Only opacity and scale animate, so it stays on the GPU. */
     opacity: 0;
     transform-origin: top right;
@@ -237,12 +258,13 @@
     display: flex;
     align-items: center;
     padding: 0.45cqi 0.8cqi;
-    border-radius: 0.55cqi;
+    border-radius: 0.7cqi;
 }
 
 .status-menu .check {
     width: 1.8cqi;
-    font-size: 1.05cqi;
+    font-size: 1.15cqi;
+    font-weight: 600;
     visibility: hidden;
 }
 .status-menu li.checked > .check {
@@ -253,31 +275,39 @@
     padding-left: 2.6cqi;
 }
 .status-menu li.is-hover {
-    background: #3d6fe0;
+    background: var(--menu-highlight);
 }
+/* Starts where the labels start, as in macOS 27, not at the check marks. */
 .status-menu .sep {
     height: 1px;
-    margin: 0.45cqi 0.8cqi;
+    margin: 0.5cqi 1.2cqi 0.5cqi 2.6cqi;
     padding: 0;
-    background: rgb(255 255 255 / 0.12);
+    background: rgb(255 255 255 / 0.14);
 }
-.status-menu kbd,
-.status-menu .chevron {
+.status-menu kbd {
     margin-left: auto;
     font: inherit;
-    color: #8d8b97;
+    color: var(--menu-dim);
+}
+.status-menu .chevron {
+    margin-left: auto;
+    font-weight: 700;
+    font-size: 1.2em;
+    line-height: 1;
 }
 
-/* Opens to the right of its row, its first row level with it, like a macOS submenu. */
+/*
+ * Opens to the right of its row, its first row level with it, like a macOS submenu. It overlaps
+ * the menu's edge a little, as in macOS 27.
+ */
 .status-menu li:has(> .submenu) {
     position: relative;
 }
 .status-menu .submenu {
     position: absolute;
     top: calc(-0.5cqi - 1px);
-    left: calc(100% + 0.5cqi + 1px);
-    width: 9cqi;
-    background: rgb(38 38 44 / 0.97);
+    left: calc(100% + 0.15cqi);
+    width: 8cqi;
     opacity: 0;
     transition: opacity 0.15s ease;
 }
