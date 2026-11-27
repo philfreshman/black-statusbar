@@ -1,4 +1,5 @@
 import { Window } from 'happy-dom'
+import { createHash } from 'node:crypto'
 import { fileURLToPath } from 'node:url'
 import { build } from 'vite-plus'
 import { beforeAll, describe, expect, it } from 'vite-plus/test'
@@ -88,11 +89,31 @@ describe('production build', () => {
         }
     })
 
-    it('loads the hashed script as a module', () => {
-        const script = document.querySelector('script[type="module"]')?.getAttribute('src')
+    it('inlines the script and allows only it, by its hash, in the Content Security Policy', () => {
+        const scripts = [...document.querySelectorAll('script[type="module"]')]
+        const policy =
+            document
+                .querySelector('meta[http-equiv="Content-Security-Policy"]')
+                ?.getAttribute('content') ?? ''
 
-        expect(script).toMatch(/^\/assets\/index-[\w-]+\.js$/)
-        expect(output.fileNames).toContain(script?.slice(1))
+        expect(scripts).toHaveLength(1)
+        expect(scripts[0].hasAttribute('src')).toBe(false)
+        expect(output.fileNames.filter((fileName) => fileName.endsWith('.js'))).toEqual([])
+
+        const hash = createHash('sha256')
+            .update(scripts[0].textContent ?? '')
+            .digest('base64')
+        expect(policy).toContain(`script-src 'sha256-${hash}' 'strict-dynamic'`)
+        expect(policy).toContain("object-src 'none'")
+        expect(policy).toContain("base-uri 'none'")
+        expect(policy).toContain("require-trusted-types-for 'script'")
+    })
+
+    it('sets the Content Security Policy before any script', () => {
+        const policyAt = output.html.indexOf('<meta http-equiv="Content-Security-Policy"')
+
+        expect(policyAt).toBeGreaterThan(-1)
+        expect(policyAt).toBeLessThan(output.html.indexOf('<script'))
     })
 
     it('preloads the Latin font files the stylesheet uses', () => {
