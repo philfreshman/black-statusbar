@@ -1,7 +1,7 @@
 import AppKit
 
 /// Installs a release by downloading its zip, checking the app inside and swapping it in for the running app's bundle.
-struct UpdateInstaller: UpdateInstalling {
+struct UpdateInstaller {
     /// Saves the file at the first URL to the second URL.
     typealias Download = @Sendable (URL, URL) async throws -> Void
 
@@ -18,29 +18,6 @@ struct UpdateInstaller: UpdateInstalling {
         self.appURL = appURL
         self.bundleIdentifier = bundleIdentifier
         self.download = download
-    }
-
-    func install(_ release: Release) async throws {
-        let bundleIdentifier = try checkCanReplaceApp()
-        let workFolder = try makeWorkFolder()
-        defer { try? FileManager.default.removeItem(at: workFolder) }
-
-        let zip = workFolder.appendingPathComponent(GitHubUpdateChecker.assetName)
-        try await download(release.downloadURL, zip)
-        let newApp = try await unpack(zip, into: workFolder)
-        try Self.verify(newApp, bundleIdentifier: bundleIdentifier, version: release.version)
-        try? await Self.run("/usr/bin/xattr", ["-dr", "com.apple.quarantine", newApp.path])
-        _ = try FileManager.default.replaceItemAt(appURL, withItemAt: newApp)
-    }
-
-    @MainActor func relaunch() {
-        // Waits for this process to exit, then opens the app. Values go in as arguments, never into the script.
-        let script = #"while kill -0 "$1" 2>/dev/null; do sleep 0.2; done; /usr/bin/open "$2""#
-        let process = Process()
-        process.executableURL = URL(fileURLWithPath: "/bin/sh")
-        process.arguments = ["-c", script, "sh", String(ProcessInfo.processInfo.processIdentifier), appURL.path]
-        guard (try? process.run()) != nil else { return }
-        NSApp.terminate(nil)
     }
 
     /// Returns the bundle identifier the download must have, or throws when this app cannot be replaced.
@@ -110,5 +87,30 @@ struct UpdateInstaller: UpdateInstalling {
             throw UpdateError.gitHubUnavailable(statusCode: http.statusCode)
         }
         try FileManager.default.moveItem(at: file, to: destination)
+    }
+}
+
+extension UpdateInstaller: UpdateInstalling {
+    func install(_ release: Release) async throws {
+        let bundleIdentifier = try checkCanReplaceApp()
+        let workFolder = try makeWorkFolder()
+        defer { try? FileManager.default.removeItem(at: workFolder) }
+
+        let zip = workFolder.appendingPathComponent(GitHubUpdateChecker.assetName)
+        try await download(release.downloadURL, zip)
+        let newApp = try await unpack(zip, into: workFolder)
+        try Self.verify(newApp, bundleIdentifier: bundleIdentifier, version: release.version)
+        try? await Self.run("/usr/bin/xattr", ["-dr", "com.apple.quarantine", newApp.path])
+        _ = try FileManager.default.replaceItemAt(appURL, withItemAt: newApp)
+    }
+
+    @MainActor func relaunch() {
+        // Waits for this process to exit, then opens the app. Values go in as arguments, never into the script.
+        let script = #"while kill -0 "$1" 2>/dev/null; do sleep 0.2; done; /usr/bin/open "$2""#
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: "/bin/sh")
+        process.arguments = ["-c", script, "sh", String(ProcessInfo.processInfo.processIdentifier), appURL.path]
+        guard (try? process.run()) != nil else { return }
+        NSApp.terminate(nil)
     }
 }

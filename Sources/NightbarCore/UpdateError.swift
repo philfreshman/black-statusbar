@@ -1,7 +1,7 @@
 import Foundation
 
 /// Why checking for or installing an update failed, worded for the update window.
-enum UpdateError: LocalizedError, Equatable {
+enum UpdateError: Error, Equatable {
     /// GitHub answered with an HTTP status outside 200–299.
     case gitHubUnavailable(statusCode: Int)
     /// GitHub's answer was not the release data Nightbar expects.
@@ -20,7 +20,9 @@ enum UpdateError: LocalizedError, Equatable {
     case unexpectedDownload
 
     private static let installScript = "curl -fsSL https://nightbar.app/install.sh | bash"
+}
 
+extension UpdateError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .gitHubUnavailable(let statusCode) where statusCode == 403 || statusCode == 429:
